@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X, ChevronDown } from "lucide-react";
 import { Link } from "react-router-dom";
+import datacareLogoHorizontal from "@/assets/datacare-logo-horizontal.png";
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -38,14 +39,12 @@ const Navigation = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-3">
-            <div className="w-16 h-16 bg-gradient-to-r from-primary to-accent rounded-xl flex items-center justify-center">
-              <span className="text-white font-bold text-3xl">D</span>
-            </div>
-            <div className="flex flex-col">
-              <span className="font-bold text-xl text-foreground">Datacare</span>
-              <span className="text-sm text-muted-foreground -mt-1">AI-Integrated IT Services</span>
-            </div>
+          <Link to="/" className="flex items-center">
+            <img 
+              src={datacareLogoHorizontal} 
+              alt="Datacare - AI-Integrated IT Services" 
+              className="h-16 w-auto"
+            />
           </Link>
 
           {/* Desktop Navigation */}
