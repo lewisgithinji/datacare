@@ -64,7 +64,7 @@ const Navigation = () => {
                       <ChevronDown className="ml-1 h-4 w-4" />
                     </span>
                     {activeDropdown === item.label && (
-                      <div className="absolute top-full left-0 mt-2 w-64 bg-popover border border-border rounded-xl shadow-lg p-2 animate-slide-up">
+                      <div className="absolute top-full left-0 mt-1 w-64 bg-popover border border-border rounded-xl shadow-lg p-2 animate-slide-up z-50">
                         {item.dropdown.map((subItem) => (
                           <Link
                             key={subItem}
@@ -72,6 +72,7 @@ const Navigation = () => {
                                 subItem === "Data Analytics Platform" ? "/data-analytics-platform" : 
                                 "/ai-services"}
                             className="block px-4 py-3 text-sm text-popover-foreground hover:bg-accent/10 rounded-lg transition-colors"
+                            onMouseEnter={() => setActiveDropdown(item.label)}
                           >
                             {subItem}
                           </Link>
