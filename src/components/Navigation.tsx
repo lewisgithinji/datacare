@@ -68,7 +68,7 @@ const Navigation = () => {
                         {item.dropdown.map((subItem) => (
                           <Link
                             key={subItem}
-                            to={`/${subItem.toLowerCase().replace(/ /g, '-')}`}
+                            to={subItem === "Data Analytics Platform" ? "/data-analytics-platform" : `/ai-services`}
                             className="block px-4 py-3 text-sm text-popover-foreground hover:bg-accent/10 rounded-lg transition-colors"
                           >
                             {subItem}
