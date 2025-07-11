@@ -39,12 +39,12 @@ const Navigation = () => {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-gradient-to-r from-primary to-accent rounded-xl flex items-center justify-center">
-              <span className="text-white font-bold text-xl">D</span>
+            <div className="w-16 h-16 bg-gradient-to-r from-primary to-accent rounded-xl flex items-center justify-center">
+              <span className="text-white font-bold text-3xl">D</span>
             </div>
             <div className="flex flex-col">
-              <span className="font-bold text-lg text-foreground">Datacare</span>
-              <span className="text-xs text-muted-foreground -mt-1">AI-Integrated IT Services</span>
+              <span className="font-bold text-xl text-foreground">Datacare</span>
+              <span className="text-sm text-muted-foreground -mt-1">AI-Integrated IT Services</span>
             </div>
           </Link>
 
