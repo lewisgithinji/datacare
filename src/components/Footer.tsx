@@ -122,7 +122,7 @@ const Footer = () => {
                 {footerLinks.solutions.map((link) => (
                   <li key={link}>
                     <Link
-                      to={`/${link.toLowerCase().replace(/\s+/g, '-')}`}
+                      to="/solutions"
                       className="text-sm text-muted-foreground hover:text-accent transition-colors"
                     >
                       {link}
@@ -139,7 +139,7 @@ const Footer = () => {
                 {footerLinks.industries.map((link) => (
                   <li key={link}>
                     <Link
-                      to={`/industries/${link.toLowerCase().replace(/\s+/g, '-')}`}
+                      to="/industries"
                       className="text-sm text-muted-foreground hover:text-accent transition-colors"
                     >
                       {link}
@@ -156,7 +156,12 @@ const Footer = () => {
                 {footerLinks.company.map((link) => (
                   <li key={link}>
                     <Link
-                      to={`/${link.toLowerCase().replace(/\s+/g, '-')}`}
+                      to={link === "About Us" ? "/about" : 
+                          link === "Contact" ? "/contact" :
+                          link === "Our Team" ? "/about" :
+                          link === "Careers" ? "/about" :
+                          link === "Partners" ? "/about" :
+                          link === "News & Updates" ? "/resources" : "/about"}
                       className="text-sm text-muted-foreground hover:text-accent transition-colors"
                     >
                       {link}
@@ -173,7 +178,7 @@ const Footer = () => {
                 {footerLinks.resources.map((link) => (
                   <li key={link}>
                     <Link
-                      to={`/${link.toLowerCase().replace(/\s+/g, '-')}`}
+                      to={link === "Support" ? "/contact" : "/resources"}
                       className="text-sm text-muted-foreground hover:text-accent transition-colors"
                     >
                       {link}
