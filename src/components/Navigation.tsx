@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X, ChevronDown } from "lucide-react";
 import { Link } from "react-router-dom";
-import datacareLogoHorizontal from "@/assets/datacare-logo-horizontal.png";
+import datacareLogoHorizontal from "@/assets/datacare-logo-horizontal-updated.png";
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
