@@ -8,6 +8,7 @@ import Industries from "./pages/Industries";
 import Products from "./pages/Products";
 import AIServices from "./pages/AIServices";
 import Resources from "./pages/Resources";
+import About from "./pages/About";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -24,6 +25,7 @@ const App = () => (
           <Route path="/products" element={<Products />} />
           <Route path="/ai-services" element={<AIServices />} />
           <Route path="/resources" element={<Resources />} />
+          <Route path="/about" element={<About />} />
           <Route path="/data-analytics-platform" element={<AIServices />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
