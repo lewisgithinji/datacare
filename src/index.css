@@ -2,41 +2,76 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+/* Datacare Limited Design System - Professional AI-Integrated IT Services 
 All colors MUST be HSL.
 */
 
 @layer base {
   :root {
+    /* Core Brand Colors - Professional Tech Company Palette */
     --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --foreground: 222 25% 15%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 222 25% 15%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 222 25% 15%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    /* Primary Brand - Deep Professional Blue */
+    --primary: 214 85% 35%;
+    --primary-foreground: 0 0% 100%;
+    --primary-light: 214 85% 45%;
+    --primary-dark: 214 85% 25%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    /* Secondary - Clean Corporate Gray */
+    --secondary: 215 15% 95%;
+    --secondary-foreground: 222 25% 15%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    /* Muted Elements */
+    --muted: 215 15% 96%;
+    --muted-foreground: 215 15% 45%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    /* AI Accent - Modern Cyan/Teal */
+    --accent: 189 85% 45%;
+    --accent-foreground: 0 0% 100%;
+    --accent-light: 189 85% 55%;
+    --accent-glow: 189 85% 65%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    /* Status Colors */
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    
+    --success: 142 85% 40%;
+    --success-foreground: 0 0% 100%;
+    
+    --warning: 45 95% 55%;
+    --warning-foreground: 222 25% 15%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    /* Border & Input Elements */
+    --border: 215 15% 88%;
+    --input: 215 15% 92%;
+    --ring: 214 85% 35%;
 
-    --radius: 0.5rem;
+    /* Design System Elements */
+    --radius: 0.75rem;
+    
+    /* Professional Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-light)));
+    --gradient-accent: linear-gradient(135deg, hsl(var(--accent)), hsl(var(--accent-light)));
+    --gradient-hero: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--primary-dark)) 50%, hsl(var(--accent)) 100%);
+    --gradient-ai: linear-gradient(90deg, hsl(var(--accent-glow)) 0%, hsl(var(--accent)) 50%, hsl(var(--primary-light)) 100%);
+    
+    /* Professional Shadows */
+    --shadow-soft: 0 4px 12px hsl(var(--primary) / 0.1);
+    --shadow-medium: 0 8px 24px hsl(var(--primary) / 0.15);
+    --shadow-strong: 0 16px 40px hsl(var(--primary) / 0.2);
+    --shadow-glow: 0 0 24px hsl(var(--accent) / 0.3);
+    
+    /* Animation Variables */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    --animation-duration: 0.6s;
 
     --sidebar-background: 0 0% 98%;
 
@@ -56,33 +91,46 @@ All colors MUST be HSL.
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+    /* Dark Mode - Professional Tech Theme */
+    --background: 222 25% 8%;
+    --foreground: 0 0% 95%;
 
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
+    --card: 222 25% 10%;
+    --card-foreground: 0 0% 95%;
 
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 222 25% 10%;
+    --popover-foreground: 0 0% 95%;
 
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    /* Primary adjusts for dark mode */
+    --primary: 214 85% 55%;
+    --primary-foreground: 222 25% 8%;
+    --primary-light: 214 85% 65%;
+    --primary-dark: 214 85% 45%;
 
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 222 15% 15%;
+    --secondary-foreground: 0 0% 90%;
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted: 222 15% 12%;
+    --muted-foreground: 215 15% 65%;
 
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
+    /* AI accent maintains vibrancy in dark */
+    --accent: 189 85% 55%;
+    --accent-foreground: 222 25% 8%;
+    --accent-light: 189 85% 65%;
+    --accent-glow: 189 85% 75%;
 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 75% 65%;
+    --destructive-foreground: 0 0% 95%;
+    
+    --success: 142 75% 50%;
+    --success-foreground: 0 0% 95%;
+    
+    --warning: 45 85% 65%;
+    --warning-foreground: 222 25% 8%;
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
+    --border: 222 15% 20%;
+    --input: 222 15% 18%;
+    --ring: 214 85% 55%;
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
@@ -100,6 +148,93 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans antialiased;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+  
+  /* Typography Scale */
+  h1 { @apply text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight; }
+  h2 { @apply text-3xl md:text-4xl font-bold tracking-tight; }
+  h3 { @apply text-2xl md:text-3xl font-semibold tracking-tight; }
+  h4 { @apply text-xl md:text-2xl font-semibold; }
+  h5 { @apply text-lg md:text-xl font-semibold; }
+  h6 { @apply text-base md:text-lg font-semibold; }
+}
+
+@layer components {
+  /* Professional Button Variants */
+  .btn-primary {
+    @apply bg-gradient-to-r from-[hsl(var(--primary))] to-[hsl(var(--primary-light))] 
+           text-primary-foreground px-6 py-3 rounded-xl font-semibold
+           shadow-[var(--shadow-medium)] hover:shadow-[var(--shadow-strong)]
+           transition-[var(--transition-smooth)] hover:scale-105;
+  }
+  
+  .btn-accent {
+    @apply bg-gradient-to-r from-[hsl(var(--accent))] to-[hsl(var(--accent-light))] 
+           text-accent-foreground px-6 py-3 rounded-xl font-semibold
+           shadow-[var(--shadow-glow)] hover:shadow-[var(--shadow-glow)]
+           transition-[var(--transition-smooth)] hover:scale-105;
+  }
+  
+  .btn-outline {
+    @apply border-2 border-[hsl(var(--primary))] text-[hsl(var(--primary))]
+           px-6 py-3 rounded-xl font-semibold bg-transparent
+           hover:bg-[hsl(var(--primary))] hover:text-primary-foreground
+           transition-[var(--transition-smooth)];
+  }
+  
+  /* AI-themed Elements */
+  .ai-glow {
+    @apply shadow-[var(--shadow-glow)] border border-[hsl(var(--accent))/30];
+  }
+  
+  .gradient-text {
+    @apply bg-gradient-to-r from-[hsl(var(--primary))] to-[hsl(var(--accent))]
+           bg-clip-text text-transparent;
+  }
+  
+  /* Cards */
+  .card-elevated {
+    @apply bg-card rounded-2xl p-6 shadow-[var(--shadow-medium)]
+           border border-border hover:shadow-[var(--shadow-strong)]
+           transition-[var(--transition-smooth)] hover:scale-[1.02];
+  }
+}
+
+@layer utilities {
+  /* Custom animations */
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  .animate-pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite alternate;
+  }
+  
+  .animate-slide-up {
+    animation: slide-up 0.6s ease-out;
+  }
+}
+
+/* Keyframes */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes pulse-glow {
+  0% { box-shadow: 0 0 5px hsl(var(--accent) / 0.5); }
+  100% { box-shadow: 0 0 20px hsl(var(--accent) / 0.8), 0 0 30px hsl(var(--accent) / 0.4); }
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
