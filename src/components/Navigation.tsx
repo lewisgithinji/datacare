@@ -58,17 +58,11 @@ const Navigation = () => {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-4">
-            <div className="w-12 h-12 bg-gradient-to-r from-primary to-accent rounded-lg flex items-center justify-center shadow-lg">
-              <span className="text-white font-bold text-xl">DC</span>
-            </div>
-            <div className="flex flex-col">
-              <span className="font-bold text-2xl bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                DATACARE
-              </span>
-              <span className="text-sm text-primary font-medium -mt-1">
-                Innovate. Secure. Thrive.
-              </span>
-            </div>
+            <img 
+              src="/lovable-uploads/4232c54f-4a56-45a4-93a7-42688be356e7.png"
+              alt="Datacare Limited Logo" 
+              className="h-12 w-auto"
+            />
           </Link>
 
           {/* Desktop Navigation */}

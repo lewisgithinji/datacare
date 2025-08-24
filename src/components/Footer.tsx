@@ -80,14 +80,12 @@ const Footer = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8">
             {/* Company Info */}
             <div className="lg:col-span-2">
-              <Link to="/" className="flex items-center space-x-3 mb-6">
-                <div className="w-10 h-10 bg-gradient-to-r from-primary to-accent rounded-xl flex items-center justify-center">
-                  <Brain className="w-6 h-6 text-white" />
-                </div>
-                <div className="flex flex-col">
-                  <span className="font-bold text-lg text-white">Datacare</span>
-                  <span className="text-xs text-slate-400 -mt-1">AI-Integrated IT Services</span>
-                </div>
+              <Link to="/" className="flex items-center mb-6">
+                <img 
+                  src="/lovable-uploads/4232c54f-4a56-45a4-93a7-42688be356e7.png" 
+                  alt="Datacare Limited Logo" 
+                  className="h-8 w-auto filter brightness-0 invert"
+                />
               </Link>
               <p className="text-slate-400 mb-6 leading-relaxed">
                 Leading East Africa's digital transformation with intelligent IT solutions, 
@@ -102,7 +100,7 @@ const Footer = () => {
                 </div>
                 <div className="flex items-center text-sm text-slate-400">
                   <Phone className="w-4 h-4 mr-3 text-accent" />
-                  +254 (0) 700 123 456
+                  +254 784 155 752
                 </div>
                 <div className="flex items-center text-sm text-slate-400">
                   <Mail className="w-4 h-4 mr-3 text-accent" />
@@ -113,7 +111,7 @@ const Footer = () => {
               {/* Quick Action Buttons */}
               <div className="mt-6 flex flex-col sm:flex-row gap-3">
                 <a
-                  href="https://wa.me/254700123456"
+                  href="https://wa.me/254784155752"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center justify-center px-4 py-2 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700 transition-colors"
