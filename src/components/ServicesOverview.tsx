@@ -38,6 +38,13 @@ const ServicesOverview = () => {
       description: "Protect your business with endpoint security, identity management, and regulatory compliance.",
       features: ["Endpoint Security", "Identity Management", "Regulatory Compliance"],
       color: "from-red-500 to-red-600"
+    },
+    {
+      icon: Brain,
+      title: "Data & Analytics",
+      description: "Turn business data into actionable insights with dashboards, reporting, and AI-driven analytics.",
+      features: ["Business Intelligence", "Real-time Dashboards", "AI-driven Insights"],
+      color: "from-violet-500 to-violet-600"
     }
   ];
 

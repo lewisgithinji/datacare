@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Building2, Scale, Landmark, GraduationCap, HardHat, Building } from "lucide-react";
+import { Building2, Scale, Landmark, GraduationCap, HardHat, Building, Users } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const IndustriesSection = () => {
@@ -12,26 +12,36 @@ const IndustriesSection = () => {
     },
     {
       icon: Scale,
-      title: "Law Firms",
-      link: "/industries/law-firms"
+      title: "Legal",
+      link: "/industries/legal"
     },
     {
       icon: Landmark,
-      title: "SACCOs",
-      link: "/industries/saccos"
+      title: "Banking & Finance",
+      link: "/industries/banking"
     },
     {
       icon: GraduationCap,
-      title: "Schools",
-      link: "/industries/schools"
+      title: "Healthcare",
+      link: "/industries/healthcare"
     },
     {
       icon: HardHat,
-      title: "Construction",
-      link: "/industries/construction"
+      title: "Education",
+      link: "/industries/education"
     },
     {
       icon: Building,
+      title: "Manufacturing",
+      link: "/industries/manufacturing"
+    },
+    {
+      icon: Users,
+      title: "NGOs",
+      link: "/industries/ngos"
+    },
+    {
+      icon: Landmark,
       title: "Government",
       link: "/industries/government"
     }
@@ -49,7 +59,7 @@ const IndustriesSection = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 mb-12">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-12">
           {industries.map((industry, index) => (
             <Link key={index} to={industry.link} className="group">
               <Card className="h-full transition-all duration-300 hover:shadow-lg hover:scale-105 border-border text-center">

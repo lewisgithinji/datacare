@@ -29,10 +29,12 @@ import CloudBackupAndRecovery from "./pages/products/CloudBackupAndRecovery";
 
 // Industry pages
 import SMEsIndustry from "./pages/industries/SMEs";
-import LawFirms from "./pages/industries/LawFirms";
-import Saccos from "./pages/industries/Saccos";
-import Schools from "./pages/industries/Schools";
-import Construction from "./pages/industries/Construction";
+import Legal from "./pages/industries/Legal";
+import Banking from "./pages/industries/Banking";
+import Healthcare from "./pages/industries/Healthcare";
+import Education from "./pages/industries/Education";
+import Manufacturing from "./pages/industries/Manufacturing";
+import NGOs from "./pages/industries/NGOs";
 import Government from "./pages/industries/Government";
 
 // Resource pages
@@ -74,10 +76,12 @@ const App = () => (
           
           {/* Industry pages */}
           <Route path="/industries/smes" element={<SMEsIndustry />} />
-          <Route path="/industries/law-firms" element={<LawFirms />} />
-          <Route path="/industries/saccos" element={<Saccos />} />
-          <Route path="/industries/schools" element={<Schools />} />
-          <Route path="/industries/construction" element={<Construction />} />
+          <Route path="/industries/legal" element={<Legal />} />
+          <Route path="/industries/banking" element={<Banking />} />
+          <Route path="/industries/healthcare" element={<Healthcare />} />
+          <Route path="/industries/education" element={<Education />} />
+          <Route path="/industries/manufacturing" element={<Manufacturing />} />
+          <Route path="/industries/ngos" element={<NGOs />} />
           <Route path="/industries/government" element={<Government />} />
           
           {/* Resource pages */}

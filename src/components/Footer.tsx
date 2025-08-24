@@ -18,36 +18,32 @@ const Footer = () => {
 
   const footerLinks = {
     solutions: [
-      "AI-Powered Security",
-      "Managed IT Services", 
-      "Cloud Solutions",
-      "Backup & Recovery",
-      "Data Analytics",
-      "Enterprise Software"
+      { name: "Cloud & Licensing", link: "/solutions/cloud-and-licensing" },
+      { name: "AI & Messaging Automation", link: "/solutions/ai-and-messaging-automation" },
+      { name: "Web Design as a Service", link: "/solutions/web-design-as-a-service" },
+      { name: "SME Digital Transformation", link: "/solutions/sme-digital-transformation" },
+      { name: "Security & Compliance", link: "/solutions/security-and-compliance" }
+    ],
+    products: [
+      { name: "Microsoft 365", link: "/products/microsoft365" },
+      { name: "Google Workspace", link: "/products/google-workspace" },
+      { name: "Datacare Messaging Platform", link: "/products/datacare-messaging-platform" },
+      { name: "Cloud Backup & Recovery", link: "/products/cloud-backup-and-recovery" }
     ],
     industries: [
-      "Banking & Finance",
-      "Healthcare",
-      "Education",
-      "Manufacturing",
-      "NGOs",
-      "Government"
-    ],
-    company: [
-      "About Us",
-      "Our Team",
-      "Careers",
-      "Partners",
-      "News & Updates",
-      "Contact"
+      { name: "SMEs", link: "/industries/smes" },
+      { name: "Legal", link: "/industries/legal" },
+      { name: "Banking & Finance", link: "/industries/banking" },
+      { name: "Healthcare", link: "/industries/healthcare" },
+      { name: "Education", link: "/industries/education" },
+      { name: "Manufacturing", link: "/industries/manufacturing" },
+      { name: "NGOs", link: "/industries/ngos" },
+      { name: "Government", link: "/industries/government" }
     ],
     resources: [
-      "Blog",
-      "Whitepapers",
-      "Case Studies",
-      "Documentation",
-      "API Reference",
-      "Support"
+      { name: "Case Studies", link: "/resources/case-studies" },
+      { name: "Guides", link: "/resources/guides" },
+      { name: "Knowledge Base", link: "/resources/knowledge-base" }
     ]
   };
 
@@ -81,7 +77,7 @@ const Footer = () => {
 
         {/* Main Footer Content */}
         <div className="py-12">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
             {/* Company Info */}
             <div className="lg:col-span-2">
               <Link to="/" className="flex items-center space-x-3 mb-6">
@@ -119,13 +115,30 @@ const Footer = () => {
             <div>
               <h4 className="font-semibold text-foreground mb-4">Solutions</h4>
               <ul className="space-y-3">
-                {footerLinks.solutions.map((link) => (
-                  <li key={link}>
+                {footerLinks.solutions.map((item) => (
+                  <li key={item.name}>
                     <Link
-                      to="/solutions"
+                      to={item.link}
                       className="text-sm text-muted-foreground hover:text-accent transition-colors"
                     >
-                      {link}
+                      {item.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Products */}
+            <div>
+              <h4 className="font-semibold text-foreground mb-4">Products</h4>
+              <ul className="space-y-3">
+                {footerLinks.products.map((item) => (
+                  <li key={item.name}>
+                    <Link
+                      to={item.link}
+                      className="text-sm text-muted-foreground hover:text-accent transition-colors"
+                    >
+                      {item.name}
                     </Link>
                   </li>
                 ))}
@@ -136,55 +149,59 @@ const Footer = () => {
             <div>
               <h4 className="font-semibold text-foreground mb-4">Industries</h4>
               <ul className="space-y-3">
-                {footerLinks.industries.map((link) => (
-                  <li key={link}>
+                {footerLinks.industries.map((item) => (
+                  <li key={item.name}>
                     <Link
-                      to="/industries"
+                      to={item.link}
                       className="text-sm text-muted-foreground hover:text-accent transition-colors"
                     >
-                      {link}
+                      {item.name}
                     </Link>
                   </li>
                 ))}
               </ul>
             </div>
 
-            {/* Company */}
-            <div>
-              <h4 className="font-semibold text-foreground mb-4">Company</h4>
-              <ul className="space-y-3">
-                {footerLinks.company.map((link) => (
-                  <li key={link}>
-                    <Link
-                      to={link === "About Us" ? "/about" : 
-                          link === "Contact" ? "/contact" :
-                          link === "Our Team" ? "/about" :
-                          link === "Careers" ? "/about" :
-                          link === "Partners" ? "/about" :
-                          link === "News & Updates" ? "/resources" : "/about"}
-                      className="text-sm text-muted-foreground hover:text-accent transition-colors"
-                    >
-                      {link}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Resources */}
+            {/* Resources & Company */}
             <div>
               <h4 className="font-semibold text-foreground mb-4">Resources</h4>
               <ul className="space-y-3">
-                {footerLinks.resources.map((link) => (
-                  <li key={link}>
+                {footerLinks.resources.map((item) => (
+                  <li key={item.name}>
                     <Link
-                      to={link === "Support" ? "/contact" : "/resources"}
+                      to={item.link}
                       className="text-sm text-muted-foreground hover:text-accent transition-colors"
                     >
-                      {link}
+                      {item.name}
                     </Link>
                   </li>
                 ))}
+                <li>
+                  <Link
+                    to="/about"
+                    className="text-sm text-muted-foreground hover:text-accent transition-colors"
+                  >
+                    About
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/contact"
+                    className="text-sm text-muted-foreground hover:text-accent transition-colors"
+                  >
+                    Contact
+                  </Link>
+                </li>
+                <li>
+                  <a
+                    href="https://wa.me/254700123456"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm text-muted-foreground hover:text-accent transition-colors"
+                  >
+                    WhatsApp
+                  </a>
+                </li>
               </ul>
             </div>
           </div>
