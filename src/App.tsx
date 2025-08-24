@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ScrollToTop from "./components/ScrollToTop";
+import Chatbot from "./components/Chatbot";
 import Index from "./pages/Index";
 import Industries from "./pages/Industries";  
 import Products from "./pages/Products";
@@ -51,6 +52,7 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <ScrollToTop />
+        <Chatbot />
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/industries" element={<Industries />} />
@@ -69,6 +71,7 @@ const App = () => (
           <Route path="/solutions/security-and-compliance" element={<SecurityAndCompliance />} />
           
           {/* Product pages */}
+          <Route path="/products/microsoft365" element={<Microsoft365 />} />
           <Route path="/products/microsoft-365" element={<Microsoft365 />} />
           <Route path="/products/google-workspace" element={<GoogleWorkspace />} />
           <Route path="/products/datacare-messaging-platform" element={<DatacareMessagingPlatform />} />

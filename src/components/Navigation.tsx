@@ -21,7 +21,7 @@ const Navigation = () => {
     {
       label: "Products",
       dropdown: [
-        { title: "Microsoft 365", href: "/products/microsoft-365" },
+        { title: "Microsoft 365", href: "/products/microsoft365" },
         { title: "Google Workspace", href: "/products/google-workspace" },
         { title: "Datacare Messaging Platform", href: "/products/datacare-messaging-platform" },
         { title: "Cloud Backup & Recovery", href: "/products/cloud-backup-and-recovery" }
@@ -31,10 +31,12 @@ const Navigation = () => {
       label: "Industries",
       dropdown: [
         { title: "SMEs", href: "/industries/smes" },
-        { title: "Law Firms", href: "/industries/law-firms" },
-        { title: "SACCOs", href: "/industries/saccos" },
-        { title: "Schools", href: "/industries/schools" },
-        { title: "Construction", href: "/industries/construction" },
+        { title: "Legal", href: "/industries/legal" },
+        { title: "Banking & Finance", href: "/industries/banking" },
+        { title: "Healthcare", href: "/industries/healthcare" },
+        { title: "Education", href: "/industries/education" },
+        { title: "Manufacturing", href: "/industries/manufacturing" },
+        { title: "NGOs", href: "/industries/ngos" },
         { title: "Government", href: "/industries/government" }
       ]
     },
@@ -72,33 +74,33 @@ const Navigation = () => {
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center space-x-8">
             {navItems.map((item) => (
-              <div
-                key={item.label}
-                className="relative"
-                onMouseEnter={() => item.dropdown && setActiveDropdown(item.label)}
-                onMouseLeave={() => setActiveDropdown(null)}
-              >
-                {item.dropdown ? (
-                  <div className="cursor-pointer">
-                    <span className="flex items-center text-foreground hover:text-primary transition-colors font-medium">
-                      {item.label}
-                      <ChevronDown className="ml-1 h-4 w-4" />
-                    </span>
-                    {activeDropdown === item.label && (
-                      <div className="absolute top-full left-0 mt-1 w-64 bg-popover border border-border rounded-xl shadow-lg p-2 animate-slide-up z-50">
-                        {item.dropdown.map((subItem) => (
-                          <Link
-                            key={subItem.title}
-                            to={subItem.href}
-                            className="block px-4 py-3 text-sm text-popover-foreground hover:bg-accent/10 rounded-lg transition-colors"
-                            onMouseEnter={() => setActiveDropdown(item.label)}
-                          >
-                            {subItem.title}
-                          </Link>
-                        ))}
-                      </div>
-                    )}
+          <div
+            key={item.label}
+            className="relative group"
+            onMouseEnter={() => item.dropdown && setActiveDropdown(item.label)}
+            onMouseLeave={() => setActiveDropdown(null)}
+          >
+            {item.dropdown ? (
+              <div className="cursor-pointer">
+                <span className="flex items-center text-foreground hover:text-primary transition-colors font-medium">
+                  {item.label}
+                  <ChevronDown className="ml-1 h-4 w-4" />
+                </span>
+                {activeDropdown === item.label && (
+                  <div className="absolute top-full left-0 mt-1 w-64 bg-white dark:bg-slate-800 border border-border rounded-xl shadow-lg p-2 animate-slide-up z-50 group-hover:block">
+                    {item.dropdown.map((subItem) => (
+                      <Link
+                        key={subItem.title}
+                        to={subItem.href}
+                        className="block px-4 py-3 text-sm text-popover-foreground hover:bg-accent/10 rounded-lg transition-colors"
+                        onClick={() => setActiveDropdown(null)}
+                      >
+                        {subItem.title}
+                      </Link>
+                    ))}
                   </div>
+                )}
+              </div>
                 ) : (
                   <Link
                     to={item.href || `/${item.label.toLowerCase()}`}

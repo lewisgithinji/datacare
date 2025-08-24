@@ -126,7 +126,76 @@ const Microsoft365 = () => {
         </div>
       </section>
 
-      {/* Implementation, Compliance, FAQ, and CTA sections would follow the same pattern */}
+      {/* Implementation Section */}
+      <section className="py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold mb-4">Seamless Implementation</h2>
+            <p className="text-lg text-muted-foreground">Expert migration and setup with minimal downtime</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="text-center">
+              <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl font-bold text-primary">1</span>
+              </div>
+              <h3 className="text-xl font-semibold mb-2">Assessment</h3>
+              <p className="text-muted-foreground">Evaluate current systems and plan migration strategy</p>
+            </div>
+            <div className="text-center">
+              <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl font-bold text-primary">2</span>
+              </div>
+              <h3 className="text-xl font-semibold mb-2">Migration</h3>
+              <p className="text-muted-foreground">Secure data transfer and user account setup</p>
+            </div>
+            <div className="text-center">
+              <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl font-bold text-primary">3</span>
+              </div>
+              <h3 className="text-xl font-semibold mb-2">Training</h3>
+              <p className="text-muted-foreground">User training and ongoing support</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="py-16 bg-secondary/30">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold mb-4">Frequently Asked Questions</h2>
+          </div>
+          <div className="space-y-4">
+            <Card className="p-6">
+              <h3 className="font-semibold mb-2">How long does migration take?</h3>
+              <p className="text-muted-foreground">Typical migrations complete within 24-48 hours with minimal disruption to your business operations.</p>
+            </Card>
+            <Card className="p-6">
+              <h3 className="font-semibold mb-2">Is my data secure during migration?</h3>
+              <p className="text-muted-foreground">Yes, we use encrypted channels and follow Microsoft's security best practices for all data transfers.</p>
+            </Card>
+            <Card className="p-6">
+              <h3 className="font-semibold mb-2">What ongoing support is included?</h3>
+              <p className="text-muted-foreground">We provide 24/7 technical support, regular updates, and user training as part of our service.</p>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* Final CTA */}
+      <section className="py-16 bg-gradient-to-r from-primary to-accent">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
+          <h2 className="text-4xl font-bold mb-4">Ready to Transform Your Business?</h2>
+          <p className="text-xl mb-8 text-primary-foreground/90">Join thousands of businesses already using Microsoft 365</p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button size="lg" className="bg-white text-primary hover:bg-white/90">Start Free Trial</Button>
+            <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-primary">
+              <HeadphonesIcon className="w-4 h-4 mr-2" />
+              Book Consultation
+            </Button>
+          </div>
+        </div>
+      </section>
       
       <Footer />
     </div>

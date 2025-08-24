@@ -48,23 +48,23 @@ const Footer = () => {
   };
 
   return (
-    <footer className="bg-muted/50 border-t border-border">
+    <footer className="bg-slate-900 text-slate-100 border-t border-slate-700">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Newsletter Section */}
-        <div className="py-12 border-b border-border">
+        <div className="py-12 border-b border-slate-700">
           <div className="flex flex-col lg:flex-row items-center justify-between gap-8">
             <div className="text-center lg:text-left">
-              <h3 className="text-2xl font-bold mb-2">
-                Stay Updated with <span className="gradient-text">AI Insights</span>
+              <h3 className="text-2xl font-bold mb-2 text-white">
+                Stay Updated with <span className="bg-gradient-to-r from-accent to-accent-light bg-clip-text text-transparent">AI Insights</span>
               </h3>
-              <p className="text-muted-foreground">
+              <p className="text-slate-400">
                 Get the latest news on AI-integrated IT solutions and industry trends.
               </p>
             </div>
             <div className="flex w-full lg:w-auto gap-2">
               <Input
                 placeholder="Enter your email"
-                className="lg:w-80"
+                className="lg:w-80 bg-slate-800 border-slate-600 text-white placeholder:text-slate-400"
                 type="email"
               />
               <Button className="btn-primary">
@@ -77,7 +77,7 @@ const Footer = () => {
 
         {/* Main Footer Content */}
         <div className="py-12">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8">
             {/* Company Info */}
             <div className="lg:col-span-2">
               <Link to="/" className="flex items-center space-x-3 mb-6">
@@ -85,41 +85,59 @@ const Footer = () => {
                   <Brain className="w-6 h-6 text-white" />
                 </div>
                 <div className="flex flex-col">
-                  <span className="font-bold text-lg text-foreground">Datacare</span>
-                  <span className="text-xs text-muted-foreground -mt-1">AI-Integrated IT Services</span>
+                  <span className="font-bold text-lg text-white">Datacare</span>
+                  <span className="text-xs text-slate-400 -mt-1">AI-Integrated IT Services</span>
                 </div>
               </Link>
-              <p className="text-muted-foreground mb-6 leading-relaxed">
+              <p className="text-slate-400 mb-6 leading-relaxed">
                 Leading East Africa's digital transformation with intelligent IT solutions, 
                 AI-powered security, and enterprise-grade cloud services since 2012.
               </p>
               
               {/* Contact Info */}
               <div className="space-y-3">
-                <div className="flex items-center text-sm text-muted-foreground">
+                <div className="flex items-center text-sm text-slate-400">
                   <MapPin className="w-4 h-4 mr-3 text-accent" />
                   Nairobi, Kenya | Kampala, Uganda
                 </div>
-                <div className="flex items-center text-sm text-muted-foreground">
+                <div className="flex items-center text-sm text-slate-400">
                   <Phone className="w-4 h-4 mr-3 text-accent" />
                   +254 (0) 700 123 456
                 </div>
-                <div className="flex items-center text-sm text-muted-foreground">
+                <div className="flex items-center text-sm text-slate-400">
                   <Mail className="w-4 h-4 mr-3 text-accent" />
                   info@datacare.co.ke
                 </div>
+              </div>
+
+              {/* Quick Action Buttons */}
+              <div className="mt-6 flex flex-col sm:flex-row gap-3">
+                <a
+                  href="https://wa.me/254700123456"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center px-4 py-2 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700 transition-colors"
+                >
+                  WhatsApp
+                </a>
+                <Button variant="outline" size="sm" className="border-slate-600 text-slate-300 hover:bg-slate-800">
+                  Book Consultation
+                </Button>
+                <Button variant="outline" size="sm" className="border-slate-600 text-slate-300 hover:bg-slate-800">
+                  Get Retainer Quote
+                </Button>
               </div>
             </div>
 
             {/* Solutions */}
             <div>
-              <h4 className="font-semibold text-foreground mb-4">Solutions</h4>
+              <h4 className="font-semibold text-white mb-4">Solutions</h4>
               <ul className="space-y-3">
                 {footerLinks.solutions.map((item) => (
                   <li key={item.name}>
                     <Link
                       to={item.link}
-                      className="text-sm text-muted-foreground hover:text-accent transition-colors"
+                      className="text-sm text-slate-400 hover:text-accent transition-colors"
                     >
                       {item.name}
                     </Link>
@@ -130,13 +148,13 @@ const Footer = () => {
 
             {/* Products */}
             <div>
-              <h4 className="font-semibold text-foreground mb-4">Products</h4>
+              <h4 className="font-semibold text-white mb-4">Products</h4>
               <ul className="space-y-3">
                 {footerLinks.products.map((item) => (
                   <li key={item.name}>
                     <Link
                       to={item.link}
-                      className="text-sm text-muted-foreground hover:text-accent transition-colors"
+                      className="text-sm text-slate-400 hover:text-accent transition-colors"
                     >
                       {item.name}
                     </Link>
@@ -147,13 +165,13 @@ const Footer = () => {
 
             {/* Industries */}
             <div>
-              <h4 className="font-semibold text-foreground mb-4">Industries</h4>
+              <h4 className="font-semibold text-white mb-4">Industries</h4>
               <ul className="space-y-3">
                 {footerLinks.industries.map((item) => (
                   <li key={item.name}>
                     <Link
                       to={item.link}
-                      className="text-sm text-muted-foreground hover:text-accent transition-colors"
+                      className="text-sm text-slate-400 hover:text-accent transition-colors"
                     >
                       {item.name}
                     </Link>
@@ -164,13 +182,13 @@ const Footer = () => {
 
             {/* Resources & Company */}
             <div>
-              <h4 className="font-semibold text-foreground mb-4">Resources</h4>
+              <h4 className="font-semibold text-white mb-4">Resources</h4>
               <ul className="space-y-3">
                 {footerLinks.resources.map((item) => (
                   <li key={item.name}>
                     <Link
                       to={item.link}
-                      className="text-sm text-muted-foreground hover:text-accent transition-colors"
+                      className="text-sm text-slate-400 hover:text-accent transition-colors"
                     >
                       {item.name}
                     </Link>
@@ -179,7 +197,7 @@ const Footer = () => {
                 <li>
                   <Link
                     to="/about"
-                    className="text-sm text-muted-foreground hover:text-accent transition-colors"
+                    className="text-sm text-slate-400 hover:text-accent transition-colors"
                   >
                     About
                   </Link>
@@ -187,31 +205,21 @@ const Footer = () => {
                 <li>
                   <Link
                     to="/contact"
-                    className="text-sm text-muted-foreground hover:text-accent transition-colors"
+                    className="text-sm text-slate-400 hover:text-accent transition-colors"
                   >
                     Contact
                   </Link>
-                </li>
-                <li>
-                  <a
-                    href="https://wa.me/254700123456"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-sm text-muted-foreground hover:text-accent transition-colors"
-                  >
-                    WhatsApp
-                  </a>
                 </li>
               </ul>
             </div>
           </div>
         </div>
 
-        <Separator />
+        <Separator className="bg-slate-700" />
 
         {/* Bottom Footer */}
         <div className="py-6 flex flex-col md:flex-row justify-between items-center gap-4">
-          <div className="text-sm text-muted-foreground">
+          <div className="text-sm text-slate-400">
             © {currentYear} Datacare Limited. All rights reserved. | ISO 27001 Certified
           </div>
           
@@ -219,21 +227,21 @@ const Footer = () => {
           <div className="flex items-center space-x-4">
             <Link
               to="https://linkedin.com/company/datacare-limited"
-              className="text-muted-foreground hover:text-accent transition-colors"
+              className="text-slate-400 hover:text-accent transition-colors"
               target="_blank"
             >
               <Linkedin className="w-5 h-5" />
             </Link>
             <Link
               to="https://twitter.com/DatacareLimited"
-              className="text-muted-foreground hover:text-accent transition-colors"
+              className="text-slate-400 hover:text-accent transition-colors"
               target="_blank"
             >
               <Twitter className="w-5 h-5" />
             </Link>
             <Link
               to="https://facebook.com/DatacareLimited"
-              className="text-muted-foreground hover:text-accent transition-colors"
+              className="text-slate-400 hover:text-accent transition-colors"
               target="_blank"
             >
               <Facebook className="w-5 h-5" />
