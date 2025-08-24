@@ -1,0 +1,56 @@
+import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+};
+
+interface AnalyticsEvent {
+  eventType: string;
+  sessionId: string;
+  data?: any;
+}
+
+serve(async (req) => {
+  if (req.method === 'OPTIONS') {
+    return new Response(null, { headers: corsHeaders });
+  }
+
+  try {
+    const supabaseClient = createClient(
+      Deno.env.get('SUPABASE_URL') ?? '',
+      Deno.env.get('SUPABASE_ANON_KEY') ?? ''
+    );
+
+    const { eventType, sessionId, data }: AnalyticsEvent = await req.json();
+
+    // Store analytics event
+    await supabaseClient
+      .from('chatbot_analytics')
+      .insert({
+        event_type: eventType,
+        session_id: sessionId,
+        data: data || {}
+      });
+
+    // If it's a recommendation click, update the recommendations table
+    if (eventType === 'recommendation_clicked' && data?.recommendationId) {
+      await supabaseClient
+        .from('recommendations')
+        .update({ clicked: true })
+        .eq('id', data.recommendationId);
+    }
+
+    return new Response(JSON.stringify({ success: true }), {
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
+
+  } catch (error) {
+    console.error('Error in chatbot-analytics function:', error);
+    return new Response(JSON.stringify({ error: error.message }), {
+      status: 500,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
+  }
+});
