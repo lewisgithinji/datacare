@@ -11,24 +11,41 @@ const Navigation = () => {
     {
       label: "Solutions",
       dropdown: [
-        "AI-Powered Security",
-        "Managed IT & Infrastructure", 
-        "Backup & Disaster Recovery",
-        "Cloud & Virtualization"
+        { title: "Cloud & Licensing", href: "/solutions/cloud-and-licensing" },
+        { title: "AI & Messaging Automation", href: "/solutions/ai-and-messaging-automation" },
+        { title: "Web Design as a Service", href: "/solutions/web-design-as-a-service" },
+        { title: "SME Digital Transformation", href: "/solutions/sme-digital-transformation" },
+        { title: "Security & Compliance", href: "/solutions/security-and-compliance" }
       ]
     },
     {
-      label: "AI Services",
+      label: "Products",
       dropdown: [
-        "Security AI",
-        "Monitoring AI", 
-        "Data Analytics Platform",
-        "Predictive Analytics"
+        { title: "Microsoft 365", href: "/products/microsoft-365" },
+        { title: "Google Workspace", href: "/products/google-workspace" },
+        { title: "Datacare Messaging Platform", href: "/products/datacare-messaging-platform" },
+        { title: "Cloud Backup & Recovery", href: "/products/cloud-backup-and-recovery" }
       ]
     },
-    { label: "Industries", href: "/industries" },
-    { label: "Products", href: "/products" },
-    { label: "Resources", href: "/resources" },
+    {
+      label: "Industries",
+      dropdown: [
+        { title: "SMEs", href: "/industries/smes" },
+        { title: "Law Firms", href: "/industries/law-firms" },
+        { title: "SACCOs", href: "/industries/saccos" },
+        { title: "Schools", href: "/industries/schools" },
+        { title: "Construction", href: "/industries/construction" },
+        { title: "Government", href: "/industries/government" }
+      ]
+    },
+    {
+      label: "Resources",
+      dropdown: [
+        { title: "Case Studies", href: "/resources/case-studies" },
+        { title: "Guides", href: "/resources/guides" },
+        { title: "Knowledge Base", href: "/resources/knowledge-base" }
+      ]
+    },
     { label: "About", href: "/about" },
     { label: "Contact", href: "/contact" }
   ];
@@ -71,14 +88,12 @@ const Navigation = () => {
                       <div className="absolute top-full left-0 mt-1 w-64 bg-popover border border-border rounded-xl shadow-lg p-2 animate-slide-up z-50">
                         {item.dropdown.map((subItem) => (
                           <Link
-                            key={subItem}
-                            to={item.label === "Solutions" ? "/solutions" : 
-                                subItem === "Data Analytics Platform" ? "/data-analytics-platform" : 
-                                "/ai-services"}
+                            key={subItem.title}
+                            to={subItem.href}
                             className="block px-4 py-3 text-sm text-popover-foreground hover:bg-accent/10 rounded-lg transition-colors"
                             onMouseEnter={() => setActiveDropdown(item.label)}
                           >
-                            {subItem}
+                            {subItem.title}
                           </Link>
                         ))}
                       </div>
