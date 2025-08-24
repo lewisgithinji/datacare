@@ -14,13 +14,213 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      chatbot_analytics: {
+        Row: {
+          created_at: string
+          data: Json | null
+          event_type: string
+          id: string
+          session_id: string
+        }
+        Insert: {
+          created_at?: string
+          data?: Json | null
+          event_type: string
+          id?: string
+          session_id: string
+        }
+        Update: {
+          created_at?: string
+          data?: Json | null
+          event_type?: string
+          id?: string
+          session_id?: string
+        }
+        Relationships: []
+      }
+      conversation_messages: {
+        Row: {
+          content: string
+          conversation_id: string
+          created_at: string
+          id: string
+          message_type: string
+          metadata: Json | null
+        }
+        Insert: {
+          content: string
+          conversation_id: string
+          created_at?: string
+          id?: string
+          message_type: string
+          metadata?: Json | null
+        }
+        Update: {
+          content?: string
+          conversation_id?: string
+          created_at?: string
+          id?: string
+          message_type?: string
+          metadata?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "conversation_messages_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "conversations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      conversations: {
+        Row: {
+          budget: string | null
+          company_size: string | null
+          contact_company: string | null
+          contact_email: string | null
+          contact_name: string | null
+          contact_phone: string | null
+          created_at: string
+          current_stack: string | null
+          id: string
+          intent: string | null
+          lead_score: number | null
+          org_type: string | null
+          primary_need: string | null
+          session_id: string
+          status: string | null
+          updated_at: string
+          urgency: string | null
+        }
+        Insert: {
+          budget?: string | null
+          company_size?: string | null
+          contact_company?: string | null
+          contact_email?: string | null
+          contact_name?: string | null
+          contact_phone?: string | null
+          created_at?: string
+          current_stack?: string | null
+          id?: string
+          intent?: string | null
+          lead_score?: number | null
+          org_type?: string | null
+          primary_need?: string | null
+          session_id?: string
+          status?: string | null
+          updated_at?: string
+          urgency?: string | null
+        }
+        Update: {
+          budget?: string | null
+          company_size?: string | null
+          contact_company?: string | null
+          contact_email?: string | null
+          contact_name?: string | null
+          contact_phone?: string | null
+          created_at?: string
+          current_stack?: string | null
+          id?: string
+          intent?: string | null
+          lead_score?: number | null
+          org_type?: string | null
+          primary_need?: string | null
+          session_id?: string
+          status?: string | null
+          updated_at?: string
+          urgency?: string | null
+        }
+        Relationships: []
+      }
+      faq_responses: {
+        Row: {
+          active: boolean | null
+          category: string
+          created_at: string
+          id: string
+          priority: number | null
+          question_keywords: string[]
+          resource_url: string | null
+          response: string
+        }
+        Insert: {
+          active?: boolean | null
+          category: string
+          created_at?: string
+          id?: string
+          priority?: number | null
+          question_keywords: string[]
+          resource_url?: string | null
+          response: string
+        }
+        Update: {
+          active?: boolean | null
+          category?: string
+          created_at?: string
+          id?: string
+          priority?: number | null
+          question_keywords?: string[]
+          resource_url?: string | null
+          response?: string
+        }
+        Relationships: []
+      }
+      recommendations: {
+        Row: {
+          clicked: boolean | null
+          conversation_id: string
+          created_at: string
+          id: string
+          product_id: string
+          product_name: string
+          product_url: string
+          reason: string
+        }
+        Insert: {
+          clicked?: boolean | null
+          conversation_id: string
+          created_at?: string
+          id?: string
+          product_id: string
+          product_name: string
+          product_url: string
+          reason: string
+        }
+        Update: {
+          clicked?: boolean | null
+          conversation_id?: string
+          created_at?: string
+          id?: string
+          product_id?: string
+          product_name?: string
+          product_url?: string
+          reason?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "recommendations_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "conversations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      calculate_lead_score: {
+        Args: {
+          budget: string
+          company_size: string
+          org_type: string
+          urgency: string
+        }
+        Returns: number
+      }
     }
     Enums: {
       [_ in never]: never
