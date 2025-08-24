@@ -21,6 +21,7 @@ import AIAndMessagingAutomation from "./pages/solutions/AIAndMessagingAutomation
 import WebDesignAsAService from "./pages/solutions/WebDesignAsAService";
 import SMEDigitalTransformation from "./pages/solutions/SMEDigitalTransformation";
 import SecurityAndCompliance from "./pages/solutions/SecurityAndCompliance";
+import DataAndAnalytics from "./pages/solutions/DataAndAnalytics";
 
 // Product pages
 import Microsoft365 from "./pages/products/Microsoft365";
@@ -69,6 +70,7 @@ const App = () => (
           <Route path="/solutions/web-design-as-a-service" element={<WebDesignAsAService />} />
           <Route path="/solutions/sme-digital-transformation" element={<SMEDigitalTransformation />} />
           <Route path="/solutions/security-and-compliance" element={<SecurityAndCompliance />} />
+          <Route path="/solutions/data-and-analytics" element={<DataAndAnalytics />} />
           
           {/* Product pages */}
           <Route path="/products/microsoft365" element={<Microsoft365 />} />

@@ -2,37 +2,212 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { MessageCircle, X, Send } from "lucide-react";
+import { MessageCircle, X, Send, RotateCcw, Phone } from "lucide-react";
+
+type Intent = "sales" | "support" | "general";
+type OrgType = "SMEs" | "Legal" | "Banking & Finance" | "Healthcare" | "Education" | "Manufacturing" | "NGOs" | "Government";
+type CompanySize = "1–10" | "11–50" | "51–300" | "300+";
+type PrimaryNeed = "Email/Collaboration" | "Device Management" | "Security/Compliance" | "Messaging Automation" | "Website" | "Backup/Recovery" | "Data & Analytics";
+type CurrentStack = "Microsoft 365" | "Google Workspace" | "On-prem" | "None";
+type Urgency = "Now" | "30 days" | "90 days";
+type Budget = "Entry" | "Standard" | "Enterprise";
+
+interface Recommendation {
+  id: string;
+  name: string;
+  url: string;
+  reason: string;
+}
+
+interface ConversationData {
+  intent: Intent | "";
+  orgType: OrgType | "";
+  size: CompanySize | "";
+  need: PrimaryNeed | "";
+  stack: CurrentStack | "";
+  urgency: Urgency | "";
+  budget: Budget | "";
+  contact: {
+    name: string;
+    email: string;
+    company: string;
+    phone: string;
+  };
+}
 
 const Chatbot = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [currentStep, setCurrentStep] = useState("greeting");
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    company: "",
-    inquiry: "",
-    message: ""
+  const [currentStep, setCurrentStep] = useState("intent");
+  const [conversationData, setConversationData] = useState<ConversationData>({
+    intent: "",
+    orgType: "",
+    size: "",
+    need: "",
+    stack: "",
+    urgency: "",
+    budget: "",
+    contact: {
+      name: "",
+      email: "",
+      company: "",
+      phone: ""
+    }
   });
+  const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
 
-  const handleOptionSelect = (option: string) => {
-    setFormData({ ...formData, inquiry: option });
-    setCurrentStep("form");
+  const handleIntentSelect = (intent: Intent) => {
+    setConversationData({ ...conversationData, intent });
+    if (intent === "support" || intent === "general") {
+      setCurrentStep("contact");
+    } else {
+      setCurrentStep("orgType");
+    }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleQuickReply = (field: keyof ConversationData, value: any) => {
+    const updated = { ...conversationData, [field]: value };
+    setConversationData(updated);
+    
+    const stepOrder = ["orgType", "size", "need", "stack", "urgency", "budget", "contact"];
+    const currentIndex = stepOrder.indexOf(field as string);
+    const nextStep = stepOrder[currentIndex + 1];
+    
+    if (nextStep) {
+      setCurrentStep(nextStep);
+    } else {
+      generateRecommendations(updated);
+    }
+  };
+
+  const generateRecommendations = (data: ConversationData) => {
+    const recs: Recommendation[] = [];
+    
+    // Microsoft 365 Rules
+    if (data.need === "Email/Collaboration") {
+      recs.push({
+        id: "m365-basic",
+        name: "Microsoft 365 Business Basic",
+        url: "/products/microsoft-365",
+        reason: "Email and collaboration focused solution"
+      });
+    }
+    
+    if (data.need === "Device Management" || data.need === "Security/Compliance") {
+      recs.push({
+        id: "m365-premium",
+        name: "Microsoft 365 Business Premium",
+        url: "/products/microsoft-365",
+        reason: "Advanced security and device management capabilities"
+      });
+    }
+    
+    // Google Workspace Rules
+    if (data.stack === "Google Workspace" || (data.need === "Email/Collaboration" && data.size !== "300+")) {
+      recs.push({
+        id: "google-workspace",
+        name: "Google Workspace",
+        url: "/products/google-workspace",
+        reason: "Google-native collaboration solution"
+      });
+    }
+    
+    // Messaging Automation Rules
+    if (data.need === "Messaging Automation") {
+      recs.push({
+        id: "messaging-platform",
+        name: "Datacare Messaging Platform",
+        url: "/products/datacare-messaging-platform",
+        reason: "WhatsApp and SMS automation for customer engagement"
+      });
+    }
+    
+    // Backup Rules
+    if (["Banking & Finance", "Healthcare", "Legal"].includes(data.orgType) || 
+        ["11–50", "51–300", "300+"].includes(data.size)) {
+      recs.push({
+        id: "cloud-backup",
+        name: "Cloud Backup & Recovery",
+        url: "/products/cloud-backup-and-recovery",
+        reason: "Essential for compliance and data protection"
+      });
+    }
+    
+    // Website Rules
+    if (data.need === "Website") {
+      recs.push({
+        id: "web-design",
+        name: "Web Design as a Service",
+        url: "/solutions/web-design-as-a-service",
+        reason: "Complete website solution with ongoing maintenance"
+      });
+    }
+    
+    // Analytics Rules
+    if (data.need === "Data & Analytics") {
+      recs.push({
+        id: "data-analytics",
+        name: "Data & Analytics Solutions",
+        url: "/solutions/data-and-analytics",
+        reason: "Business intelligence and reporting dashboards"
+      });
+    }
+    
+    setRecommendations(recs);
+    setCurrentStep("recommendations");
+  };
+
+  const handleContactSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Here you would typically send the data to your backend
-    console.log("Form submitted:", formData);
+    
+    // Send to backend/email
+    const payload = {
+      ...conversationData,
+      recommendations,
+      timestamp: new Date().toISOString()
+    };
+    
+    console.log("Conversation completed:", payload);
+    
+    // Here you would send to your webhook and email
+    // sendToWebhook(payload);
+    // sendToEmail(payload);
+    
     setCurrentStep("success");
     
-    // Reset after 3 seconds
     setTimeout(() => {
-      setIsOpen(false);
-      setCurrentStep("greeting");
-      setFormData({ name: "", email: "", company: "", inquiry: "", message: "" });
-    }, 3000);
+      resetChat();
+    }, 5000);
+  };
+
+  const resetChat = () => {
+    setIsOpen(false);
+    setCurrentStep("intent");
+    setConversationData({
+      intent: "",
+      orgType: "",
+      size: "",
+      need: "",
+      stack: "",
+      urgency: "",
+      budget: "",
+      contact: { name: "", email: "", company: "", phone: "" }
+    });
+    setRecommendations([]);
+  };
+
+  const startOver = () => {
+    setCurrentStep("intent");
+    setConversationData({
+      intent: "",
+      orgType: "",
+      size: "",
+      need: "",
+      stack: "",
+      urgency: "",
+      budget: "",
+      contact: { name: "", email: "", company: "", phone: "" }
+    });
+    setRecommendations([]);
   };
 
   if (!isOpen) {
@@ -72,7 +247,8 @@ const Chatbot = () => {
         </div>
 
         <div className="p-6">
-          {currentStep === "greeting" && (
+          {/* Intent Selection */}
+          {currentStep === "intent" && (
             <div className="space-y-4">
               <div className="bg-primary/5 p-4 rounded-lg">
                 <p className="text-sm font-medium text-primary mb-2">Hi, welcome to Datacare!</p>
@@ -83,21 +259,21 @@ const Chatbot = () => {
                 <Button
                   variant="outline"
                   className="w-full justify-start text-left"
-                  onClick={() => handleOptionSelect("Sales")}
+                  onClick={() => handleIntentSelect("sales")}
                 >
                   💼 Sales (Licensing, Automation, Web Design)
                 </Button>
                 <Button
                   variant="outline"
                   className="w-full justify-start text-left"
-                  onClick={() => handleOptionSelect("Support")}
+                  onClick={() => handleIntentSelect("support")}
                 >
                   🛠️ Technical Support
                 </Button>
                 <Button
                   variant="outline"
                   className="w-full justify-start text-left"
-                  onClick={() => handleOptionSelect("General")}
+                  onClick={() => handleIntentSelect("general")}
                 >
                   💬 General Inquiry
                 </Button>
@@ -105,63 +281,269 @@ const Chatbot = () => {
             </div>
           )}
 
-          {currentStep === "form" && (
-            <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Organization Type */}
+          {currentStep === "orgType" && (
+            <div className="space-y-4">
+              <div className="bg-primary/5 p-3 rounded-lg">
+                <p className="text-sm text-primary">What type of organization are you?</p>
+              </div>
+              <div className="grid grid-cols-2 gap-2">
+                {(["SMEs", "Legal", "Banking & Finance", "Healthcare", "Education", "Manufacturing", "NGOs", "Government"] as OrgType[]).map((type) => (
+                  <Button
+                    key={type}
+                    variant="outline"
+                    size="sm"
+                    className="text-xs"
+                    onClick={() => handleQuickReply("orgType", type)}
+                  >
+                    {type}
+                  </Button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Company Size */}
+          {currentStep === "size" && (
+            <div className="space-y-4">
+              <div className="bg-primary/5 p-3 rounded-lg">
+                <p className="text-sm text-primary">How many employees do you have?</p>
+              </div>
+              <div className="grid grid-cols-2 gap-2">
+                {(["1–10", "11–50", "51–300", "300+"] as CompanySize[]).map((size) => (
+                  <Button
+                    key={size}
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handleQuickReply("size", size)}
+                  >
+                    {size}
+                  </Button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Primary Need */}
+          {currentStep === "need" && (
+            <div className="space-y-4">
+              <div className="bg-primary/5 p-3 rounded-lg">
+                <p className="text-sm text-primary">What's your primary need?</p>
+              </div>
+              <div className="space-y-2">
+                {(["Email/Collaboration", "Device Management", "Security/Compliance", "Messaging Automation", "Website", "Backup/Recovery", "Data & Analytics"] as PrimaryNeed[]).map((need) => (
+                  <Button
+                    key={need}
+                    variant="outline"
+                    size="sm"
+                    className="w-full text-left justify-start text-xs"
+                    onClick={() => handleQuickReply("need", need)}
+                  >
+                    {need}
+                  </Button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Current Stack */}
+          {currentStep === "stack" && (
+            <div className="space-y-4">
+              <div className="bg-primary/5 p-3 rounded-lg">
+                <p className="text-sm text-primary">What's your current setup?</p>
+              </div>
+              <div className="space-y-2">
+                {(["Microsoft 365", "Google Workspace", "On-prem", "None"] as CurrentStack[]).map((stack) => (
+                  <Button
+                    key={stack}
+                    variant="outline"
+                    size="sm"
+                    className="w-full"
+                    onClick={() => handleQuickReply("stack", stack)}
+                  >
+                    {stack}
+                  </Button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Urgency */}
+          {currentStep === "urgency" && (
+            <div className="space-y-4">
+              <div className="bg-primary/5 p-3 rounded-lg">
+                <p className="text-sm text-primary">When do you need this implemented?</p>
+              </div>
+              <div className="space-y-2">
+                {(["Now", "30 days", "90 days"] as Urgency[]).map((urgency) => (
+                  <Button
+                    key={urgency}
+                    variant="outline"
+                    size="sm"
+                    className="w-full"
+                    onClick={() => handleQuickReply("urgency", urgency)}
+                  >
+                    {urgency}
+                  </Button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Budget */}
+          {currentStep === "budget" && (
+            <div className="space-y-4">
+              <div className="bg-primary/5 p-3 rounded-lg">
+                <p className="text-sm text-primary">What's your budget range?</p>
+              </div>
+              <div className="space-y-2">
+                {(["Entry", "Standard", "Enterprise"] as Budget[]).map((budget) => (
+                  <Button
+                    key={budget}
+                    variant="outline"
+                    size="sm"
+                    className="w-full"
+                    onClick={() => handleQuickReply("budget", budget)}
+                  >
+                    {budget}
+                  </Button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Contact Information */}
+          {currentStep === "contact" && (
+            <form onSubmit={handleContactSubmit} className="space-y-4">
               <div className="bg-primary/5 p-3 rounded-lg">
                 <p className="text-sm text-primary">
-                  Great! Let's get you connected with the right team.
+                  Let's get your contact details to finalize this.
                 </p>
               </div>
 
               <div className="space-y-3">
                 <Input
                   placeholder="Your Name *"
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  value={conversationData.contact.name}
+                  onChange={(e) => setConversationData({
+                    ...conversationData,
+                    contact: { ...conversationData.contact, name: e.target.value }
+                  })}
                   required
                   className="text-sm"
                 />
                 <Input
                   type="email"
                   placeholder="Email Address *"
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  value={conversationData.contact.email}
+                  onChange={(e) => setConversationData({
+                    ...conversationData,
+                    contact: { ...conversationData.contact, email: e.target.value }
+                  })}
                   required
                   className="text-sm"
                 />
                 <Input
-                  placeholder="Company Name"
-                  value={formData.company}
-                  onChange={(e) => setFormData({ ...formData, company: e.target.value })}
+                  placeholder="Company Name *"
+                  value={conversationData.contact.company}
+                  onChange={(e) => setConversationData({
+                    ...conversationData,
+                    contact: { ...conversationData.contact, company: e.target.value }
+                  })}
+                  required
                   className="text-sm"
                 />
-                <Textarea
-                  placeholder="How can we help you?"
-                  value={formData.message}
-                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                  className="text-sm min-h-20"
-                  required
+                <Input
+                  placeholder="Phone Number"
+                  value={conversationData.contact.phone}
+                  onChange={(e) => setConversationData({
+                    ...conversationData,
+                    contact: { ...conversationData.contact, phone: e.target.value }
+                  })}
+                  className="text-sm"
                 />
               </div>
 
-              <Button type="submit" className="w-full btn-primary">
+              <Button type="submit" className="w-full">
                 <Send className="w-4 h-4 mr-2" />
-                Send Message
+                Get Recommendations
               </Button>
             </form>
           )}
 
+          {/* Recommendations */}
+          {currentStep === "recommendations" && (
+            <div className="space-y-4">
+              <div className="bg-primary/5 p-4 rounded-lg">
+                <p className="text-sm font-medium text-primary mb-2">Based on your answers:</p>
+                <p className="text-sm text-muted-foreground">
+                  Here are our recommended solutions for your business needs.
+                </p>
+              </div>
+              
+              {recommendations.map((rec) => (
+                <div key={rec.id} className="border rounded-lg p-3 hover:bg-muted/50">
+                  <div className="flex justify-between items-start mb-2">
+                    <h4 className="font-medium text-sm">{rec.name}</h4>
+                    <Button 
+                      size="sm" 
+                      variant="outline"
+                      onClick={() => window.open(rec.url, '_blank')}
+                    >
+                      View
+                    </Button>
+                  </div>
+                  <p className="text-xs text-muted-foreground">{rec.reason}</p>
+                </div>
+              ))}
+              
+              <div className="space-y-2 pt-4">
+                <Button className="w-full" onClick={() => window.open('/contact', '_blank')}>
+                  Book a Consultation
+                </Button>
+                <Button variant="outline" className="w-full">
+                  Get a Retainer Quote
+                </Button>
+              </div>
+            </div>
+          )}
+
+          {/* Success */}
           {currentStep === "success" && (
             <div className="text-center space-y-4">
-              <div className="w-16 h-16 bg-success/10 rounded-full flex items-center justify-center mx-auto">
+              <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto">
                 <span className="text-2xl">✓</span>
               </div>
               <div>
-                <h3 className="font-semibold text-success mb-2">Message Sent!</h3>
+                <h3 className="font-semibold text-primary mb-2">Thank You!</h3>
                 <p className="text-sm text-muted-foreground">
-                  Thank you for contacting us. We'll get back to you within 24 hours.
+                  We've received your information and will contact you within 24 hours with a customized proposal.
                 </p>
               </div>
+            </div>
+          )}
+
+          {/* Action Buttons */}
+          {currentStep !== "intent" && currentStep !== "success" && (
+            <div className="flex gap-2 pt-4 border-t">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={startOver}
+                className="flex items-center gap-1"
+              >
+                <RotateCcw className="w-3 h-3" />
+                Start Over
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => window.open('/contact', '_blank')}
+                className="flex items-center gap-1"
+              >
+                <Phone className="w-3 h-3" />
+                Talk to Human
+              </Button>
             </div>
           )}
         </div>
