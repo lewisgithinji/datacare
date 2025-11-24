@@ -217,10 +217,23 @@ const Footer = () => {
 
         {/* Bottom Footer */}
         <div className="py-6 flex flex-col md:flex-row justify-between items-center gap-4">
-          <div className="text-sm text-slate-400">
-            © {currentYear} Datacare Limited. All rights reserved. | ISO 27001 Certified
+          <div className="flex flex-col md:flex-row items-center gap-2 md:gap-4">
+            <div className="text-sm text-slate-400">
+              © {currentYear} Datacare Limited. All rights reserved. | ISO 27001 Certified
+            </div>
+            <div className="text-xs text-slate-500">
+              Designed by{" "}
+              <a
+                href="https://sirlewis.pages.dev/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-accent hover:text-accent-light transition-colors"
+              >
+                Sirlewis
+              </a>
+            </div>
           </div>
-          
+
           {/* Social Links */}
           <div className="flex items-center space-x-4">
             <Link
