@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -6,6 +6,7 @@ import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
 import { useToast } from "@/hooks/use-toast";
+import emailjs from "@emailjs/browser";
 import { 
   MapPin, 
   Phone, 
@@ -27,8 +28,15 @@ import {
   Youtube
 } from "lucide-react";
 
+// EmailJS Configuration
+// Sign up at https://www.emailjs.com/ and get your credentials
+const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID || "YOUR_SERVICE_ID";
+const EMAILJS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || "YOUR_TEMPLATE_ID";
+const EMAILJS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || "YOUR_PUBLIC_KEY";
+
 const Contact = () => {
   const { toast } = useToast();
+  const formRef = useRef<HTMLFormElement>(null);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -51,25 +59,69 @@ const Contact = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate form submission
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    // Check if EmailJS is configured
+    if (EMAILJS_SERVICE_ID === "YOUR_SERVICE_ID" ||
+        EMAILJS_TEMPLATE_ID === "YOUR_TEMPLATE_ID" ||
+        EMAILJS_PUBLIC_KEY === "YOUR_PUBLIC_KEY") {
+      // Fallback: Open mailto link if EmailJS not configured
+      const mailtoLink = `mailto:info@datacare.co.ke?subject=${encodeURIComponent(formData.subject)}&body=${encodeURIComponent(
+        `Name: ${formData.name}\nEmail: ${formData.email}\nCompany: ${formData.company}\nPhone: ${formData.phone}\nService Interest: ${formData.serviceInterest}\n\nMessage:\n${formData.message}`
+      )}`;
+      window.location.href = mailtoLink;
 
-    toast({
-      title: "Message Sent Successfully!",
-      description: "Thank you for contacting us. We'll get back to you within 24 hours.",
-    });
+      toast({
+        title: "Opening Email Client",
+        description: "Please send the email from your email application.",
+      });
+      setIsSubmitting(false);
+      return;
+    }
 
-    // Reset form
-    setFormData({
-      name: "",
-      email: "",
-      company: "",
-      phone: "",
-      subject: "",
-      message: "",
-      serviceInterest: ""
-    });
-    setIsSubmitting(false);
+    try {
+      // Send email using EmailJS
+      const templateParams = {
+        from_name: formData.name,
+        from_email: formData.email,
+        company: formData.company || "Not provided",
+        phone: formData.phone || "Not provided",
+        subject: formData.subject,
+        service_interest: formData.serviceInterest || "General Inquiry",
+        message: formData.message,
+        to_email: "info@datacare.co.ke",
+      };
+
+      await emailjs.send(
+        EMAILJS_SERVICE_ID,
+        EMAILJS_TEMPLATE_ID,
+        templateParams,
+        EMAILJS_PUBLIC_KEY
+      );
+
+      toast({
+        title: "Message Sent Successfully!",
+        description: "Thank you for contacting us. We'll get back to you within 24 hours.",
+      });
+
+      // Reset form
+      setFormData({
+        name: "",
+        email: "",
+        company: "",
+        phone: "",
+        subject: "",
+        message: "",
+        serviceInterest: ""
+      });
+    } catch (error) {
+      console.error("EmailJS Error:", error);
+      toast({
+        title: "Failed to Send Message",
+        description: "Please try again or contact us directly at info@datacare.co.ke",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const offices = [
