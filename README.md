@@ -1,24 +1,14 @@
-# Welcome to your Lovable project
+# Datacare Limited - Website
 
-## Project info
+## Project Info
 
-**URL**: https://lovable.dev/projects/a0c2e7d2-a79f-41b7-bbc7-641f8014f0f0
+Official website for Datacare Limited, a leading East African IT company providing AI-powered services, Microsoft 365, Google Workspace, cybersecurity, cloud solutions, and web design.
 
-## How can I edit this code?
+**Live URL**: https://datacare.co.ke
 
-There are several ways of editing your application.
+## Development Setup
 
-**Use Lovable**
-
-Simply visit the [Lovable Project](https://lovable.dev/projects/a0c2e7d2-a79f-41b7-bbc7-641f8014f0f0) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+To run this project locally, you need Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
 
 Follow these steps:
 
@@ -60,14 +50,19 @@ This project is built with:
 - shadcn-ui
 - Tailwind CSS
 
-## How can I deploy this project?
+## Deployment
 
-Simply open [Lovable](https://lovable.dev/projects/a0c2e7d2-a79f-41b7-bbc7-641f8014f0f0) and click on Share -> Publish.
+This project can be deployed to any static hosting service such as:
 
-## Can I connect a custom domain to my Lovable project?
+- Vercel
+- Netlify
+- GitHub Pages
+- AWS S3 + CloudFront
 
-Yes, you can!
+Build the project for production using:
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+```sh
+npm run build
+```
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+The build output will be in the `dist` directory.

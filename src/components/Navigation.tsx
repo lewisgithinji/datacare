@@ -59,9 +59,9 @@ const Navigation = () => {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-4">
-            <img 
-              src="/lovable-uploads/4232c54f-4a56-45a4-93a7-42688be356e7.png"
-              alt="Datacare Limited Logo" 
+            <img
+              src="/datacare-logo.png"
+              alt="Datacare Limited Logo"
               className="h-12 w-auto"
             />
           </Link>

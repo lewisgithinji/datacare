@@ -81,9 +81,9 @@ const Footer = () => {
             {/* Company Info */}
             <div className="lg:col-span-2">
               <Link to="/" className="flex items-center mb-6">
-                <img 
-                  src="/lovable-uploads/4232c54f-4a56-45a4-93a7-42688be356e7.png" 
-                  alt="Datacare Limited Logo" 
+                <img
+                  src="/datacare-logo.png"
+                  alt="Datacare Limited Logo"
                   className="h-8 w-auto filter brightness-0 invert"
                 />
               </Link>
