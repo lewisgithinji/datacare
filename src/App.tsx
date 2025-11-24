@@ -43,6 +43,8 @@ import Government from "./pages/industries/Government";
 import CaseStudies from "./pages/resources/CaseStudies";
 import Guides from "./pages/resources/Guides";
 import KnowledgeBase from "./pages/resources/KnowledgeBase";
+// Portfolio page
+import Portfolio from "./pages/Portfolio";
 
 const queryClient = new QueryClient();
 
@@ -63,6 +65,7 @@ const App = () => (
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/solutions" element={<Solutions />} />
+          <Route path="/portfolio" element={<Portfolio />} />
           
           {/* Solution pages */}
           <Route path="/solutions/cloud-and-licensing" element={<CloudAndLicensing />} />

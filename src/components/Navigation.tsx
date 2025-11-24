@@ -48,6 +48,7 @@ const Navigation = () => {
         { title: "Knowledge Base", href: "/resources/knowledge-base" }
       ]
     },
+    { label: "Portfolio", href: "/portfolio" },
     { label: "About", href: "/about" },
     { label: "Contact", href: "/contact" }
   ];
