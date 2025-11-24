@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 import { useToast } from "@/hooks/use-toast";
 import { 
   MapPin, 
@@ -189,8 +190,14 @@ const Contact = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO
+        title="Contact Us - Datacare Limited"
+        description="Contact Datacare Limited for IT services, Microsoft 365, Google Workspace, cybersecurity, and cloud solutions in Kenya. Get in touch with our team in Nairobi for a consultation."
+        keywords="contact Datacare, IT support Kenya, IT consultation Nairobi, technology services contact, Datacare phone, Datacare email"
+        url="https://datacare.co.ke/contact"
+      />
       <Navigation />
-      
+
       {/* Hero Section */}
       <section className="pt-24 pb-16 bg-gradient-to-br from-primary/5 via-accent/5 to-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

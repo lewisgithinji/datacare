@@ -1,14 +1,71 @@
+# Robots.txt for Datacare Limited
+# https://datacare.co.ke
+
+# Allow all search engines
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://datacare.co.ke/sitemap.xml
+
+# Google
 User-agent: Googlebot
 Allow: /
 
+# Google Images
+User-agent: Googlebot-Image
+Allow: /
+
+# Bing
 User-agent: Bingbot
 Allow: /
 
-User-agent: Twitterbot
+# Bing Ads
+User-agent: Adidxbot
 Allow: /
 
+# Yahoo
+User-agent: Slurp
+Allow: /
+
+# DuckDuckGo
+User-agent: DuckDuckBot
+Allow: /
+
+# Facebook
 User-agent: facebookexternalhit
 Allow: /
 
-User-agent: *
+# Twitter
+User-agent: Twitterbot
 Allow: /
+
+# LinkedIn
+User-agent: LinkedInBot
+Allow: /
+
+# Pinterest
+User-agent: Pinterestbot
+Allow: /
+
+# Block bad bots
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
+
+# Crawl-delay for resource management
+User-agent: *
+Crawl-delay: 1
+
+# Block access to admin or private areas (if any exist)
+Disallow: /api/
+Disallow: /_/
+Disallow: /private/

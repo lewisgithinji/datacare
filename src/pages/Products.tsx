@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 import { 
   Shield, 
   Brain, 
@@ -363,8 +364,14 @@ const Products = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO
+        title="Products - Microsoft 365, Google Workspace & Cloud Solutions"
+        description="Explore Datacare Limited's products including Microsoft 365, Google Workspace, Datacare Messaging Platform, and Cloud Backup & Recovery solutions for businesses in Kenya."
+        keywords="Microsoft 365 Kenya, Google Workspace Kenya, cloud backup, messaging platform, business software, productivity tools, enterprise solutions"
+        url="https://datacare.co.ke/products"
+      />
       <Navigation />
-      
+
       {/* Hero Section */}
       <section className="pt-24 pb-16 bg-gradient-to-br from-primary/5 via-accent/5 to-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

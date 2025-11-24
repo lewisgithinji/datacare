@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 import { 
   Users, 
   Target, 
@@ -196,8 +197,14 @@ const About = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO
+        title="About Us - Datacare Limited"
+        description="Learn about Datacare Limited, Kenya's leading IT company since 2012. We provide AI-powered IT services, cybersecurity, cloud solutions, and digital transformation for businesses across East Africa."
+        keywords="about Datacare, IT company Kenya, technology company Nairobi, East Africa IT services, Datacare history, IT solutions provider"
+        url="https://datacare.co.ke/about"
+      />
       <Navigation />
-      
+
       {/* Hero Section */}
       <section className="pt-24 pb-16 bg-gradient-to-br from-primary/5 via-accent/5 to-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

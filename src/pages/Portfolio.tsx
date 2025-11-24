@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 import {
   Code,
   ExternalLink,
@@ -364,6 +365,12 @@ const Portfolio = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO
+        title="Portfolio - Web Development Projects & Digital Solutions"
+        description="Explore Datacare Limited's portfolio of web applications and digital solutions across IT, Legal, Banking, Healthcare, Education, and Manufacturing industries in Kenya, South Sudan, and Australia."
+        keywords="web development portfolio Kenya, IT projects, digital solutions, React projects, WordPress development, Laravel development, Kenya web design"
+        url="https://datacare.co.ke/portfolio"
+      />
       <Navigation />
 
       {/* Hero Section */}
