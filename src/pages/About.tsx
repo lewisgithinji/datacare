@@ -2,11 +2,11 @@ import { Button } from "@/components/ui/button";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
-import { 
-  Users, 
-  Target, 
-  Award, 
-  MapPin, 
+import {
+  Users,
+  Target,
+  Award,
+  MapPin,
   Calendar,
   TrendingUp,
   Shield,
@@ -25,7 +25,8 @@ import {
   Mail,
   Clock,
   Cpu,
-  Network
+  Network,
+  ExternalLink
 } from "lucide-react";
 
 const About = () => {
@@ -97,32 +98,55 @@ const About = () => {
 
   const leadership = [
     {
-      name: "Dr. James Kamau",
-      position: "Chief Executive Officer",
-      bio: "15+ years leading digital transformation initiatives across Africa. Former IBM East Africa Director.",
+      name: "Lewis Githinji",
+      position: "Founder & CEO",
+      bio: "Senior Full-Stack Developer & AI Solutions Architect with 12+ years of experience building enterprise solutions across East Africa. Founded Datacare Limited in 2012 with a vision to democratize enterprise-grade IT solutions for African businesses. Educated at Mt. Kenya University, Lewis specializes in web applications, AI agents, automation, and cloud infrastructure. Personally led delivery of 500+ projects ranging from hospital management systems to AI-powered chatbots for financial institutions.",
       image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=face",
-      linkedin: "https://linkedin.com/in/jameskamau"
+      linkedin: "https://linkedin.com/in/yourprofile",
+      portfolio: "https://sirlewis.pages.dev",
+      isFounder: true
     },
     {
-      name: "Sarah Muthoni",
-      position: "Chief Technology Officer",
-      bio: "AI and machine learning expert with 12+ years experience. MIT graduate specializing in enterprise AI solutions.",
-      image: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=200&h=200&fit=crop&crop=face",
-      linkedin: "https://linkedin.com/in/sarahmuthoni"
-    },
-    {
-      name: "Michael Odhiambo",
-      position: "Chief Security Officer",
-      bio: "Cybersecurity veteran with expertise in AI-powered threat detection. Former Safaricom Security Division Head.",
+      name: "Samson Kayembe",
+      position: "Senior Software Developer",
+      bio: "Full-stack developer with 8+ years of experience building scalable enterprise applications. Specializes in React, Node.js, and cloud architecture. Has led development of mission-critical systems for banking and healthcare clients across East Africa. Expert in microservices architecture and API design.",
       image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop&crop=face",
-      linkedin: "https://linkedin.com/in/michaelodhiambo"
+      linkedin: "https://linkedin.com/in/samsonkayembe"
     },
     {
-      name: "Grace Wanjiku",
-      position: "Chief Operations Officer",
-      bio: "Operations excellence expert focused on scalable service delivery. 10+ years in enterprise IT operations.",
-      image: "https://images.unsplash.com/photo-1559941338-fd4d06aa2d25?w=200&h=200&fit=crop&crop=face",
-      linkedin: "https://linkedin.com/in/gracewanjiku"
+      name: "Jackline Mumbi",
+      position: "Finance Manager",
+      bio: "Certified Public Accountant (CPA-K) with 7+ years of experience in financial management for technology companies. Manages budgets, client billing, and financial reporting. Previously worked with leading Nairobi-based tech firms. Expert in financial planning, tax compliance, and revenue optimization for IT service businesses.",
+      image: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=200&h=200&fit=crop&crop=face",
+      linkedin: "https://linkedin.com/in/jacklinemumbi"
+    },
+    {
+      name: "Dennis Muriithi",
+      position: "Legal & Compliance Officer",
+      bio: "Legal counsel specializing in technology law, data protection, and IT contracts. Ensures Datacare's compliance with Kenya Data Protection Act 2019 and international standards. 6+ years experience drafting SLAs, vendor agreements, and handling intellectual property matters. Holds LLB from University of Nairobi and advocate of the High Court of Kenya.",
+      image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&h=200&fit=crop&crop=face",
+      linkedin: "https://linkedin.com/in/dennismuriithi"
+    },
+    {
+      name: "Bernard Mugo",
+      position: "Infrastructure & DevOps Lead",
+      bio: "Cloud infrastructure specialist with 9+ years managing enterprise IT infrastructure. Expert in AWS, Azure, and hybrid cloud deployments. Certified in multiple cloud platforms and security frameworks. Leads our 24/7 infrastructure monitoring and disaster recovery operations. Previously managed data centers for multinational corporations.",
+      image: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=200&h=200&fit=crop&crop=face",
+      linkedin: "https://linkedin.com/in/bernardmugo"
+    },
+    {
+      name: "Christine Akinyi",
+      position: "Client Success Manager",
+      bio: "Client relationship expert with 6+ years ensuring customer satisfaction and retention. Manages onboarding, training, and ongoing support for enterprise clients. Known for building strong client partnerships and achieving 95%+ client retention rate. Background in IT support and project management.",
+      image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&h=200&fit=crop&crop=face",
+      linkedin: "https://linkedin.com/in/christineakinyi"
+    },
+    {
+      name: "Joyce Nduku",
+      position: "Cybersecurity Analyst",
+      bio: "Cybersecurity professional with 5+ years protecting enterprise systems from evolving threats. Specialized in threat intelligence, vulnerability assessment, and incident response. Holds CISSP and CEH certifications. Manages our Security Operations Center (SOC) and conducts regular security audits for clients. Previously worked with Kenyan financial institutions.",
+      image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=200&h=200&fit=crop&crop=face",
+      linkedin: "https://linkedin.com/in/joycenduku"
     }
   ];
 
@@ -391,16 +415,56 @@ const About = () => {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {leadership.map((leader, index) => (
+          {/* Founder Section - Featured */}
+          <div className="max-w-4xl mx-auto mb-16">
+            <div className="card-elevated">
+              <div className="grid md:grid-cols-3 gap-8 items-center">
+                <div className="md:col-span-1 text-center">
+                  <div className="w-48 h-48 rounded-full overflow-hidden mx-auto mb-4 border-4 border-primary/20">
+                    <img
+                      src={leadership[0].image}
+                      alt={leadership[0].name}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <div className="flex justify-center gap-3 mt-4">
+                    <Button variant="outline" size="sm" asChild>
+                      <a href={leadership[0].linkedin} target="_blank" rel="noopener noreferrer">
+                        LinkedIn
+                      </a>
+                    </Button>
+                    <Button variant="outline" size="sm" asChild>
+                      <a href={leadership[0].portfolio} target="_blank" rel="noopener noreferrer">
+                        Portfolio
+                      </a>
+                    </Button>
+                  </div>
+                </div>
+                <div className="md:col-span-2">
+                  <h3 className="text-2xl font-bold mb-2">{leadership[0].name}</h3>
+                  <div className="text-lg text-primary font-semibold mb-4">{leadership[0].position}</div>
+                  <p className="text-muted-foreground leading-relaxed mb-4">
+                    {leadership[0].bio}
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    📧 lewis@datacare.co.ke | 📱 +254 784 155 752
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Team Members Grid */}
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {leadership.slice(1).map((leader, index) => (
               <div
                 key={leader.name}
                 className="card-elevated text-center group cursor-pointer"
                 style={{ animationDelay: `${index * 100}ms` }}
               >
                 <div className="w-24 h-24 rounded-full overflow-hidden mx-auto mb-6 group-hover:scale-105 transition-transform duration-300">
-                  <img 
-                    src={leader.image} 
+                  <img
+                    src={leader.image}
                     alt={leader.name}
                     className="w-full h-full object-cover"
                   />
@@ -412,9 +476,11 @@ const About = () => {
                 <p className="text-muted-foreground text-sm leading-relaxed mb-4">
                   {leader.bio}
                 </p>
-                <Button variant="outline" size="sm" className="btn-outline">
-                  LinkedIn Profile
-                  <ArrowRight className="ml-2 h-4 w-4" />
+                <Button variant="outline" size="sm" className="btn-outline" asChild>
+                  <a href={leader.linkedin} target="_blank" rel="noopener noreferrer">
+                    LinkedIn Profile
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </a>
                 </Button>
               </div>
             ))}
