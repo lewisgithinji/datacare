@@ -56,13 +56,17 @@ This project is configured for deployment on Cloudflare Pages:
 
 1. **Connect Repository**: Link your GitHub repository to Cloudflare Pages
 2. **Build Settings**:
-   - Build command: `npm run build`
+   - Framework preset: `None`
+   - Build command: `npm install && npm run build`
    - Build output directory: `dist`
    - Root directory: `/`
+   - Node version: `18`
 3. **Environment Variables**: Add your EmailJS credentials in Cloudflare Pages settings:
    - `VITE_EMAILJS_SERVICE_ID`
    - `VITE_EMAILJS_TEMPLATE_ID`
    - `VITE_EMAILJS_PUBLIC_KEY`
+
+**Note**: The `.node-version` file ensures npm is used instead of Bun for consistent builds.
 
 ### Other Platforms
 
