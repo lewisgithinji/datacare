@@ -78,16 +78,34 @@ const Contact = () => {
     }
 
     try {
-      // Send email using EmailJS
+      // Send email using EmailJS with comprehensive template params
       const templateParams = {
+        // Standard EmailJS template variables
         from_name: formData.name,
         from_email: formData.email,
+        to_email: "info@datacare.co.ke",
+        to_name: "Datacare Team",
+        subject: formData.subject || "New Contact Form Submission",
+        message: formData.message,
+
+        // Additional custom fields
         company: formData.company || "Not provided",
         phone: formData.phone || "Not provided",
-        subject: formData.subject,
         service_interest: formData.serviceInterest || "General Inquiry",
-        message: formData.message,
-        to_email: "info@datacare.co.ke",
+
+        // Formatted message body for email
+        reply_to: formData.email,
+        message_html: `
+          <strong>Contact Form Submission</strong><br><br>
+          <strong>Name:</strong> ${formData.name}<br>
+          <strong>Email:</strong> ${formData.email}<br>
+          <strong>Company:</strong> ${formData.company || "Not provided"}<br>
+          <strong>Phone:</strong> ${formData.phone || "Not provided"}<br>
+          <strong>Service Interest:</strong> ${formData.serviceInterest || "General Inquiry"}<br>
+          <strong>Subject:</strong> ${formData.subject}<br><br>
+          <strong>Message:</strong><br>
+          ${formData.message}
+        `
       };
 
       await emailjs.send(
@@ -112,11 +130,21 @@ const Contact = () => {
         message: "",
         serviceInterest: ""
       });
-    } catch (error) {
+    } catch (error: any) {
       console.error("EmailJS Error:", error);
+
+      // Provide more specific error message
+      let errorMessage = "Please try again or contact us directly at info@datacare.co.ke";
+
+      if (error?.text) {
+        errorMessage = `Error: ${error.text}. Please contact us at info@datacare.co.ke`;
+      } else if (error?.message) {
+        errorMessage = `Error: ${error.message}. Please contact us at info@datacare.co.ke`;
+      }
+
       toast({
         title: "Failed to Send Message",
-        description: "Please try again or contact us directly at info@datacare.co.ke",
+        description: errorMessage,
         variant: "destructive",
       });
     } finally {
