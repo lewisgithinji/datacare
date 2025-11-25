@@ -1,68 +1,90 @@
-# Datacare Limited - Website
+# Datacare Limited - Corporate Website
 
-## Project Info
-
-Official website for Datacare Limited, a leading East African IT company providing AI-powered services, Microsoft 365, Google Workspace, cybersecurity, cloud solutions, and web design.
+Official website for Datacare Limited, a leading East African IT services company providing Microsoft 365, Google Workspace, cybersecurity, cloud solutions, and web design services.
 
 **Live URL**: https://datacare.co.ke
 
-## Development Setup
+## Technology Stack
 
-To run this project locally, you need Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+- **Framework**: React 18 with TypeScript
+- **Build Tool**: Vite 5
+- **Styling**: Tailwind CSS with shadcn/ui components
+- **Routing**: React Router v6
+- **Email**: EmailJS integration
+- **Forms**: React Hook Form with Zod validation
 
-Follow these steps:
+## Development
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+### Prerequisites
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+- Node.js 18+ and npm
+- Git
 
-# Step 3: Install the necessary dependencies.
-npm i
+### Local Setup
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+```bash
+# Clone the repository
+git clone https://github.com/lewisgithinji/datacare.git
+
+# Navigate to project directory
+cd datacare
+
+# Install dependencies
+npm install
+
+# Start development server
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+The development server will start at http://localhost:8080
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+### Build
 
-**Use GitHub Codespaces**
+```bash
+# Production build
+npm run build
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+# Preview production build locally
+npm run preview
+```
 
 ## Deployment
 
-This project can be deployed to any static hosting service such as:
+### Cloudflare Pages
 
+This project is configured for deployment on Cloudflare Pages:
+
+1. **Connect Repository**: Link your GitHub repository to Cloudflare Pages
+2. **Build Settings**:
+   - Build command: `npm run build`
+   - Build output directory: `dist`
+   - Root directory: `/`
+3. **Environment Variables**: Add your EmailJS credentials in Cloudflare Pages settings:
+   - `VITE_EMAILJS_SERVICE_ID`
+   - `VITE_EMAILJS_TEMPLATE_ID`
+   - `VITE_EMAILJS_PUBLIC_KEY`
+
+### Other Platforms
+
+The project can also be deployed to:
 - Vercel
 - Netlify
+- AWS Amplify
 - GitHub Pages
-- AWS S3 + CloudFront
 
-Build the project for production using:
+## Project Structure
 
-```sh
-npm run build
+```
+datacare/
+├── src/
+│   ├── components/     # Reusable UI components
+│   ├── pages/          # Page components
+│   ├── lib/            # Utilities and helpers
+│   └── main.tsx        # Application entry point
+├── public/             # Static assets
+└── dist/               # Build output
 ```
 
-The build output will be in the `dist` directory.
+## License
+
+© 2025 Datacare Limited. All rights reserved.
