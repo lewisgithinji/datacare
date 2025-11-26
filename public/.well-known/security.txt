@@ -1,0 +1,5 @@
+Contact: mailto:security@datacare.co.ke
+Contact: mailto:lewis@datacare.co.ke
+Expires: 2026-11-26T00:00:00.000Z
+Preferred-Languages: en
+Canonical: https://datacare.co.ke/.well-known/security.txt

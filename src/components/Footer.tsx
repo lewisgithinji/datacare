@@ -221,6 +221,15 @@ const Footer = () => {
             <div className="text-sm text-slate-400">
               © {currentYear} Datacare Limited. All rights reserved. | ISO 27001 Certified
             </div>
+            <div className="flex items-center gap-3 text-xs text-slate-500">
+              <Link to="/privacy-policy" className="hover:text-accent transition-colors">
+                Privacy Policy
+              </Link>
+              <span>•</span>
+              <Link to="/terms-of-service" className="hover:text-accent transition-colors">
+                Terms of Service
+              </Link>
+            </div>
             <div className="text-xs text-slate-500">
               Designed by{" "}
               <a

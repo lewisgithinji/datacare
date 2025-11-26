@@ -7,11 +7,12 @@ import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
 import { useToast } from "@/hooks/use-toast";
 import emailjs from "@emailjs/browser";
-import { 
-  MapPin, 
-  Phone, 
-  Mail, 
-  Clock, 
+import { z } from "zod";
+import {
+  MapPin,
+  Phone,
+  Mail,
+  Clock,
   Send,
   Building,
   HeadphonesIcon,
@@ -27,6 +28,33 @@ import {
   Facebook,
   Youtube
 } from "lucide-react";
+
+// Contact form validation schema
+const contactSchema = z.object({
+  name: z.string()
+    .min(2, "Name must be at least 2 characters")
+    .max(100, "Name must not exceed 100 characters")
+    .regex(/^[a-zA-Z\s'-]+$/, "Name can only contain letters, spaces, hyphens, and apostrophes"),
+  email: z.string()
+    .email("Please enter a valid email address")
+    .max(255, "Email must not exceed 255 characters"),
+  company: z.string()
+    .max(100, "Company name must not exceed 100 characters")
+    .optional(),
+  phone: z.string()
+    .regex(/^[\d\s+()-]*$/, "Phone number can only contain digits, spaces, +, -, (, )")
+    .min(10, "Phone number must be at least 10 characters")
+    .max(20, "Phone number must not exceed 20 characters")
+    .optional()
+    .or(z.literal("")),
+  subject: z.string()
+    .min(5, "Subject must be at least 5 characters")
+    .max(200, "Subject must not exceed 200 characters"),
+  message: z.string()
+    .min(10, "Message must be at least 10 characters")
+    .max(2000, "Message must not exceed 2000 characters"),
+  serviceInterest: z.string().optional()
+});
 
 // EmailJS Configuration
 // Sign up at https://www.emailjs.com/ and get your credentials
@@ -59,6 +87,36 @@ const Contact = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
+    // Rate limiting check - allow only 1 submission per 60 seconds
+    const lastSubmitTime = localStorage.getItem('lastContactSubmit');
+    const now = Date.now();
+    if (lastSubmitTime && now - parseInt(lastSubmitTime) < 60000) {
+      const remainingTime = Math.ceil((60000 - (now - parseInt(lastSubmitTime))) / 1000);
+      toast({
+        title: "Please Wait",
+        description: `You can submit again in ${remainingTime} seconds. This helps us prevent spam.`,
+        variant: "destructive",
+      });
+      setIsSubmitting(false);
+      return;
+    }
+
+    // Validate form data with Zod
+    try {
+      contactSchema.parse(formData);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        const firstError = error.errors[0];
+        toast({
+          title: "Validation Error",
+          description: firstError.message,
+          variant: "destructive",
+        });
+        setIsSubmitting(false);
+        return;
+      }
+    }
+
     // Check if EmailJS is configured
     if (EMAILJS_SERVICE_ID === "YOUR_SERVICE_ID" ||
         EMAILJS_TEMPLATE_ID === "YOUR_TEMPLATE_ID" ||
@@ -78,6 +136,8 @@ const Contact = () => {
     }
 
     try {
+      // Store submission timestamp for rate limiting
+      localStorage.setItem('lastContactSubmit', now.toString());
       // Send email using EmailJS with comprehensive template params
       const templateParams = {
         // Standard EmailJS template variables

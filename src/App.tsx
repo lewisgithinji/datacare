@@ -7,7 +7,7 @@ import { HelmetProvider } from "react-helmet-async";
 import ScrollToTop from "./components/ScrollToTop";
 import Chatbot from "./components/Chatbot";
 import Index from "./pages/Index";
-import Industries from "./pages/Industries";  
+import Industries from "./pages/Industries";
 import Products from "./pages/Products";
 import AIServices from "./pages/AIServices";
 import Resources from "./pages/Resources";
@@ -15,6 +15,8 @@ import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Solutions from "./pages/Solutions";
 import NotFound from "./pages/NotFound";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import TermsOfService from "./pages/TermsOfService";
 
 // Solution pages
 import CloudAndLicensing from "./pages/solutions/CloudAndLicensing";
@@ -98,7 +100,11 @@ const App = () => (
           <Route path="/resources/case-studies" element={<CaseStudies />} />
           <Route path="/resources/guides" element={<Guides />} />
           <Route path="/resources/knowledge-base" element={<KnowledgeBase />} />
-          
+
+          {/* Legal pages */}
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/terms-of-service" element={<TermsOfService />} />
+
           {/* Legacy route */}
           <Route path="/data-analytics-platform" element={<AIServices />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
