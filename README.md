@@ -6,9 +6,34 @@
 [![Vite](https://img.shields.io/badge/Vite-7.2-646CFF?logo=vite&logoColor=white)](https://vite.dev/)
 [![License](https://img.shields.io/badge/License-Proprietary-red.svg)](https://datacare.co.ke)
 
-Official corporate website for **Datacare Limited**, a leading East African IT services company specializing in Microsoft 365, Google Workspace, cybersecurity, cloud infrastructure, and enterprise web solutions.
+## Overview
+
+Enterprise-grade corporate website for **Datacare Limited**, a leading East African IT services company. This production-ready platform showcases advanced React development, modern UI/UX design, and enterprise-level features including AI-powered chatbot integration, comprehensive security implementation, and full TypeScript type safety.
+
+### 🎯 Project Highlights
+
+- **Enterprise Architecture**: Production-deployed React 18.3 application serving 34+ portfolio projects and 8 industry verticals
+- **AI Integration**: Custom Supabase-powered chatbot with analytics and real-time communication
+- **Modern Stack**: Vite build system, TypeScript 5.5, shadcn/ui component library, and TanStack Query for state management
+- **Security-First**: Comprehensive security headers, Zod validation, GDPR/Kenya DPA 2019 compliance
+- **Performance Optimized**: Code splitting, lazy loading, and edge delivery via Cloudflare Pages CDN
+
+This project demonstrates expertise in modern React development, TypeScript architecture, enterprise UI/UX design, third-party API integration, and production deployment at scale.
 
 **🌐 Live Site**: [https://datacare.co.ke](https://datacare.co.ke)
+
+### 💼 Key Technologies
+
+| Category | Technologies |
+|----------|-------------|
+| **Frontend** | React 18.3, TypeScript 5.5, Vite 7.2 |
+| **UI Framework** | Tailwind CSS 3.4, shadcn/ui, Radix UI |
+| **State Management** | TanStack React Query 5.5, React Router 6.26 |
+| **Backend Integration** | Supabase 2.56, EmailJS |
+| **Forms & Validation** | React Hook Form 7.53, Zod 3.23 |
+| **Security** | Security Headers, Input Validation, GDPR/DPA Compliance |
+| **Deployment** | Cloudflare Pages, Edge CDN, Automatic HTTPS |
+| **Development** | ESLint 9.9, TypeScript ESLint, SWC Compiler |
 
 ---
 
