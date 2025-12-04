@@ -8,14 +8,42 @@ const SUPABASE_PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
 // Import the supabase client like this:
 // import { supabase } from "@/integrations/supabase/client";
 
-if (!SUPABASE_URL || !SUPABASE_PUBLISHABLE_KEY) {
-  throw new Error('Missing Supabase environment variables. Please check your .env file.');
-}
+if (SUPABASE_URL && SUPABASE_PUBLISHABLE_KEY) {
+  export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
+    auth: {
+      storage: localStorage,
+      persistSession: true,
+      autoRefreshToken: true,
+    }
+  });
+} else {
+  // Create a tolerant proxy that delays throwing until a method is actually used.
+  const missingMsg = 'Missing Supabase environment variables. Supabase client is unavailable.';
 
-export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
-  auth: {
-    storage: localStorage,
-    persistSession: true,
-    autoRefreshToken: true,
+  function createMissingProxy(): any {
+    const handler: ProxyHandler<any> = {
+      get(_target, prop) {
+        if (prop === Symbol.toStringTag) return 'MissingSupabaseClient';
+        // return another proxy so chained property access doesn't throw immediately
+        return createMissingProxy();
+      },
+      apply() {
+        throw new Error(missingMsg);
+      },
+      construct() {
+        throw new Error(missingMsg);
+      }
+    };
+
+    // function-style proxy so it can be called or have properties accessed
+    const fn = () => { throw new Error(missingMsg); };
+    return new Proxy(fn, handler);
   }
-});
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  export const supabase: any = createMissingProxy();
+
+  // Helpful warning in console for developers
+  // eslint-disable-next-line no-console
+  console.warn('Supabase client not initialized: VITE_SUPABASE_URL and/or VITE_SUPABASE_ANON_KEY are missing.');
+}
