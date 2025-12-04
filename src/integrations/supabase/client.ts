@@ -8,8 +8,12 @@ const SUPABASE_PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
 // Import the supabase client like this:
 // import { supabase } from "@/integrations/supabase/client";
 
+// Export a top-level binding so ESM analysis works; initialize below.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export let supabase: any;
+
 if (SUPABASE_URL && SUPABASE_PUBLISHABLE_KEY) {
-  export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
+  supabase = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
     auth: {
       storage: localStorage,
       persistSession: true,
@@ -40,8 +44,7 @@ if (SUPABASE_URL && SUPABASE_PUBLISHABLE_KEY) {
     return new Proxy(fn, handler);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  export const supabase: any = createMissingProxy();
+  supabase = createMissingProxy();
 
   // Helpful warning in console for developers
   // eslint-disable-next-line no-console
