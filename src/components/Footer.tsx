@@ -18,14 +18,15 @@ const Footer = () => {
 
   const footerLinks = {
     solutions: [
+      { name: "All Solutions", link: "/solutions" },
+      { name: "Employee Amplification", link: "/employee-amplification" },
       { name: "Cloud & Licensing", link: "/solutions/cloud-and-licensing" },
       { name: "AI & Messaging Automation", link: "/solutions/ai-and-messaging-automation" },
-      { name: "Web Design as a Service", link: "/solutions/web-design-as-a-service" },
-      { name: "SME Digital Transformation", link: "/solutions/sme-digital-transformation" },
-      { name: "Security & Compliance", link: "/solutions/security-and-compliance" }
+      { name: "Data & Analytics", link: "/solutions/data-and-analytics" }
     ],
     products: [
-      { name: "Microsoft 365", link: "/products/microsoft365" },
+      { name: "All Products", link: "/products" },
+      { name: "Microsoft 365", link: "/products/microsoft-365" },
       { name: "Google Workspace", link: "/products/google-workspace" },
       { name: "Datacare Messaging Platform", link: "/products/datacare-messaging-platform" },
       { name: "Cloud Backup & Recovery", link: "/products/cloud-backup-and-recovery" }

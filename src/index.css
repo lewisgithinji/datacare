@@ -238,3 +238,230 @@ All colors MUST be HSL.
     transform: translateY(0);
   }
 }
+
+/* Knowledge Base Article Styling */
+.kb-article {
+  @apply text-foreground;
+}
+
+.kb-article h2 {
+  @apply text-3xl font-bold mt-12 mb-6 text-foreground border-b-2 border-orange-500 pb-3;
+}
+
+.kb-article h3 {
+  @apply text-2xl font-bold mt-8 mb-4 text-foreground;
+}
+
+.kb-article h4 {
+  @apply text-xl font-semibold mt-6 mb-3 text-foreground;
+}
+
+.kb-article p {
+  @apply mb-6 leading-relaxed text-lg text-muted-foreground;
+}
+
+.kb-article strong {
+  @apply font-semibold text-foreground;
+}
+
+.kb-article em {
+  @apply italic;
+}
+
+.kb-article ul, .kb-article ol {
+  @apply mb-6 ml-6 space-y-2;
+}
+
+.kb-article ul {
+  @apply list-disc;
+}
+
+.kb-article ol {
+  @apply list-decimal;
+}
+
+.kb-article li {
+  @apply text-muted-foreground leading-relaxed;
+}
+
+.kb-article a {
+  @apply text-primary hover:text-primary/80 underline font-medium transition-colors;
+}
+
+.kb-article blockquote {
+  @apply border-l-4 border-orange-500 pl-6 py-4 my-8 bg-muted/30 italic text-muted-foreground rounded-r-lg;
+}
+
+/* Article Tables */
+.kb-article table {
+  @apply w-full border-collapse my-8 shadow-lg rounded-lg overflow-hidden;
+}
+
+.kb-article thead {
+  @apply bg-primary text-primary-foreground;
+}
+
+.kb-article th {
+  @apply px-6 py-4 text-left font-bold text-sm uppercase tracking-wide;
+}
+
+.kb-article tbody tr {
+  @apply border-b border-border hover:bg-muted/30 transition-colors;
+}
+
+.kb-article tbody tr:last-child {
+  @apply border-b-0;
+}
+
+.kb-article td {
+  @apply px-6 py-4 text-muted-foreground;
+}
+
+.kb-article .price-row td {
+  @apply bg-orange-50 dark:bg-orange-950 font-bold text-foreground;
+}
+
+/* Callout Boxes */
+.kb-article .callout {
+  @apply my-8 p-6 rounded-lg border-l-4;
+}
+
+.kb-article .callout-example {
+  @apply bg-blue-50 dark:bg-blue-950 border-blue-500;
+}
+
+.kb-article .callout-tip {
+  @apply bg-green-50 dark:bg-green-950 border-green-500;
+}
+
+.kb-article .callout h4 {
+  @apply mt-0 mb-3 text-lg;
+}
+
+.kb-article .callout p {
+  @apply mb-3 last:mb-0;
+}
+
+.kb-article .callout ul {
+  @apply mb-0;
+}
+
+/* Metrics Grid */
+.kb-article .metrics-grid {
+  @apply grid grid-cols-2 md:grid-cols-3 gap-6 my-8;
+}
+
+.kb-article .metric {
+  @apply bg-gradient-to-br from-orange-50 to-blue-50 dark:from-orange-950 dark:to-blue-950 p-6 rounded-lg text-center border border-border;
+}
+
+.kb-article .metric-value {
+  @apply text-4xl font-bold text-orange-600 mb-2;
+}
+
+.kb-article .metric-label {
+  @apply text-sm text-muted-foreground;
+}
+
+/* Feature Grid */
+.kb-article .feature-grid {
+  @apply grid md:grid-cols-2 gap-6 my-8;
+}
+
+.kb-article .feature-item {
+  @apply bg-muted/30 p-6 rounded-lg border border-border;
+}
+
+.kb-article .feature-item.highlight {
+  @apply bg-blue-50 dark:bg-blue-950 border-blue-500;
+}
+
+.kb-article .feature-item.premium {
+  @apply bg-purple-50 dark:bg-purple-950 border-purple-500;
+}
+
+.kb-article .feature-item h4 {
+  @apply mt-0 mb-3 text-lg flex items-center gap-2;
+}
+
+.kb-article .feature-item ul {
+  @apply mb-0 ml-0;
+}
+
+/* CTA Box */
+.kb-article .cta-box {
+  @apply my-12 p-8 bg-gradient-to-r from-orange-600 to-orange-500 rounded-xl text-white text-center;
+}
+
+.kb-article .cta-box h3 {
+  @apply text-white mt-0 mb-4;
+}
+
+.kb-article .cta-box p {
+  @apply text-white/90 mb-6;
+}
+
+.kb-article .cta-button {
+  @apply inline-block px-8 py-4 bg-white text-orange-600 rounded-lg font-bold text-lg hover:bg-white/90 transition-colors no-underline;
+}
+
+.kb-article .cta-subtext {
+  @apply text-sm text-white/75 mt-4 mb-0;
+}
+
+/* Recommendation Box */
+.kb-article .recommendation-box {
+  @apply my-8 p-6 bg-green-50 dark:bg-green-950 border-l-4 border-green-500 rounded-r-lg;
+}
+
+.kb-article .recommendation-box h4 {
+  @apply mt-0 mb-3 text-green-700 dark:text-green-300;
+}
+
+.kb-article .recommendation-framework {
+  @apply grid md:grid-cols-2 gap-6 my-8;
+}
+
+.kb-article .recommendation-item {
+  @apply bg-muted/30 p-6 rounded-lg border border-border;
+}
+
+.kb-article .recommendation-item h3 {
+  @apply mt-0 mb-3 text-lg;
+}
+
+.kb-article .recommendation-item .note {
+  @apply text-sm text-muted-foreground italic mt-3;
+}
+
+/* ROI Example Box */
+.kb-article .roi-example {
+  @apply my-8 p-6 bg-blue-50 dark:bg-blue-950 rounded-lg border border-blue-500;
+}
+
+/* Decision Tree/Node */
+.kb-article .decision-tree {
+  @apply my-8 space-y-6;
+}
+
+.kb-article .decision-node {
+  @apply p-6 bg-muted/30 rounded-lg border-2 border-orange-500;
+}
+
+.kb-article .decision-node p {
+  @apply mb-2 last:mb-0;
+}
+
+/* Comparison Table Specific */
+.kb-article .comparison-table {
+  @apply text-sm;
+}
+
+.kb-article .comparison-table th:first-child {
+  @apply w-1/3;
+}
+
+/* Pricing Table */
+.kb-article .pricing-table th {
+  @apply bg-gradient-to-r from-orange-600 to-orange-500 text-white;
+}

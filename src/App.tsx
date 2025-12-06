@@ -14,6 +14,7 @@ import Resources from "./pages/Resources";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Solutions from "./pages/Solutions";
+import EmployeeAmplification from "./pages/EmployeeAmplification";
 import NotFound from "./pages/NotFound";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
@@ -46,6 +47,8 @@ import Government from "./pages/industries/Government";
 import CaseStudies from "./pages/resources/CaseStudies";
 import Guides from "./pages/resources/Guides";
 import KnowledgeBase from "./pages/resources/KnowledgeBase";
+import KnowledgeBaseArticle from "./pages/resources/KnowledgeBaseArticle";
+
 // Portfolio page
 import Portfolio from "./pages/Portfolio";
 
@@ -69,6 +72,7 @@ const App = () => (
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/solutions" element={<Solutions />} />
+          <Route path="/employee-amplification" element={<EmployeeAmplification />} />
           <Route path="/portfolio" element={<Portfolio />} />
           
           {/* Solution pages */}
@@ -100,6 +104,7 @@ const App = () => (
           <Route path="/resources/case-studies" element={<CaseStudies />} />
           <Route path="/resources/guides" element={<Guides />} />
           <Route path="/resources/knowledge-base" element={<KnowledgeBase />} />
+          <Route path="/resources/knowledge-base/:slug" element={<KnowledgeBaseArticle />} />
 
           {/* Legal pages */}
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />

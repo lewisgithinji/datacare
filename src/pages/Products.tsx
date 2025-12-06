@@ -1,373 +1,196 @@
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
-import { 
-  Shield, 
-  Brain, 
-  Cloud, 
-  Database, 
-  Zap, 
-  Monitor,
-  Smartphone,
-  Wifi,
-  Lock,
-  ChartBar,
-  ArrowRight,
+import {
+  Building,
+  MessageSquare,
+  Shield,
+  Cloud,
   CheckCircle,
+  ArrowRight,
   Star,
   Users,
-  Clock,
-  Settings,
   Globe,
-  Layers,
+  Zap,
   TrendingUp,
-  BarChart3,
-  FileText,
-  Headphones
+  Award,
+  ExternalLink
 } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Products = () => {
-  const [activeCategory, setActiveCategory] = useState("security");
-
-  const productCategories = [
+  const products = [
     {
-      id: "security",
-      title: "AI-Powered Security",
+      id: "microsoft365",
+      name: "Microsoft 365",
+      tagline: "Complete Productivity Suite",
+      description: "Enterprise-grade productivity platform with Office apps, Teams collaboration, OneDrive storage, and advanced security features.",
+      icon: Building,
+      color: "from-blue-500 to-blue-600",
+      bgColor: "bg-blue-50 dark:bg-blue-950",
+      popular: true,
+      features: [
+        "Word, Excel, PowerPoint, Outlook",
+        "Microsoft Teams collaboration",
+        "1TB OneDrive cloud storage per user",
+        "Advanced threat protection",
+        "Mobile apps for iOS & Android",
+        "24/7 Microsoft support"
+      ],
+      pricing: {
+        starting: "$6",
+        plans: "3 plans available"
+      },
+      stats: {
+        users: "1000+ users migrated",
+        uptime: "99.9% uptime",
+        time: "24h migration"
+      },
+      link: "/products/microsoft-365",
+      cta: "View Plans & Pricing"
+    },
+    {
+      id: "google-workspace",
+      name: "Google Workspace",
+      tagline: "AI-Powered Collaboration",
+      description: "Modern cloud-based productivity platform with Gmail, Drive, Meet, and intelligent AI features for seamless team collaboration.",
+      icon: Globe,
+      color: "from-green-500 to-green-600",
+      bgColor: "bg-green-50 dark:bg-green-950",
+      popular: false,
+      features: [
+        "Professional Gmail & Calendar",
+        "Google Meet video conferencing",
+        "Up to 5TB cloud storage",
+        "Real-time document collaboration",
+        "AI-powered Smart Compose",
+        "Google Chat & Spaces"
+      ],
+      pricing: {
+        starting: "$6",
+        plans: "3 plans available"
+      },
+      stats: {
+        users: "800+ users migrated",
+        uptime: "99.8% uptime",
+        time: "12h migration"
+      },
+      link: "/products/google-workspace",
+      cta: "View Plans & Pricing"
+    },
+    {
+      id: "messaging-platform",
+      name: "Datacare Messaging Platform",
+      tagline: "WhatsApp Automation & AI",
+      description: "Official WhatsApp Business API platform with AI-powered chatbots, workflow automation, and advanced analytics for customer engagement.",
+      icon: MessageSquare,
+      color: "from-purple-500 to-purple-600",
+      bgColor: "bg-purple-50 dark:bg-purple-950",
+      popular: true,
+      features: [
+        "WhatsApp Business API integration",
+        "AI-powered chatbot automation",
+        "Custom workflow builder",
+        "Real-time analytics dashboard",
+        "Multi-agent support",
+        "API integrations (CRM, ERP)"
+      ],
+      pricing: {
+        starting: "$99",
+        plans: "3 plans available"
+      },
+      stats: {
+        reduction: "65% support call reduction",
+        automation: "90% queries automated",
+        support: "24/7 availability"
+      },
+      link: "/products/datacare-messaging-platform",
+      cta: "Book Demo"
+    },
+    {
+      id: "cloud-backup",
+      name: "Cloud Backup & Recovery",
+      tagline: "Enterprise Data Protection",
+      description: "Next-generation cloud backup solution with automated continuous protection, instant recovery, and 99.99% uptime guarantee.",
       icon: Shield,
-      description: "Advanced cybersecurity solutions with machine learning",
-      color: "from-red-500 to-red-600"
+      color: "from-orange-500 to-orange-600",
+      bgColor: "bg-orange-50 dark:bg-orange-950",
+      popular: false,
+      features: [
+        "Automated continuous backup",
+        "15-minute recovery time objective",
+        "Multi-cloud redundant storage",
+        "Ransomware protection",
+        "KDPA compliance ready",
+        "Zero data loss incidents"
+      ],
+      pricing: {
+        starting: "$49",
+        plans: "Per TB/month"
+      },
+      stats: {
+        uptime: "99.99% guaranteed",
+        recovery: "15min recovery",
+        incidents: "0 data loss"
+      },
+      link: "/products/cloud-backup-and-recovery",
+      cta: "Get Quote"
+    }
+  ];
+
+  const benefits = [
+    {
+      icon: Award,
+      title: "Certified Partners",
+      description: "Official Microsoft & Google partners with certified expertise"
     },
     {
-      id: "infrastructure",
-      title: "Managed IT & Infrastructure",
-      icon: Monitor,
-      description: "Proactive IT management with predictive analytics",
-      color: "from-blue-500 to-blue-600"
+      icon: Users,
+      title: "1800+ Users Served",
+      description: "Trusted by businesses across East Africa"
     },
     {
-      id: "cloud",
-      title: "Cloud & Virtualization",
-      icon: Cloud,
-      description: "Scalable cloud solutions and hybrid deployments",
-      color: "from-cyan-500 to-cyan-600"
-    },
-    {
-      id: "data",
-      title: "Data & Analytics",
-      icon: Brain,
-      description: "Business intelligence and predictive analytics",
-      color: "from-purple-500 to-purple-600"
-    },
-    {
-      id: "software",
-      title: "Enterprise Software",
       icon: Zap,
-      description: "Custom software solutions and ERP systems",
-      color: "from-amber-500 to-amber-600"
+      title: "Rapid Deployment",
+      description: "Most migrations complete within 24-48 hours"
     },
     {
-      id: "backup",
-      title: "Backup & Recovery", 
-      icon: Database,
-      description: "Next-generation backup and disaster recovery",
-      color: "from-green-500 to-green-600"
+      icon: TrendingUp,
+      title: "99%+ Uptime SLA",
+      description: "Enterprise-grade reliability guarantee"
     }
   ];
 
-  const products = {
-    security: [
-      {
-        name: "SecureAI Pro",
-        description: "Enterprise-grade AI-powered security platform with real-time threat detection and automated response.",
-        features: [
-          "24/7 AI Threat Monitoring",
-          "Behavioral Analytics",
-          "Automated Incident Response",
-          "Compliance Reporting",
-          "Zero-Day Protection",
-          "Advanced Endpoint Security"
-        ],
-        pricing: "From $2,500/month",
-        popular: true
-      },
-      {
-        name: "Network Guardian",
-        description: "Advanced network security solution with deep packet inspection and AI-powered anomaly detection.",
-        features: [
-          "Deep Packet Inspection",
-          "Intrusion Detection & Prevention",
-          "Network Segmentation",
-          "Traffic Analysis",
-          "Threat Intelligence Integration"
-        ],
-        pricing: "From $1,800/month"
-      },
-      {
-        name: "Identity Shield",
-        description: "Comprehensive identity and access management with biometric authentication and single sign-on.",
-        features: [
-          "Multi-Factor Authentication",
-          "Single Sign-On (SSO)",
-          "Biometric Authentication",
-          "Privileged Access Management",
-          "Identity Governance"
-        ],
-        pricing: "From $15/user/month"
-      }
-    ],
-    infrastructure: [
-      {
-        name: "InfraAI Manager",
-        description: "Intelligent IT infrastructure management with predictive maintenance and automated healing.",
-        features: [
-          "Predictive Maintenance",
-          "Automated System Healing",
-          "Performance Optimization",
-          "Resource Management",
-          "24/7 Monitoring",
-          "Capacity Planning"
-        ],
-        pricing: "From $1,200/month",
-        popular: true
-      },
-      {
-        name: "Server Shield Pro",
-        description: "Enterprise server management with virtualization support and high availability clustering.",
-        features: [
-          "Server Virtualization",
-          "High Availability Clustering",
-          "Load Balancing",
-          "Patch Management",
-          "Configuration Management"
-        ],
-        pricing: "From $800/month"
-      },
-      {
-        name: "Network Optimizer",
-        description: "AI-driven network optimization with bandwidth management and quality of service controls.",
-        features: [
-          "Bandwidth Management",
-          "Quality of Service (QoS)",
-          "Network Performance Analytics",
-          "Traffic Shaping",
-          "WAN Optimization"
-        ],
-        pricing: "From $600/month"
-      }
-    ],
-    cloud: [
-      {
-        name: "CloudFlex Platform",
-        description: "Multi-cloud management platform with cost optimization and automated scaling.",
-        features: [
-          "Multi-Cloud Management",
-          "Cost Optimization",
-          "Auto-Scaling",
-          "Cloud Migration Tools",
-          "Hybrid Cloud Support",
-          "Container Orchestration"
-        ],
-        pricing: "From $3,000/month",
-        popular: true
-      },
-      {
-        name: "VirtualCore Suite",
-        description: "Complete virtualization solution with enterprise-grade hypervisor and management tools.",
-        features: [
-          "Enterprise Hypervisor",
-          "VM Management",
-          "Resource Pooling",
-          "Live Migration",
-          "Disaster Recovery"
-        ],
-        pricing: "From $2,200/month"
-      },
-      {
-        name: "Edge Computing Hub",
-        description: "Edge computing platform for low-latency applications with 5G integration.",
-        features: [
-          "Edge Node Management",
-          "5G Integration",
-          "Low-Latency Processing",
-          "IoT Device Support",
-          "Real-time Analytics"
-        ],
-        pricing: "From $1,500/month"
-      }
-    ],
-    data: [
-      {
-        name: "DataMind Analytics",
-        description: "Advanced business intelligence platform with machine learning and predictive analytics.",
-        features: [
-          "Real-time Dashboards",
-          "Predictive Analytics",
-          "Machine Learning Models",
-          "Data Visualization",
-          "Custom Reports",
-          "Mobile Analytics"
-        ],
-        pricing: "From $2,800/month",
-        popular: true
-      },
-      {
-        name: "IntelliStream",
-        description: "Real-time data streaming and processing platform for high-volume data environments.",
-        features: [
-          "Real-time Data Streaming",
-          "Stream Processing",
-          "Data Pipeline Management",
-          "Event Processing",
-          "API Integration"
-        ],
-        pricing: "From $1,900/month"
-      },
-      {
-        name: "AI Insights Engine",
-        description: "AI-powered data analysis platform with natural language processing and automated insights.",
-        features: [
-          "Natural Language Processing",
-          "Automated Insights",
-          "Pattern Recognition",
-          "Anomaly Detection",
-          "Trend Analysis"
-        ],
-        pricing: "From $2,200/month"
-      }
-    ],
-    software: [
-      {
-        name: "EnterpriseAI Suite",
-        description: "Comprehensive ERP solution with AI-powered workflow automation and business process optimization.",
-        features: [
-          "AI Workflow Automation",
-          "Financial Management",
-          "Human Resources",
-          "Supply Chain Management",
-          "Customer Relationship Management",
-          "Business Intelligence"
-        ],
-        pricing: "From $5,000/month",
-        popular: true
-      },
-      {
-        name: "WorkflowGenius",
-        description: "Intelligent workflow automation platform with low-code/no-code development capabilities.",
-        features: [
-          "Low-Code Development",
-          "Process Automation",
-          "Integration Hub",
-          "Workflow Designer",
-          "API Management"
-        ],
-        pricing: "From $1,200/month"
-      },
-      {
-        name: "CustomApp Builder",
-        description: "Rapid application development platform with AI-assisted coding and deployment.",
-        features: [
-          "AI-Assisted Development",
-          "Rapid Prototyping",
-          "Cross-Platform Deployment",
-          "Database Integration",
-          "API Generation"
-        ],
-        pricing: "From $2,000/month"
-      }
-    ],
-    backup: [
-      {
-        name: "BackupAI Pro",
-        description: "Next-generation backup solution with AI-optimized storage and instant recovery capabilities.",
-        features: [
-          "AI-Optimized Backup",
-          "Instant Recovery",
-          "Deduplication",
-          "Encryption at Rest & Transit",
-          "Cross-Platform Support",
-          "Automated Testing"
-        ],
-        pricing: "From $1,800/month",
-        popular: true
-      },
-      {
-        name: "DisasterShield",
-        description: "Comprehensive disaster recovery solution with cloud replication and automated failover.",
-        features: [
-          "Cloud Replication",
-          "Automated Failover",
-          "Recovery Point Objectives",
-          "Business Continuity Planning",
-          "Regular DR Testing"
-        ],
-        pricing: "From $2,500/month"
-      },
-      {
-        name: "ArchiveVault",
-        description: "Long-term data archiving solution with compliance management and intelligent tiering.",
-        features: [
-          "Intelligent Data Tiering",
-          "Compliance Management",
-          "Legal Hold Support",
-          "Audit Trails",
-          "Cost Optimization"
-        ],
-        pricing: "From $800/month"
-      }
-    ]
-  };
-
-  const supportPlans = [
+  const testimonials = [
     {
-      name: "Essential Support",
-      price: "Included",
-      features: [
-        "Business Hours Support",
-        "Email & Phone Support",
-        "Knowledge Base Access",
-        "Basic Training Resources"
-      ],
-      color: "border-muted"
+      quote: "Migration to Microsoft 365 was seamless. Datacare handled everything from planning to training. Zero downtime.",
+      author: "IT Manager",
+      company: "Leading Kenyan Law Firm",
+      product: "Microsoft 365"
     },
     {
-      name: "Premium Support",
-      price: "+30% of license cost",
-      features: [
-        "24/7 Priority Support",
-        "Dedicated Account Manager",
-        "Advanced Training",
-        "Quarterly Health Checks",
-        "Priority Bug Fixes"
-      ],
-      color: "border-primary",
-      popular: true
+      quote: "The WhatsApp automation reduced our support calls by 65%. Customers love the instant responses.",
+      author: "Customer Service Director",
+      company: "Financial Services SACCO",
+      product: "Messaging Platform"
     },
     {
-      name: "Enterprise Support",
-      price: "Custom Pricing",
-      features: [
-        "White-Glove Service",
-        "On-site Support Available",
-        "Custom SLA Agreement",
-        "Dedicated Support Team",
-        "Proactive Monitoring",
-        "Strategic Consulting"
-      ],
-      color: "border-accent"
+      quote: "Cloud backup saved us from a ransomware attack. Recovery took 15 minutes. Priceless.",
+      author: "Managing Director",
+      company: "Import/Export Company",
+      product: "Cloud Backup"
     }
   ];
-
-  const activeProducts = products[activeCategory as keyof typeof products] || [];
-  const activeCategoryInfo = productCategories.find(cat => cat.id === activeCategory);
 
   return (
     <div className="min-h-screen bg-background">
       <SEO
-        title="Products - Microsoft 365, Google Workspace & Cloud Solutions"
-        description="Explore Datacare Limited's products including Microsoft 365, Google Workspace, Datacare Messaging Platform, and Cloud Backup & Recovery solutions for businesses in Kenya."
-        keywords="Microsoft 365 Kenya, Google Workspace Kenya, cloud backup, messaging platform, business software, productivity tools, enterprise solutions"
+        title="Products - Microsoft 365, Google Workspace & More | Datacare Limited"
+        description="Explore Datacare's products: Microsoft 365, Google Workspace, WhatsApp Business API Messaging Platform, and Cloud Backup solutions for businesses in Kenya."
+        keywords="Microsoft 365 Kenya, Google Workspace Kenya, WhatsApp Business API, cloud backup Kenya, business productivity tools, enterprise software Kenya"
         url="https://datacare.co.ke/products"
       />
       <Navigation />
@@ -377,27 +200,27 @@ const Products = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <div className="inline-flex items-center px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-6">
-              <Layers className="w-4 h-4 text-primary mr-2" />
-              <span className="text-sm font-medium text-primary">Product Portfolio</span>
+              <Cloud className="w-4 h-4 text-primary mr-2" />
+              <span className="text-sm font-medium text-primary">Enterprise Products</span>
             </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
-              <span className="gradient-text">AI-Powered</span><br />
-              IT Solutions Portfolio
+              <span className="gradient-text">Cloud-Powered</span><br />
+              Business Solutions
             </h1>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-8">
-              Discover our comprehensive suite of AI-integrated IT products and services, 
-              designed to transform your business operations and drive digital innovation.
+              Comprehensive suite of enterprise-grade productivity, collaboration, and security products
+              designed to transform how East African businesses work
             </p>
-            
-            {/* Product Stats */}
+
+            {/* Quick Stats */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
               <div className="text-center">
-                <div className="text-3xl font-bold text-primary mb-2">18+</div>
+                <div className="text-3xl font-bold text-primary mb-2">4</div>
                 <div className="text-sm text-muted-foreground">Core Products</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-accent mb-2">6</div>
-                <div className="text-sm text-muted-foreground">Product Categories</div>
+                <div className="text-3xl font-bold text-accent mb-2">1800+</div>
+                <div className="text-sm text-muted-foreground">Users Deployed</div>
               </div>
               <div className="text-center">
                 <div className="text-3xl font-bold text-success mb-2">99.9%</div>
@@ -405,201 +228,339 @@ const Products = () => {
               </div>
               <div className="text-center">
                 <div className="text-3xl font-bold text-warning mb-2">24/7</div>
-                <div className="text-sm text-muted-foreground">Support Available</div>
+                <div className="text-sm text-muted-foreground">Expert Support</div>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Product Categories */}
+      {/* Products Grid */}
       <section className="py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Category Navigation */}
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-16">
-            {productCategories.map((category) => {
-              const Icon = category.icon;
+          <div className="grid md:grid-cols-2 gap-8">
+            {products.map((product, index) => {
+              const Icon = product.icon;
               return (
-                <button
-                  key={category.id}
-                  onClick={() => setActiveCategory(category.id)}
-                  className={`p-6 rounded-xl text-center transition-all duration-300 ${
-                    activeCategory === category.id
-                      ? 'bg-primary text-primary-foreground shadow-[var(--shadow-medium)]'
-                      : 'bg-muted/50 text-muted-foreground hover:bg-primary/10 hover:text-primary'
+                <Card
+                  key={product.id}
+                  className={`relative overflow-hidden group hover:shadow-2xl transition-all duration-300 ${
+                    product.popular ? 'ring-2 ring-primary/20' : ''
                   }`}
+                  style={{ animationDelay: `${index * 100}ms` }}
                 >
-                  <div className={`w-12 h-12 rounded-xl bg-gradient-to-r ${category.color} flex items-center justify-center mx-auto mb-3 ${
-                    activeCategory === category.id ? 'opacity-100' : 'opacity-70'
-                  }`}>
-                    <Icon className="w-6 h-6 text-white" />
-                  </div>
-                  <h3 className="font-semibold text-sm mb-1">{category.title}</h3>
-                  <p className="text-xs opacity-80">{category.description}</p>
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Active Category Products */}
-          {activeCategoryInfo && (
-            <div className="animate-fade-in">
-              {/* Category Header */}
-              <div className="text-center mb-12">
-                <div className={`w-16 h-16 rounded-2xl bg-gradient-to-r ${activeCategoryInfo.color} flex items-center justify-center mx-auto mb-4`}>
-                  <activeCategoryInfo.icon className="w-8 h-8 text-white" />
-                </div>
-                <h2 className="text-3xl md:text-4xl font-bold mb-4">{activeCategoryInfo.title}</h2>
-                <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-                  {activeCategoryInfo.description}
-                </p>
-              </div>
-
-              {/* Products Grid */}
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {activeProducts.map((product, index) => (
-                  <div
-                    key={product.name}
-                    className={`card-elevated group cursor-pointer relative ${
-                      product.popular ? 'ring-2 ring-primary/20' : ''
-                    }`}
-                    style={{ animationDelay: `${index * 100}ms` }}
-                  >
-                    {product.popular && (
-                      <div className="absolute -top-3 left-6 px-3 py-1 bg-primary text-primary-foreground text-xs font-semibold rounded-full">
-                        Most Popular
-                      </div>
-                    )}
-                    
-                    <div className="flex items-start justify-between mb-4">
-                      <div>
-                        <h3 className="text-xl font-semibold mb-2 group-hover:text-primary transition-colors">
-                          {product.name}
-                        </h3>
-                        <p className="text-sm text-muted-foreground mb-4 leading-relaxed">
-                          {product.description}
-                        </p>
-                      </div>
-                      <div className="text-right">
-                        <div className="text-lg font-bold text-primary">{product.pricing}</div>
-                      </div>
+                  {product.popular && (
+                    <div className="absolute top-4 right-4 z-10">
+                      <Badge className="bg-orange-600 text-white">
+                        <Star className="w-3 h-3 mr-1" />
+                        Popular
+                      </Badge>
                     </div>
-                    
-                    <ul className="space-y-2 mb-6">
+                  )}
+
+                  {/* Header with Icon */}
+                  <div className={`p-8 ${product.bgColor} border-b border-border`}>
+                    <div className={`w-16 h-16 rounded-2xl bg-gradient-to-r ${product.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
+                      <Icon className="w-8 h-8 text-white" />
+                    </div>
+                    <h2 className="text-2xl font-bold mb-2">{product.name}</h2>
+                    <p className="text-sm font-semibold text-primary mb-3">{product.tagline}</p>
+                    <p className="text-muted-foreground leading-relaxed">{product.description}</p>
+                  </div>
+
+                  {/* Features */}
+                  <div className="p-8">
+                    <h3 className="font-semibold text-lg mb-4">Key Features:</h3>
+                    <ul className="space-y-3 mb-6">
                       {product.features.map((feature) => (
-                        <li key={feature} className="flex items-center text-sm text-muted-foreground">
-                          <CheckCircle className="w-4 h-4 text-success mr-3 flex-shrink-0" />
-                          {feature}
+                        <li key={feature} className="flex items-start text-sm">
+                          <CheckCircle className="w-4 h-4 text-success mr-3 mt-0.5 flex-shrink-0" />
+                          <span>{feature}</span>
                         </li>
                       ))}
                     </ul>
-                    
-                    <div className="flex gap-3">
-                      <Button size="sm" className="btn-primary flex-1">
-                        Get Quote
-                      </Button>
-                      <Button variant="outline" size="sm" className="btn-outline">
-                        Learn More
+
+                    {/* Stats */}
+                    <div className="bg-secondary/30 rounded-lg p-4 mb-6">
+                      <div className="grid grid-cols-3 gap-4 text-center text-xs">
+                        {Object.entries(product.stats).map(([key, value]) => (
+                          <div key={key}>
+                            <div className="font-bold text-primary mb-1">{value}</div>
+                            <div className="text-muted-foreground capitalize">{key}</div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Pricing & CTA */}
+                    <div className="flex items-center justify-between pt-6 border-t border-border">
+                      <div>
+                        <div className="text-xs text-muted-foreground mb-1">Starting from</div>
+                        <div className="text-2xl font-bold text-primary">
+                          {product.pricing.starting}
+                          <span className="text-sm text-muted-foreground font-normal">/{product.pricing.plans}</span>
+                        </div>
+                      </div>
+                      <Button asChild className="bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90">
+                        <Link to={product.link}>
+                          {product.cta}
+                          <ArrowRight className="w-4 h-4 ml-2" />
+                        </Link>
                       </Button>
                     </div>
                   </div>
-                ))}
-              </div>
-            </div>
-          )}
+                </Card>
+              );
+            })}
+          </div>
         </div>
       </section>
 
-      {/* Support Plans */}
+      {/* Why Choose Datacare */}
       <section className="py-16 bg-muted/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center px-4 py-2 rounded-full bg-accent/10 border border-accent/20 mb-6">
-              <Headphones className="w-4 h-4 text-accent mr-2" />
-              <span className="text-sm font-medium text-accent">Support & Services</span>
-            </div>
+          <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold mb-6">
-              World-Class <span className="gradient-text">Support Plans</span>
+              Why Choose <span className="gradient-text">Datacare</span>
             </h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Choose the support level that best fits your business needs. 
-              All plans include access to our expert technical team and comprehensive resources.
+              Trusted by businesses across East Africa for enterprise product deployment and support
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {benefits.map((benefit, index) => {
+              const Icon = benefit.icon;
+              return (
+                <Card
+                  key={benefit.title}
+                  className="p-6 text-center hover:shadow-lg transition-all group"
+                  style={{ animationDelay: `${index * 100}ms` }}
+                >
+                  <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                    <Icon className="w-6 h-6 text-primary" />
+                  </div>
+                  <h3 className="font-semibold mb-2 group-hover:text-primary transition-colors">
+                    {benefit.title}
+                  </h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    {benefit.description}
+                  </p>
+                </Card>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Customer Testimonials */}
+      <section className="py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">
+              Trusted by <span className="gradient-text">Leading Organizations</span>
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+              Real results from businesses that transformed with our products
             </p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
-            {supportPlans.map((plan, index) => (
-              <div
-                key={plan.name}
-                className={`card-elevated text-center relative ${
-                  plan.popular ? 'ring-2 ring-primary/20' : ''
-                }`}
+            {testimonials.map((testimonial, index) => (
+              <Card
+                key={testimonial.company}
+                className="p-6 hover:shadow-xl transition-all"
                 style={{ animationDelay: `${index * 100}ms` }}
               >
-                {plan.popular && (
-                  <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 px-4 py-1 bg-primary text-primary-foreground text-xs font-semibold rounded-full">
-                    Recommended
-                  </div>
-                )}
-                
-                <h3 className="text-xl font-semibold mb-2">{plan.name}</h3>
-                <div className="text-2xl font-bold text-primary mb-6">{plan.price}</div>
-                
-                <ul className="space-y-3 mb-8">
-                  {plan.features.map((feature) => (
-                    <li key={feature} className="flex items-center text-sm">
-                      <CheckCircle className="w-4 h-4 text-success mr-3 flex-shrink-0" />
-                      {feature}
-                    </li>
+                <div className="flex items-center gap-1 mb-4">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="w-4 h-4 fill-yellow-500 text-yellow-500" />
                   ))}
-                </ul>
-                
-                <Button 
-                  className={plan.popular ? 'btn-primary' : 'btn-outline'} 
-                  size="sm"
-                >
-                  {plan.popular ? 'Get Started' : 'Contact Sales'}
-                </Button>
-              </div>
+                </div>
+                <blockquote className="text-muted-foreground mb-4 leading-relaxed italic">
+                  "{testimonial.quote}"
+                </blockquote>
+                <div className="flex items-start justify-between pt-4 border-t border-border">
+                  <div>
+                    <div className="font-semibold">{testimonial.author}</div>
+                    <div className="text-sm text-muted-foreground">{testimonial.company}</div>
+                  </div>
+                  <Badge variant="outline" className="text-xs">
+                    {testimonial.product}
+                  </Badge>
+                </div>
+              </Card>
             ))}
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-16">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-6">
-            Ready to Transform Your Business?
-          </h2>
-          <p className="text-xl text-muted-foreground mb-8">
-            Speak with our product experts to find the perfect solution for your organization. 
-            Get personalized recommendations and custom pricing.
-          </p>
-          
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="btn-primary">
-              Schedule Product Demo
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
-            <Button variant="outline" size="lg" className="btn-outline">
-              Download Product Catalog
-            </Button>
+      {/* Comparison Table */}
+      <section className="py-16 bg-muted/30">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">
+              Product <span className="gradient-text">Comparison</span>
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+              Compare our products to find the right solution for your business needs
+            </p>
           </div>
-          
-          <div className="flex items-center justify-center gap-8 mt-12 text-sm text-muted-foreground">
-            <div className="flex items-center">
-              <Users className="w-4 h-4 mr-2" />
-              800+ Satisfied Clients
-            </div>
-            <div className="flex items-center">
-              <Star className="w-4 h-4 mr-2 text-yellow-500" />
-              4.9/5 Customer Rating
-            </div>
-            <div className="flex items-center">
-              <Clock className="w-4 h-4 mr-2" />
-              15+ Years Experience
-            </div>
+
+          <Card className="overflow-x-auto">
+            <table className="w-full">
+              <thead>
+                <tr className="border-b border-border bg-muted/50">
+                  <th className="p-4 text-left font-semibold">Feature</th>
+                  <th className="p-4 text-center font-semibold">Microsoft 365</th>
+                  <th className="p-4 text-center font-semibold">Google Workspace</th>
+                  <th className="p-4 text-center font-semibold">Messaging Platform</th>
+                  <th className="p-4 text-center font-semibold">Cloud Backup</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr className="border-b border-border">
+                  <td className="p-4 font-medium">Email & Calendar</td>
+                  <td className="p-4 text-center"><CheckCircle className="w-5 h-5 text-success mx-auto" /></td>
+                  <td className="p-4 text-center"><CheckCircle className="w-5 h-5 text-success mx-auto" /></td>
+                  <td className="p-4 text-center text-muted-foreground">—</td>
+                  <td className="p-4 text-center text-muted-foreground">—</td>
+                </tr>
+                <tr className="border-b border-border bg-muted/20">
+                  <td className="p-4 font-medium">Office Apps</td>
+                  <td className="p-4 text-center"><CheckCircle className="w-5 h-5 text-success mx-auto" /></td>
+                  <td className="p-4 text-center"><CheckCircle className="w-5 h-5 text-success mx-auto" /></td>
+                  <td className="p-4 text-center text-muted-foreground">—</td>
+                  <td className="p-4 text-center text-muted-foreground">—</td>
+                </tr>
+                <tr className="border-b border-border">
+                  <td className="p-4 font-medium">Cloud Storage</td>
+                  <td className="p-4 text-center"><CheckCircle className="w-5 h-5 text-success mx-auto" /></td>
+                  <td className="p-4 text-center"><CheckCircle className="w-5 h-5 text-success mx-auto" /></td>
+                  <td className="p-4 text-center text-muted-foreground">—</td>
+                  <td className="p-4 text-center"><CheckCircle className="w-5 h-5 text-success mx-auto" /></td>
+                </tr>
+                <tr className="border-b border-border bg-muted/20">
+                  <td className="p-4 font-medium">Video Conferencing</td>
+                  <td className="p-4 text-center"><CheckCircle className="w-5 h-5 text-success mx-auto" /></td>
+                  <td className="p-4 text-center"><CheckCircle className="w-5 h-5 text-success mx-auto" /></td>
+                  <td className="p-4 text-center text-muted-foreground">—</td>
+                  <td className="p-4 text-center text-muted-foreground">—</td>
+                </tr>
+                <tr className="border-b border-border">
+                  <td className="p-4 font-medium">WhatsApp Automation</td>
+                  <td className="p-4 text-center text-muted-foreground">—</td>
+                  <td className="p-4 text-center text-muted-foreground">—</td>
+                  <td className="p-4 text-center"><CheckCircle className="w-5 h-5 text-success mx-auto" /></td>
+                  <td className="p-4 text-center text-muted-foreground">—</td>
+                </tr>
+                <tr className="border-b border-border bg-muted/20">
+                  <td className="p-4 font-medium">AI Chatbots</td>
+                  <td className="p-4 text-center text-muted-foreground">—</td>
+                  <td className="p-4 text-center text-muted-foreground">—</td>
+                  <td className="p-4 text-center"><CheckCircle className="w-5 h-5 text-success mx-auto" /></td>
+                  <td className="p-4 text-center text-muted-foreground">—</td>
+                </tr>
+                <tr className="border-b border-border">
+                  <td className="p-4 font-medium">Automated Backup</td>
+                  <td className="p-4 text-center text-muted-foreground">—</td>
+                  <td className="p-4 text-center text-muted-foreground">—</td>
+                  <td className="p-4 text-center text-muted-foreground">—</td>
+                  <td className="p-4 text-center"><CheckCircle className="w-5 h-5 text-success mx-auto" /></td>
+                </tr>
+                <tr className="bg-muted/20">
+                  <td className="p-4 font-medium">Disaster Recovery</td>
+                  <td className="p-4 text-center text-muted-foreground">—</td>
+                  <td className="p-4 text-center text-muted-foreground">—</td>
+                  <td className="p-4 text-center text-muted-foreground">—</td>
+                  <td className="p-4 text-center"><CheckCircle className="w-5 h-5 text-success mx-auto" /></td>
+                </tr>
+              </tbody>
+            </table>
+          </Card>
+        </div>
+      </section>
+
+      {/* Related Resources */}
+      <section className="py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">
+              Learn <span className="gradient-text">More</span>
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+              Explore our resources to make informed decisions about your business technology
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            <Card className="p-6 hover:shadow-xl transition-all group">
+              <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors">
+                Case Studies
+              </h3>
+              <p className="text-muted-foreground mb-4 leading-relaxed">
+                See how businesses transformed with Microsoft 365, WhatsApp automation, and cloud backup
+              </p>
+              <Button asChild variant="outline" className="w-full">
+                <Link to="/resources/case-studies">
+                  Read Success Stories
+                  <ExternalLink className="w-4 h-4 ml-2" />
+                </Link>
+              </Button>
+            </Card>
+
+            <Card className="p-6 hover:shadow-xl transition-all group">
+              <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors">
+                Knowledge Base
+              </h3>
+              <p className="text-muted-foreground mb-4 leading-relaxed">
+                In-depth guides on Microsoft 365 plans, WhatsApp security, and KDPA compliance
+              </p>
+              <Button asChild variant="outline" className="w-full">
+                <Link to="/resources/knowledge-base">
+                  Browse Articles
+                  <ExternalLink className="w-4 h-4 ml-2" />
+                </Link>
+              </Button>
+            </Card>
+
+            <Card className="p-6 hover:shadow-xl transition-all group">
+              <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors">
+                Free Consultation
+              </h3>
+              <p className="text-muted-foreground mb-4 leading-relaxed">
+                Speak with our experts to find the right product combination for your needs
+              </p>
+              <Button asChild className="w-full bg-gradient-to-r from-primary to-accent">
+                <Link to="/contact">
+                  Schedule Call
+                  <ArrowRight className="w-4 h-4 ml-2" />
+                </Link>
+              </Button>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-20 bg-gradient-to-r from-orange-600 to-orange-500 text-white">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-4xl font-bold mb-6">Ready to Transform Your Business?</h2>
+          <p className="text-xl mb-8 opacity-90">
+            Get expert guidance on choosing and implementing the right products for your organization
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button asChild size="lg" variant="secondary">
+              <Link to="/contact">
+                Schedule Free Consultation
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Link>
+            </Button>
+            <Button asChild size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-orange-600">
+              <Link to="/resources/knowledge-base">
+                Explore Knowledge Base
+              </Link>
+            </Button>
           </div>
         </div>
       </section>

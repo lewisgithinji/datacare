@@ -1,347 +1,264 @@
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
-import { 
-  Shield, 
-  Monitor, 
-  Cloud, 
-  Database,
-  Brain,
-  Zap,
-  Network,
-  Lock,
-  Eye,
-  Cpu,
-  Server,
-  HardDrive,
-  Smartphone,
-  Globe,
-  ArrowRight,
-  CheckCircle,
+import {
+  Cloud,
+  MessageSquare,
+  Palette,
   TrendingUp,
-  Target,
-  Layers,
-  Settings,
+  Shield,
   BarChart3,
-  Workflow,
-  GitMerge,
+  CheckCircle,
+  ArrowRight,
   Users,
   Award,
+  Zap,
+  Star,
   Clock,
-  Star
+  Layers
 } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Solutions = () => {
-  const [activeSolution, setActiveSolution] = useState("security");
-
-  const solutionPillars = [
+  const solutions = [
     {
-      id: "security",
-      title: "AI-Powered Security",
-      icon: Shield,
-      description: "Advanced cybersecurity with intelligent threat detection and automated response",
-      color: "from-red-500 to-red-600",
-      stats: { threats: "99.8%", response: "< 5 min", incidents: "95%" }
-    },
-    {
-      id: "infrastructure",
-      title: "Managed IT & Infrastructure",
-      icon: Monitor,
-      description: "Proactive IT management with predictive analytics and automated maintenance",
-      color: "from-blue-500 to-blue-600",
-      stats: { uptime: "99.9%", efficiency: "80%", costs: "40%" }
-    },
-    {
-      id: "cloud",
-      title: "Cloud & Virtualization",
+      id: "cloud-licensing",
+      name: "Cloud & Licensing",
+      tagline: "Microsoft 365 & Google Workspace",
+      description: "Enterprise-grade cloud productivity platforms with expert migration, licensing optimization, and 24/7 support. Save 20-40% on software costs.",
       icon: Cloud,
-      description: "Scalable cloud solutions with hybrid deployment and cost optimization",
-      color: "from-cyan-500 to-cyan-600",
-      stats: { migration: "100%", savings: "45%", scalability: "∞" }
+      color: "from-blue-500 to-blue-600",
+      bgColor: "bg-blue-50 dark:bg-blue-950",
+      popular: true,
+      features: [
+        "Microsoft 365 & Google Workspace deployment",
+        "License audit and optimization",
+        "24-48 hour migration",
+        "99.9% uptime guarantee",
+        "User training and onboarding",
+        "Ongoing support and management"
+      ],
+      stats: {
+        clients: "500+ businesses",
+        savings: "30% cost savings",
+        uptime: "99.9% SLA"
+      },
+      link: "/solutions/cloud-and-licensing",
+      cta: "Explore Cloud Solutions"
     },
     {
-      id: "backup",
-      title: "Backup & Disaster Recovery",
-      icon: Database,
-      description: "Next-generation backup with AI-optimized recovery and business continuity",
+      id: "ai-messaging",
+      name: "AI & Messaging Automation",
+      tagline: "WhatsApp Business API & Chatbots",
+      description: "Official WhatsApp Business API integration with AI-powered chatbots, workflow automation, and omnichannel messaging for seamless customer engagement.",
+      icon: MessageSquare,
       color: "from-green-500 to-green-600",
-      stats: { recovery: "< 15 min", reliability: "99.99%", testing: "Monthly" }
+      bgColor: "bg-green-50 dark:bg-green-950",
+      popular: true,
+      features: [
+        "WhatsApp Business API setup",
+        "AI chatbot development",
+        "SMS & email integration",
+        "Workflow automation builder",
+        "Real-time analytics dashboard",
+        "CRM/ERP integrations"
+      ],
+      stats: {
+        reduction: "65% support reduction",
+        automation: "90% queries automated",
+        response: "24/7 availability"
+      },
+      link: "/solutions/ai-and-messaging-automation",
+      cta: "Automate Messaging"
     },
     {
-      id: "analytics",
-      title: "Data & Analytics",
-      icon: Brain,
-      description: "Business intelligence platform with predictive analytics and real-time insights", 
+      id: "web-design",
+      name: "Web Design as a Service",
+      tagline: "Monthly Retainer, Unlimited Revisions",
+      description: "Professional website design and maintenance on a predictable monthly retainer. Unlimited revisions, continuous optimization, and dedicated design team.",
+      icon: Palette,
       color: "from-purple-500 to-purple-600",
-      stats: { insights: "Real-time", accuracy: "95%", decisions: "3x Faster" }
+      bgColor: "bg-purple-50 dark:bg-purple-950",
+      popular: false,
+      features: [
+        "Responsive modern design",
+        "Unlimited revisions included",
+        "SEO optimization",
+        "Performance monitoring",
+        "Monthly content updates",
+        "Security & hosting management"
+      ],
+      stats: {
+        delivery: "72h turnaround",
+        uptime: "99.9% guaranteed",
+        support: "Dedicated team"
+      },
+      link: "/solutions/web-design-as-a-service",
+      cta: "Get Retainer Quote"
     },
     {
-      id: "software",
-      title: "Enterprise Software",
-      icon: Zap,
-      description: "Custom software solutions and ERP systems with AI-powered automation",
-      color: "from-amber-500 to-amber-600",
-      stats: { automation: "70%", efficiency: "60%", roi: "300%" }
+      id: "sme-transformation",
+      name: "SME Digital Transformation",
+      tagline: "Complete Digitalization Roadmap",
+      description: "End-to-end digital transformation for small and medium enterprises. From assessment to implementation, we modernize your operations and workflows.",
+      icon: TrendingUp,
+      color: "from-orange-500 to-orange-600",
+      bgColor: "bg-orange-50 dark:bg-orange-950",
+      popular: true,
+      features: [
+        "Digital readiness assessment",
+        "Technology roadmap planning",
+        "Process automation",
+        "Cloud migration strategy",
+        "Change management support",
+        "ROI tracking and reporting"
+      ],
+      stats: {
+        efficiency: "60% efficiency gain",
+        roi: "300% avg ROI",
+        timeline: "90-180 day plans"
+      },
+      link: "/solutions/sme-digital-transformation",
+      cta: "Start Transformation"
+    },
+    {
+      id: "security-compliance",
+      name: "Security & Compliance",
+      tagline: "KDPA, ISO 27001, Cybersecurity",
+      description: "Comprehensive cybersecurity and regulatory compliance solutions. Protect your data, meet KDPA requirements, and achieve ISO certification.",
+      icon: Shield,
+      color: "from-red-500 to-red-600",
+      bgColor: "bg-red-50 dark:bg-red-950",
+      popular: false,
+      features: [
+        "KDPA 2019 compliance audit",
+        "ISO 27001 certification support",
+        "Cybersecurity assessment",
+        "Incident response planning",
+        "Employee security training",
+        "Continuous monitoring"
+      ],
+      stats: {
+        compliance: "100% KDPA ready",
+        threats: "99.8% blocked",
+        response: "< 5 min detection"
+      },
+      link: "/solutions/security-and-compliance",
+      cta: "Secure Your Business"
+    },
+    {
+      id: "data-analytics",
+      name: "Data & Analytics",
+      tagline: "Business Intelligence & Insights",
+      description: "Transform raw data into actionable insights with custom dashboards, predictive analytics, and real-time reporting solutions.",
+      icon: BarChart3,
+      color: "from-cyan-500 to-cyan-600",
+      bgColor: "bg-cyan-50 dark:bg-cyan-950",
+      popular: false,
+      features: [
+        "Custom dashboard development",
+        "Power BI & Tableau integration",
+        "Predictive analytics models",
+        "Real-time data pipelines",
+        "Data warehouse setup",
+        "Executive reporting"
+      ],
+      stats: {
+        insights: "Real-time data",
+        accuracy: "95% prediction",
+        decisions: "3x faster"
+      },
+      link: "/solutions/data-and-analytics",
+      cta: "Unlock Insights"
     }
   ];
 
-  const solutionDetails = {
-    security: {
-      overview: "Protect your organization with our comprehensive AI-powered security platform that combines advanced threat detection, behavioral analytics, and automated incident response to safeguard your digital assets against evolving cyber threats.",
-      coreServices: [
-        {
-          icon: Eye,
-          title: "24/7 AI Threat Monitoring",
-          description: "Continuous monitoring with machine learning algorithms that detect known and unknown threats in real-time.",
-          features: ["Behavioral Analysis", "Anomaly Detection", "Threat Intelligence", "Zero-Day Protection"]
-        },
-        {
-          icon: Lock,
-          title: "Identity & Access Management",
-          description: "Comprehensive IAM solution with multi-factor authentication and privileged access controls.",
-          features: ["Single Sign-On", "Multi-Factor Auth", "Role-Based Access", "Audit Trails"]
-        },
-        {
-          icon: Network,
-          title: "Network Security",
-          description: "Advanced firewall, intrusion detection, and network segmentation for complete perimeter protection.",
-          features: ["Next-Gen Firewall", "IDS/IPS", "Network Segmentation", "VPN Solutions"]
-        },
-        {
-          icon: Server,
-          title: "Endpoint Protection",
-          description: "AI-powered endpoint security with real-time threat prevention and automated remediation.",
-          features: ["Anti-Malware", "Behavioral Monitoring", "Device Control", "Remote Management"]
-        }
-      ],
-      benefits: [
-        "95% reduction in false positive alerts",
-        "5x faster incident response times",  
-        "Compliance with international standards",
-        "24/7 security operations center"
-      ]
+  const benefits = [
+    {
+      icon: Award,
+      title: "Proven Expertise",
+      description: "12+ years serving East African businesses"
     },
-    infrastructure: {
-      overview: "Transform your IT operations with our intelligent infrastructure management solutions that predict issues before they occur, automate routine tasks, and optimize performance across your entire technology stack.",
-      coreServices: [
-        {
-          icon: Monitor,
-          title: "Proactive Monitoring",
-          description: "AI-driven monitoring that predicts failures and prevents downtime before issues impact your business.",
-          features: ["Predictive Analytics", "Automated Alerts", "Performance Optimization", "Capacity Planning"]
-        },
-        {
-          icon: Settings,
-          title: "System Administration",
-          description: "Comprehensive system management with automated patching, configuration, and maintenance.",
-          features: ["Patch Management", "Configuration Control", "Automated Maintenance", "Change Management"]
-        },
-        {
-          icon: Network,
-          title: "Network Management",
-          description: "Complete network infrastructure management with optimization and quality of service controls.",
-          features: ["Network Optimization", "QoS Management", "Bandwidth Control", "Traffic Analysis"]
-        },
-        {
-          icon: HardDrive,
-          title: "Hardware Management",
-          description: "Proactive hardware monitoring and maintenance with predictive replacement scheduling.",
-          features: ["Hardware Monitoring", "Preventive Maintenance", "Asset Management", "Lifecycle Planning"]
-        }
-      ],
-      benefits: [
-        "80% reduction in unplanned downtime",
-        "40% decrease in operational costs",
-        "99.9% service level agreement",
-        "Dedicated technical account manager"
-      ]
+    {
+      icon: Users,
+      title: "500+ Clients",
+      description: "Trusted by organizations across Kenya, Uganda, Tanzania"
     },
-    cloud: {
-      overview: "Accelerate your digital transformation with our comprehensive cloud solutions that provide scalability, flexibility, and cost optimization while maintaining security and compliance across hybrid and multi-cloud environments.",
-      coreServices: [
-        {
-          icon: Cloud,
-          title: "Cloud Migration",
-          description: "Seamless migration to cloud platforms with minimal disruption and optimized architecture.",
-          features: ["Assessment & Planning", "Data Migration", "Application Modernization", "Testing & Validation"]
-        },
-        {
-          icon: GitMerge,
-          title: "Hybrid Cloud Integration",
-          description: "Unified management across on-premises and cloud environments with seamless integration.",
-          features: ["Hybrid Architecture", "Data Synchronization", "Unified Management", "Security Consistency"]
-        },
-        {
-          icon: TrendingUp,
-          title: "Cloud Optimization",
-          description: "AI-powered cost optimization and performance tuning for maximum cloud efficiency.",
-          features: ["Cost Optimization", "Performance Tuning", "Resource Scaling", "Usage Analytics"]
-        },
-        {
-          icon: Lock,
-          title: "Cloud Security",
-          description: "Comprehensive security framework designed specifically for cloud environments.",
-          features: ["Identity Management", "Data Encryption", "Compliance Monitoring", "Threat Protection"]
-        }
-      ],
-      benefits: [
-        "45% reduction in infrastructure costs",
-        "3x faster deployment of new services",
-        "Unlimited scalability on demand",
-        "99.9% cloud infrastructure uptime"
-      ]
+    {
+      icon: Zap,
+      title: "Rapid Deployment",
+      description: "Most solutions live within 30-90 days"
     },
-    backup: {
-      overview: "Ensure business continuity with our next-generation backup and disaster recovery solutions that leverage AI optimization, cloud-edge architecture, and automated testing to guarantee your data is always protected and recoverable.",
-      coreServices: [
-        {
-          icon: Database,
-          title: "Intelligent Backup",
-          description: "AI-optimized backup strategies with deduplication, compression, and smart scheduling.",
-          features: ["AI Optimization", "Deduplication", "Incremental Backup", "Smart Scheduling"]
-        },
-        {
-          icon: Cpu,
-          title: "Disaster Recovery",
-          description: "Comprehensive DR planning with automated failover and business continuity assurance.",
-          features: ["DR Planning", "Automated Failover", "Business Continuity", "Recovery Testing"]
-        },
-        {
-          icon: Cloud,
-          title: "Cloud Backup",
-          description: "Secure cloud backup with multiple geographic locations and instant accessibility.",
-          features: ["Multi-Site Backup", "Cloud Storage", "Instant Access", "Geographic Distribution"]
-        },
-        {
-          icon: CheckCircle,
-          title: "Compliance & Archiving",
-          description: "Long-term data archiving with compliance management and legal hold capabilities.",
-          features: ["Compliance Management", "Legal Hold", "Long-term Archiving", "Audit Trails"]
-        }
-      ],
-      benefits: [
-        "15-minute recovery time objective",
-        "99.99% backup reliability rate",
-        "Automated monthly DR testing",
-        "Compliance with industry regulations"
-      ]
-    },
-    analytics: {
-      overview: "Unlock the power of your data with our comprehensive analytics platform that transforms raw information into actionable insights through advanced visualization, machine learning, and predictive modeling.",
-      coreServices: [
-        {
-          icon: BarChart3,
-          title: "Business Intelligence",
-          description: "Interactive dashboards and reports that provide real-time insights into your business performance.",
-          features: ["Real-time Dashboards", "Custom Reports", "KPI Monitoring", "Data Visualization"]
-        },
-        {
-          icon: Brain,
-          title: "Predictive Analytics",
-          description: "Machine learning models that forecast trends, identify opportunities, and predict outcomes.",
-          features: ["Forecasting Models", "Trend Analysis", "Risk Assessment", "Opportunity Identification"]
-        },
-        {
-          icon: Workflow,
-          title: "Data Integration",
-          description: "Seamless integration of data sources with automated ETL processes and data quality management.",
-          features: ["Data Integration", "ETL Automation", "Data Quality", "Real-time Processing"]
-        },
-        {
-          icon: Target,
-          title: "Advanced Analytics",
-          description: "Sophisticated analytical tools including statistical analysis, data mining, and AI-powered insights.",
-          features: ["Statistical Analysis", "Data Mining", "AI Insights", "Pattern Recognition"]
-        }
-      ],
-      benefits: [
-        "95% improvement in decision accuracy",
-        "Real-time access to business insights",
-        "3x faster time-to-insight delivery",
-        "Automated anomaly detection"
-      ]
-    },
-    software: {
-      overview: "Accelerate your business processes with our custom enterprise software solutions that leverage AI automation, modern architectures, and industry best practices to deliver scalable, efficient, and user-friendly applications.",
-      coreServices: [
-        {
-          icon: Zap,
-          title: "Custom Software Development",
-          description: "Bespoke software solutions designed specifically for your business requirements and workflows.",
-          features: ["Custom Development", "API Integration", "Modern Architecture", "Scalable Design"]
-        },
-        {
-          icon: Layers,
-          title: "Enterprise Resource Planning",
-          description: "Comprehensive ERP systems that integrate all aspects of your business operations.",
-          features: ["Financial Management", "Human Resources", "Supply Chain", "Customer Relations"]
-        },
-        {
-          icon: Smartphone,
-          title: "Mobile Applications",
-          description: "Native and cross-platform mobile applications that extend your business capabilities.",
-          features: ["Native Development", "Cross-Platform", "Mobile-First Design", "App Store Deployment"]
-        },
-        {
-          icon: Globe,
-          title: "Web Applications",
-          description: "Modern web applications with responsive design and progressive web app capabilities.",
-          features: ["Responsive Design", "Progressive Web Apps", "Cloud-Native", "Modern Frameworks"]
-        }
-      ],
-      benefits: [
-        "70% improvement in process automation",
-        "60% increase in operational efficiency",
-        "300% return on investment average",
-        "Seamless integration with existing systems"
-      ]
+    {
+      icon: Clock,
+      title: "24/7 Support",
+      description: "Round-the-clock expert assistance"
     }
-  };
+  ];
 
-  const activeSolutionData = solutionDetails[activeSolution as keyof typeof solutionDetails];
-  const activeSolutionInfo = solutionPillars.find(pillar => pillar.id === activeSolution);
+  const industries = [
+    {
+      name: "Banking & Finance",
+      solutions: ["Cloud & Licensing", "Security & Compliance", "Data & Analytics"],
+      description: "Secure, compliant solutions for financial institutions"
+    },
+    {
+      name: "Healthcare",
+      solutions: ["Security & Compliance", "Cloud & Licensing", "AI & Messaging"],
+      description: "HIPAA-ready systems with patient data protection"
+    },
+    {
+      name: "Legal Services",
+      solutions: ["Cloud & Licensing", "Security & Compliance", "SME Transformation"],
+      description: "Document management and client communication"
+    },
+    {
+      name: "Retail & E-Commerce",
+      solutions: ["Web Design", "AI & Messaging", "Data & Analytics"],
+      description: "Online presence and customer engagement"
+    },
+    {
+      name: "Manufacturing",
+      solutions: ["SME Transformation", "Data & Analytics", "Security & Compliance"],
+      description: "Process optimization and supply chain visibility"
+    },
+    {
+      name: "NGOs & Non-Profits",
+      solutions: ["Cloud & Licensing", "Web Design", "Data & Analytics"],
+      description: "Cost-effective collaboration and impact reporting"
+    }
+  ];
 
-  const industryApplications = [
+  const testimonials = [
     {
-      industry: "Banking & Finance",
-      solutions: ["AI-Powered Security", "Data Analytics", "Compliance Management"],
-      description: "Secure financial operations with regulatory compliance and risk management."
+      quote: "Datacare transformed our entire IT infrastructure. Cloud migration was seamless, and we're saving 35% on licensing.",
+      author: "IT Director",
+      company: "Kenyan Law Firm",
+      solution: "Cloud & Licensing"
     },
     {
-      industry: "Healthcare",
-      solutions: ["Data Protection", "Cloud Infrastructure", "Backup & Recovery"],
-      description: "HIPAA-compliant solutions for patient data security and system reliability."
+      quote: "WhatsApp automation has been a game-changer. 90% of customer inquiries are now handled automatically.",
+      author: "Customer Service Manager",
+      company: "Financial Services SACCO",
+      solution: "AI & Messaging"
     },
     {
-      industry: "Manufacturing",
-      solutions: ["IoT Integration", "Predictive Analytics", "Process Automation"],
-      description: "Industry 4.0 solutions for smart manufacturing and operational excellence."
-    },
-    {
-      industry: "Education",
-      solutions: ["Cloud Platforms", "Digital Infrastructure", "Learning Management"],
-      description: "Scalable educational technology for modern learning environments."
-    },
-    {
-      industry: "Government",
-      solutions: ["Cybersecurity", "Digital Services", "Data Management"],
-      description: "Secure and transparent digital governance solutions for public sector."
-    },
-    {
-      industry: "SME & Startups",
-      solutions: ["Managed IT", "Cloud Migration", "Business Intelligence"],
-      description: "Cost-effective solutions that scale with your growing business."
+      quote: "Our new website generates 3x more leads. The monthly retainer model gives us flexibility and peace of mind.",
+      author: "Marketing Director",
+      company: "Retail Chain",
+      solution: "Web Design"
     }
   ];
 
   return (
     <div className="min-h-screen bg-background">
       <SEO
-        title="IT Solutions - Cloud, AI, Security & Digital Transformation"
-        description="Discover Datacare Limited's comprehensive IT solutions including cloud & licensing, AI automation, web design, SME digital transformation, and security compliance services in Kenya."
-        keywords="IT solutions Kenya, cloud solutions, AI automation, web design services, digital transformation, security compliance, Microsoft 365 licensing, Google Workspace"
+        title="IT Solutions - Cloud, AI, Security & Digital Transformation | Datacare"
+        description="Comprehensive IT solutions for East African businesses: Cloud & Licensing, AI Automation, Web Design, Digital Transformation, Security & Compliance, and Data Analytics."
+        keywords="IT solutions Kenya, cloud solutions, AI automation, web design, digital transformation, cybersecurity Kenya, KDPA compliance, business intelligence"
         url="https://datacare.co.ke/solutions"
       />
       <Navigation />
@@ -355,16 +272,15 @@ const Solutions = () => {
               <span className="text-sm font-medium text-primary">Complete Solutions</span>
             </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
-              <span className="gradient-text">Comprehensive IT</span><br />
-              Solutions Portfolio
+              <span className="gradient-text">Transform Your Business</span><br />
+              with Integrated IT Solutions
             </h1>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-8">
-              Transform your business with our integrated suite of AI-powered IT solutions. 
-              From cybersecurity to cloud infrastructure, we provide everything you need 
-              to thrive in the digital age.
+              From cloud infrastructure to AI automation, we provide comprehensive solutions
+              that drive efficiency, security, and growth for East African businesses
             </p>
-            
-            {/* Solution Stats */}
+
+            {/* Quick Stats */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
               <div className="text-center">
                 <div className="text-3xl font-bold text-primary mb-2">6</div>
@@ -379,206 +295,292 @@ const Solutions = () => {
                 <div className="text-sm text-muted-foreground">Uptime SLA</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-warning mb-2">24/7</div>
-                <div className="text-sm text-muted-foreground">Expert Support</div>
+                <div className="text-3xl font-bold text-warning mb-2">12+</div>
+                <div className="text-sm text-muted-foreground">Years Experience</div>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Solution Pillars Navigation */}
+      {/* Solutions Grid */}
       <section className="py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Pillar Navigation */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
-            {solutionPillars.map((pillar) => {
-              const Icon = pillar.icon;
-              return (
-                <button
-                  key={pillar.id}
-                  onClick={() => setActiveSolution(pillar.id)}
-                  className={`p-6 rounded-xl text-left transition-all duration-300 ${
-                    activeSolution === pillar.id
-                      ? 'bg-primary text-primary-foreground shadow-[var(--shadow-medium)]'
-                      : 'bg-muted/50 text-muted-foreground hover:bg-primary/10 hover:text-primary'
-                  }`}
-                >
-                  <div className={`w-12 h-12 rounded-xl bg-gradient-to-r ${pillar.color} flex items-center justify-center mb-4 ${
-                    activeSolution === pillar.id ? 'opacity-100' : 'opacity-70'
-                  }`}>
-                    <Icon className="w-6 h-6 text-white" />
-                  </div>
-                  <h3 className="font-semibold text-lg mb-2">{pillar.title}</h3>
-                  <p className="text-sm opacity-80 mb-4">{pillar.description}</p>
-                  
-                  {/* Quick Stats */}
-                  <div className="grid grid-cols-3 gap-2 text-xs">
-                    {Object.entries(pillar.stats).map(([key, value]) => (
-                      <div key={key} className="text-center">
-                        <div className={`font-bold ${
-                          activeSolution === pillar.id ? 'text-primary-foreground' : 'text-primary'
-                        }`}>
-                          {value}
-                        </div>
-                        <div className="opacity-70 capitalize">{key}</div>
-                      </div>
-                    ))}
-                  </div>
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Active Solution Details */}
-          {activeSolutionData && activeSolutionInfo && (
-            <div className="animate-fade-in">
-              {/* Solution Header */}
-              <div className="text-center mb-16">
-                <div className={`w-16 h-16 rounded-2xl bg-gradient-to-r ${activeSolutionInfo.color} flex items-center justify-center mx-auto mb-6`}>
-                  <activeSolutionInfo.icon className="w-8 h-8 text-white" />
-                </div>
-                <h2 className="text-3xl md:text-4xl font-bold mb-4">{activeSolutionInfo.title}</h2>
-                <p className="text-xl text-muted-foreground max-w-4xl mx-auto leading-relaxed">
-                  {activeSolutionData.overview}
-                </p>
-              </div>
-
-              {/* Core Services */}
-              <div className="mb-16">
-                <h3 className="text-2xl font-bold text-center mb-12">Core Services & Capabilities</h3>
-                <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-                  {activeSolutionData.coreServices.map((service, index) => {
-                    const Icon = service.icon;
-                    return (
-                      <div
-                        key={service.title}
-                        className="card-elevated group cursor-pointer"
-                        style={{ animationDelay: `${index * 100}ms` }}
-                      >
-                        <div className={`w-12 h-12 rounded-xl bg-gradient-to-r ${activeSolutionInfo.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
-                          <Icon className="w-6 h-6 text-white" />
-                        </div>
-                        <h4 className="font-semibold mb-3 group-hover:text-primary transition-colors">
-                          {service.title}
-                        </h4>
-                        <p className="text-sm text-muted-foreground mb-4 leading-relaxed">
-                          {service.description}
-                        </p>
-                        <ul className="space-y-1">
-                          {service.features.map((feature) => (
-                            <li key={feature} className="flex items-center text-xs text-muted-foreground">
-                              <CheckCircle className="w-3 h-3 text-success mr-2 flex-shrink-0" />
-                              {feature}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* Key Benefits */}
-              <div className="card-elevated">
-                <h3 className="text-xl font-bold mb-6 flex items-center">
-                  <Target className="w-5 h-5 mr-2 text-primary" />
-                  Key Business Benefits
-                </h3>
-                <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                  {activeSolutionData.benefits.map((benefit) => (
-                    <div key={benefit} className="flex items-center">
-                      <CheckCircle className="w-5 h-5 text-success mr-3 flex-shrink-0" />
-                      <span className="text-sm">{benefit}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-      </section>
-
-      {/* Industry Applications */}
-      <section className="py-16 bg-muted/30">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
+          <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold mb-6">
-              Industry-Specific <span className="gradient-text">Applications</span>
+              Our <span className="gradient-text">Solution Portfolio</span>
             </h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Our solutions are tailored to meet the unique challenges and requirements 
-              of different industries across East Africa and beyond.
+              Comprehensive IT solutions designed for modern East African businesses
             </p>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {industryApplications.map((app, index) => (
-              <div
-                key={app.industry}
-                className="card-elevated group cursor-pointer"
+            {solutions.map((solution, index) => {
+              const Icon = solution.icon;
+              return (
+                <Card
+                  key={solution.id}
+                  className={`relative overflow-hidden group hover:shadow-2xl transition-all duration-300 ${
+                    solution.popular ? 'ring-2 ring-primary/20' : ''
+                  }`}
+                  style={{ animationDelay: `${index * 100}ms` }}
+                >
+                  {solution.popular && (
+                    <div className="absolute top-4 right-4 z-10">
+                      <Badge className="bg-orange-600 text-white">
+                        <Star className="w-3 h-3 mr-1" />
+                        Popular
+                      </Badge>
+                    </div>
+                  )}
+
+                  {/* Header with Icon */}
+                  <div className={`p-6 ${solution.bgColor} border-b border-border`}>
+                    <div className={`w-14 h-14 rounded-xl bg-gradient-to-r ${solution.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
+                      <Icon className="w-7 h-7 text-white" />
+                    </div>
+                    <h3 className="text-xl font-bold mb-2">{solution.name}</h3>
+                    <p className="text-sm font-semibold text-primary mb-3">{solution.tagline}</p>
+                    <p className="text-muted-foreground text-sm leading-relaxed">{solution.description}</p>
+                  </div>
+
+                  {/* Features */}
+                  <div className="p-6">
+                    <h4 className="font-semibold mb-3 text-sm">What's Included:</h4>
+                    <ul className="space-y-2 mb-6">
+                      {solution.features.slice(0, 4).map((feature) => (
+                        <li key={feature} className="flex items-start text-xs">
+                          <CheckCircle className="w-3.5 h-3.5 text-success mr-2 mt-0.5 flex-shrink-0" />
+                          <span>{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
+
+                    {/* Stats */}
+                    <div className="bg-secondary/30 rounded-lg p-3 mb-6">
+                      <div className="grid grid-cols-3 gap-2 text-center text-xs">
+                        {Object.entries(solution.stats).map(([key, value]) => (
+                          <div key={key}>
+                            <div className="font-bold text-primary text-xs mb-0.5">{value}</div>
+                            <div className="text-muted-foreground capitalize text-[10px]">{key}</div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* CTA */}
+                    <Button asChild className="w-full bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90">
+                      <Link to={solution.link}>
+                        {solution.cta}
+                        <ArrowRight className="w-4 h-4 ml-2" />
+                      </Link>
+                    </Button>
+                  </div>
+                </Card>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Why Choose Datacare */}
+      <section className="py-16 bg-muted/30">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">
+              Why Choose <span className="gradient-text">Datacare Solutions</span>
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+              Trusted IT partner for businesses across East Africa
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {benefits.map((benefit, index) => {
+              const Icon = benefit.icon;
+              return (
+                <Card
+                  key={benefit.title}
+                  className="p-6 text-center hover:shadow-lg transition-all group"
+                  style={{ animationDelay: `${index * 100}ms` }}
+                >
+                  <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                    <Icon className="w-6 h-6 text-primary" />
+                  </div>
+                  <h3 className="font-semibold mb-2 group-hover:text-primary transition-colors">
+                    {benefit.title}
+                  </h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    {benefit.description}
+                  </p>
+                </Card>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Industry Applications */}
+      <section className="py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">
+              Industry-Specific <span className="gradient-text">Solutions</span>
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+              Tailored approaches for different sectors across East Africa
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {industries.map((industry, index) => (
+              <Card
+                key={industry.name}
+                className="p-6 hover:shadow-xl transition-all group"
                 style={{ animationDelay: `${index * 100}ms` }}
               >
-                <h3 className="text-lg font-semibold mb-3 group-hover:text-primary transition-colors">
-                  {app.industry}
+                <h3 className="text-lg font-bold mb-3 group-hover:text-primary transition-colors">
+                  {industry.name}
                 </h3>
-                <p className="text-muted-foreground text-sm mb-4 leading-relaxed">
-                  {app.description}
+                <p className="text-sm text-muted-foreground mb-4 leading-relaxed">
+                  {industry.description}
                 </p>
                 <div className="flex flex-wrap gap-2">
-                  {app.solutions.map((solution) => (
-                    <span
-                      key={solution}
-                      className="px-2 py-1 text-xs bg-primary/10 text-primary rounded-md"
-                    >
+                  {industry.solutions.map((solution) => (
+                    <Badge key={solution} variant="outline" className="text-xs">
                       {solution}
-                    </span>
+                    </Badge>
                   ))}
                 </div>
-              </div>
+              </Card>
             ))}
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-16">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-6">
-            Ready to Transform Your Business?
-          </h2>
-          <p className="text-xl text-muted-foreground mb-8">
-            Let our experts design a customized solution that addresses your specific 
-            business challenges and drives measurable results.
-          </p>
-          
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-            <Button size="lg" className="btn-primary">
-              Schedule Solution Consultation
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
-            <Button variant="outline" size="lg" className="btn-outline">
-              Download Solutions Guide
-            </Button>
+      {/* Client Success Stories */}
+      <section className="py-16 bg-muted/30">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">
+              Real <span className="gradient-text">Results</span>
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+              Hear from businesses that transformed with our solutions
+            </p>
           </div>
-          
-          <div className="flex items-center justify-center gap-8 text-sm text-muted-foreground">
-            <div className="flex items-center">
-              <Users className="w-4 h-4 mr-2" />
-              500+ Successful Implementations
-            </div>
-            <div className="flex items-center">
-              <Star className="w-4 h-4 mr-2 text-yellow-500" />
-              4.9/5 Client Satisfaction
-            </div>
-            <div className="flex items-center">
-              <Clock className="w-4 h-4 mr-2" />
-              Rapid Deployment
-            </div>
-            <div className="flex items-center">
-              <Award className="w-4 h-4 mr-2" />
-              Industry Certified
-            </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {testimonials.map((testimonial, index) => (
+              <Card
+                key={testimonial.company}
+                className="p-6 hover:shadow-xl transition-all"
+                style={{ animationDelay: `${index * 100}ms` }}
+              >
+                <div className="flex items-center gap-1 mb-4">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="w-4 h-4 fill-yellow-500 text-yellow-500" />
+                  ))}
+                </div>
+                <blockquote className="text-muted-foreground mb-4 leading-relaxed italic text-sm">
+                  "{testimonial.quote}"
+                </blockquote>
+                <div className="flex items-start justify-between pt-4 border-t border-border">
+                  <div>
+                    <div className="font-semibold text-sm">{testimonial.author}</div>
+                    <div className="text-xs text-muted-foreground">{testimonial.company}</div>
+                  </div>
+                  <Badge variant="outline" className="text-xs">
+                    {testimonial.solution}
+                  </Badge>
+                </div>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Related Resources */}
+      <section className="py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">
+              Learn <span className="gradient-text">More</span>
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+              Explore resources to understand our solutions better
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            <Card className="p-6 hover:shadow-xl transition-all group">
+              <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors">
+                Case Studies
+              </h3>
+              <p className="text-muted-foreground mb-4 leading-relaxed">
+                Read detailed success stories from businesses that implemented our solutions
+              </p>
+              <Button asChild variant="outline" className="w-full">
+                <Link to="/resources/case-studies">
+                  View Case Studies
+                  <ArrowRight className="w-4 h-4 ml-2" />
+                </Link>
+              </Button>
+            </Card>
+
+            <Card className="p-6 hover:shadow-xl transition-all group">
+              <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors">
+                Knowledge Base
+              </h3>
+              <p className="text-muted-foreground mb-4 leading-relaxed">
+                Expert guides on Microsoft 365, KDPA compliance, and digital transformation
+              </p>
+              <Button asChild variant="outline" className="w-full">
+                <Link to="/resources/knowledge-base">
+                  Browse Articles
+                  <ArrowRight className="w-4 h-4 ml-2" />
+                </Link>
+              </Button>
+            </Card>
+
+            <Card className="p-6 hover:shadow-xl transition-all group">
+              <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors">
+                Products Overview
+              </h3>
+              <p className="text-muted-foreground mb-4 leading-relaxed">
+                Explore our product offerings including Microsoft 365 and Google Workspace
+              </p>
+              <Button asChild variant="outline" className="w-full">
+                <Link to="/products">
+                  View Products
+                  <ArrowRight className="w-4 h-4 ml-2" />
+                </Link>
+              </Button>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-20 bg-gradient-to-r from-orange-600 to-orange-500 text-white">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-4xl font-bold mb-6">Ready to Transform Your Business?</h2>
+          <p className="text-xl mb-8 opacity-90">
+            Schedule a consultation to discuss which solutions are right for your organization
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button asChild size="lg" variant="secondary">
+              <Link to="/contact">
+                Schedule Free Consultation
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Link>
+            </Button>
+            <Button asChild size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-orange-600">
+              <Link to="/employee-amplification">
+                Explore Employee Amplification
+              </Link>
+            </Button>
           </div>
         </div>
       </section>
