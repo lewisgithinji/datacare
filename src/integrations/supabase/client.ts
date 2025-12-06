@@ -28,19 +28,20 @@ if (SUPABASE_URL && SUPABASE_PUBLISHABLE_KEY) {
     const handler: ProxyHandler<any> = {
       get(_target, prop) {
         if (prop === Symbol.toStringTag) return 'MissingSupabaseClient';
-        // return another proxy so chained property access doesn't throw immediately
+        // return another proxy so chained property access doesn't throw
         return createMissingProxy();
       },
       apply() {
-        throw new Error(missingMsg);
+        // When the chain is finally invoked as a function, return a safe resolved promise
+        return Promise.resolve({ data: null, error: null });
       },
       construct() {
-        throw new Error(missingMsg);
+        return createMissingProxy();
       }
     };
 
     // function-style proxy so it can be called or have properties accessed
-    const fn = () => { throw new Error(missingMsg); };
+    const fn = (..._args: any[]) => Promise.resolve({ data: null, error: null });
     return new Proxy(fn, handler);
   }
 
