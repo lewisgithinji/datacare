@@ -1,16 +1,22 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { MessageCircle, X, Send, RotateCcw, Phone, Loader2, MessageSquare } from "lucide-react";
+import { MessageCircle, X, Send, RotateCcw, Phone, Loader2, MessageSquare, Sparkles } from "lucide-react";
 import { useChatbot, type Intent, type OrgType, type CompanySize, type PrimaryNeed, type CurrentStack, type Urgency, type Budget } from "@/hooks/useChatbot";
 import { useToast } from "@/components/ui/use-toast";
+import ChatMessage from "./chatbot/ChatMessage";
+import TypingIndicator from "./chatbot/TypingIndicator";
+import type { QuickAction } from "@/lib/chatbot-query-engine";
 
 const Chatbot = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [faqQuery, setFaqQuery] = useState('');
+  const [chatInput, setChatInput] = useState('');
+  const [viewMode, setViewMode] = useState<'chat' | 'wizard'>('chat');
+  const messagesEndRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
-  
+
   const {
     currentStep,
     setCurrentStep,
@@ -24,7 +30,15 @@ const Chatbot = () => {
     handleFAQQuery,
     handleSubmit,
     trackEvent,
-    trackRecommendationClick
+    trackRecommendationClick,
+    // Conversational mode
+    messages,
+    handleQuery,
+    handleQuickQuestion,
+    lastQueryResponse,
+    switchToWizard,
+    switchToChat,
+    resetConversation
   } = useChatbot();
 
   const handleIntentSelect = (intent: Intent) => {
@@ -128,6 +142,52 @@ const Chatbot = () => {
     window.open(rec.url, '_blank');
   };
 
+  // Chat mode handlers
+  const handleChatSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!chatInput.trim()) return;
+
+    const query = chatInput.trim();
+    setChatInput('');
+    await handleQuery(query);
+  };
+
+  const handleQuickActionClick = (action: QuickAction) => {
+    if (action.type === 'navigate') {
+      window.open(action.url, '_blank');
+      trackEvent('quick_action_clicked', { label: action.label, url: action.url });
+    } else if (action.type === 'contact') {
+      window.open(action.url, '_blank');
+      trackEvent('contact_action_clicked', { label: action.label, url: action.url });
+    } else if (action.type === 'ask') {
+      handleQuery(action.query || action.label);
+      trackEvent('follow_up_question_clicked', { question: action.query || action.label });
+    }
+  };
+
+  const handleSuggestionClick = (suggestion: string) => {
+    handleQuery(suggestion);
+    trackEvent('suggestion_clicked', { suggestion });
+  };
+
+  const handleModeSwitch = (mode: 'chat' | 'wizard') => {
+    setViewMode(mode);
+    if (mode === 'chat') {
+      switchToChat();
+      trackEvent('mode_switched_to_chat');
+    } else {
+      switchToWizard();
+      trackEvent('mode_switched_to_wizard');
+    }
+  };
+
+  // Auto-scroll to bottom when new messages arrive
+  useEffect(() => {
+    if (viewMode === 'chat') {
+      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [messages, viewMode]);
+
   if (!isOpen) {
     return (
       <div className="fixed bottom-6 right-6 z-50">
@@ -164,9 +224,145 @@ const Chatbot = () => {
           </Button>
         </div>
 
-        <div className="p-6 max-h-[500px] overflow-y-auto">
-          {/* Intent Selection */}
-          {currentStep === "intent" && (
+        {/* Mode Toggle */}
+        <div className="flex gap-2 p-2 border-b bg-muted/30">
+          <Button
+            variant={viewMode === 'chat' ? 'default' : 'ghost'}
+            size="sm"
+            onClick={() => handleModeSwitch('chat')}
+            className="flex-1 h-8 text-xs"
+          >
+            <Sparkles className="w-3 h-3 mr-1" />
+            Chat
+          </Button>
+          <Button
+            variant={viewMode === 'wizard' ? 'default' : 'ghost'}
+            size="sm"
+            onClick={() => handleModeSwitch('wizard')}
+            className="flex-1 h-8 text-xs"
+          >
+            <MessageSquare className="w-3 h-3 mr-1" />
+            Guided
+          </Button>
+        </div>
+
+        {/* Chat Mode */}
+        {viewMode === 'chat' ? (
+          <div className="flex flex-col h-[500px] animate-in fade-in duration-300">
+            {/* Message History */}
+            <div className="flex-1 overflow-y-auto p-4 space-y-3 scroll-smooth">
+              {messages.length === 0 && !isLoading && (
+                <div className="flex flex-col items-center justify-center h-full text-center space-y-4 px-6">
+                  <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center">
+                    <MessageCircle className="w-8 h-8 text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-lg mb-2">Hi! I'm your Datacare AI Assistant</h3>
+                    <p className="text-sm text-muted-foreground mb-4">
+                      Ask me about our products, pricing, or services. I have all the latest information!
+                    </p>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2 w-full">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleQuery('What products do you offer?')}
+                      className="h-auto py-2 text-xs"
+                    >
+                      📦 Products
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleQuery('How much does Microsoft 365 cost?')}
+                      className="h-auto py-2 text-xs"
+                    >
+                      💰 Pricing
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleQuery('How can I contact you?')}
+                      className="h-auto py-2 text-xs"
+                    >
+                      📞 Contact
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleQuery('Tell me about Employee Amplification')}
+                      className="h-auto py-2 text-xs"
+                    >
+                      🚀 Solutions
+                    </Button>
+                  </div>
+                </div>
+              )}
+
+              {messages.map((message, index) => (
+                <ChatMessage
+                  key={index}
+                  message={message}
+                  onQuickAction={handleQuickActionClick}
+                  onSuggestionClick={handleSuggestionClick}
+                />
+              ))}
+
+              {/* Typing Indicator */}
+              {isLoading && <TypingIndicator />}
+
+              {/* Auto-scroll anchor */}
+              <div ref={messagesEndRef} />
+            </div>
+
+            {/* Chat Input */}
+            <div className="border-t bg-background p-3">
+              <form onSubmit={handleChatSubmit} className="flex gap-2">
+                <Input
+                  placeholder="Ask about our products, pricing, or services..."
+                  value={chatInput}
+                  onChange={(e) => setChatInput(e.target.value)}
+                  disabled={isLoading}
+                  className="text-sm flex-1"
+                />
+                <Button
+                  type="submit"
+                  size="sm"
+                  disabled={isLoading || !chatInput.trim()}
+                  className="px-3"
+                >
+                  <Send className="w-4 h-4" />
+                </Button>
+              </form>
+
+              {/* Quick Actions Footer */}
+              <div className="flex gap-2 mt-2">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => resetConversation()}
+                  className="flex items-center gap-1 text-xs h-7 flex-1"
+                >
+                  <RotateCcw className="w-3 h-3" />
+                  Reset
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => window.open('https://wa.me/254784155752', '_blank')}
+                  className="flex items-center gap-1 text-xs h-7 flex-1"
+                >
+                  <Phone className="w-3 h-3" />
+                  WhatsApp
+                </Button>
+              </div>
+            </div>
+          </div>
+        ) : (
+          // Wizard Mode
+          <div className="p-6 max-h-[500px] overflow-y-auto">
+            {/* Intent Selection */}
+            {currentStep === "intent" && (
             <div className="space-y-4">
               <div className="bg-primary/5 p-4 rounded-lg">
                 <p className="text-sm font-medium text-primary mb-2">Hi, welcome to Datacare!</p>
@@ -533,7 +729,8 @@ const Chatbot = () => {
               </Button>
             </div>
           )}
-        </div>
+          </div>
+        )}
       </Card>
     </div>
   );

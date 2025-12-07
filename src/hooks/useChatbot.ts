@@ -1,5 +1,17 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { queryKnowledgeBase, getPopularQuestions, type QueryResponse, type QuickAction } from '@/lib/chatbot-query-engine';
+
+// ==================== TYPES ====================
+
+export interface Message {
+  id: string;
+  role: 'user' | 'assistant';
+  content: string;
+  timestamp: Date;
+  quickActions?: QuickAction[];
+  suggestions?: string[];
+}
 
 export interface ConversationData {
   intent: Intent | '';
@@ -24,7 +36,7 @@ export interface Recommendation {
   reason: string;
 }
 
-export type Intent = 'sales' | 'support' | 'general' | 'faq';
+export type Intent = 'sales' | 'support' | 'general' | 'faq' | 'chat';
 export type OrgType = 'SMEs' | 'Legal' | 'Banking & Finance' | 'Healthcare' | 'Education' | 'Manufacturing' | 'NGOs' | 'Government';
 export type CompanySize = '1–10' | '11–50' | '51–300' | '300+';
 export type PrimaryNeed = 'Email/Collaboration' | 'Device Management' | 'Security/Compliance' | 'Messaging Automation' | 'Website' | 'Backup/Recovery' | 'Data & Analytics';
@@ -32,9 +44,13 @@ export type CurrentStack = 'Microsoft 365' | 'Google Workspace' | 'On-prem' | 'N
 export type Urgency = 'Now' | '30 days' | '90 days';
 export type Budget = 'Entry' | 'Standard' | 'Enterprise';
 
+// ==================== CUSTOM HOOK ====================
+
 export const useChatbot = () => {
   const [sessionId] = useState(() => crypto.randomUUID());
+  const [mode, setMode] = useState<'wizard' | 'chat'>('wizard'); // Support both modes
   const [currentStep, setCurrentStep] = useState('intent');
+  const [messages, setMessages] = useState<Message[]>([]);
   const [conversationData, setConversationData] = useState<ConversationData>({
     intent: '',
     orgType: '',
@@ -53,11 +69,31 @@ export const useChatbot = () => {
   const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
   const [faqResponse, setFaqResponse] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [lastQueryResponse, setLastQueryResponse] = useState<QueryResponse | null>(null);
 
   // Track session start
   useEffect(() => {
     trackEvent('session_start', { timestamp: new Date().toISOString() });
+
+    // Add welcome message
+    addMessage('assistant', "Hi! I'm your Datacare AI assistant. I can help you find the perfect IT solution for your business. What can I help you with today?", [], getPopularQuestions().map(q => q.question).slice(0, 4));
   }, []);
+
+  // ==================== UTILITY FUNCTIONS ====================
+
+  const addMessage = (role: 'user' | 'assistant', content: string, quickActions: QuickAction[] = [], suggestions: string[] = []) => {
+    const message: Message = {
+      id: crypto.randomUUID(),
+      role,
+      content,
+      timestamp: new Date(),
+      quickActions: quickActions.length > 0 ? quickActions : undefined,
+      suggestions: suggestions.length > 0 ? suggestions : undefined
+    };
+
+    setMessages(prev => [...prev, message]);
+    return message;
+  };
 
   const trackEvent = async (eventType: string, data?: any) => {
     try {
@@ -69,12 +105,53 @@ export const useChatbot = () => {
     }
   };
 
+  // ==================== CONVERSATIONAL AI FUNCTIONS ====================
+
+  /**
+   * Handle natural language query using AI query engine
+   */
+  const handleQuery = async (query: string) => {
+    setIsLoading(true);
+    addMessage('user', query);
+
+    try {
+      // Use our intelligent query engine
+      const response = queryKnowledgeBase(query);
+
+      setLastQueryResponse(response);
+      trackEvent('query_processed', { query, resultsCount: response.results.length });
+
+      // Add assistant response with quick actions
+      addMessage('assistant', response.answer, response.quickActions, response.suggestions);
+
+      return response;
+    } catch (error) {
+      console.error('Query processing failed:', error);
+      addMessage('assistant', "I apologize, but I encountered an issue. Let me connect you with our team. Would you like to chat on WhatsApp or call us at +254 784 155 752?", [
+        { label: 'WhatsApp Us', type: 'contact', url: 'https://wa.me/254784155752', icon: '💬' },
+        { label: 'Call Us', type: 'contact', url: 'tel:+254784155752', icon: '📞' }
+      ]);
+      return null;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  /**
+   * Handle quick question from suggestions
+   */
+  const handleQuickQuestion = async (question: string) => {
+    return await handleQuery(question);
+  };
+
+  // ==================== WIZARD MODE FUNCTIONS ====================
+
   const generateRecommendations = (data: ConversationData) => {
     const recs: Recommendation[] = [];
-    
+
     // Enhanced recommendation logic with personalized messaging
     const industryFocus = data.orgType ? getIndustryFocus(data.orgType) : getIndustryFocus('SMEs');
-    
+
     // Microsoft 365 Rules
     if (data.need === 'Email/Collaboration') {
       if (data.orgType && ['SMEs', 'Education'].includes(data.orgType)) {
@@ -93,7 +170,7 @@ export const useChatbot = () => {
         });
       }
     }
-    
+
     if (data.need === 'Device Management' || data.need === 'Security/Compliance') {
       recs.push({
         id: 'm365-premium',
@@ -102,9 +179,9 @@ export const useChatbot = () => {
         reason: `${industryFocus.securityReason} Advanced security and device management for ${data.orgType ? data.orgType.toLowerCase() : 'organizations'}`
       });
     }
-    
+
     // Google Workspace Rules
-    if (data.stack === 'Google Workspace' || 
+    if (data.stack === 'Google Workspace' ||
         (data.need === 'Email/Collaboration' && data.orgType && ['Education', 'NGOs'].includes(data.orgType))) {
       recs.push({
         id: 'google-workspace',
@@ -113,9 +190,9 @@ export const useChatbot = () => {
         reason: `Google-native collaboration solution ideal for ${data.orgType ? data.orgType.toLowerCase() : 'organization'} environments`
       });
     }
-    
+
     // Messaging Automation Rules
-    if (data.need === 'Messaging Automation' || 
+    if (data.need === 'Messaging Automation' ||
         (data.orgType && ['SMEs', 'Legal', 'Healthcare'].includes(data.orgType))) {
       recs.push({
         id: 'messaging-platform',
@@ -124,9 +201,9 @@ export const useChatbot = () => {
         reason: `WhatsApp automation perfect for ${data.orgType ? data.orgType.toLowerCase() : 'organization'} customer engagement and ${industryFocus.messagingReason}`
       });
     }
-    
+
     // Cloud Backup Rules - Industry specific
-    if ((data.orgType && ['Banking & Finance', 'Healthcare', 'Legal'].includes(data.orgType)) || 
+    if ((data.orgType && ['Banking & Finance', 'Healthcare', 'Legal'].includes(data.orgType)) ||
         data.need === 'Backup/Recovery' ||
         (data.size && ['51–300', '300+'].includes(data.size))) {
       recs.push({
@@ -136,7 +213,7 @@ export const useChatbot = () => {
         reason: `${industryFocus.backupReason} Essential for ${data.orgType ? data.orgType.toLowerCase() : 'organization'} compliance and data protection`
       });
     }
-    
+
     // Website Rules
     if (data.need === 'Website' || data.stack === 'None') {
       const websiteTier = data.size === '1–10' ? 'Starter' : data.size === '11–50' ? 'Growth' : 'Enterprise';
@@ -147,9 +224,9 @@ export const useChatbot = () => {
         reason: `Professional website solution for ${data.orgType ? data.orgType.toLowerCase() : 'organizations'} with ongoing maintenance and ${industryFocus.webReason}`
       });
     }
-    
+
     // Data & Analytics Rules
-    if (data.need === 'Data & Analytics' || 
+    if (data.need === 'Data & Analytics' ||
         (data.orgType && ['Banking & Finance', 'Manufacturing', 'Government'].includes(data.orgType))) {
       recs.push({
         id: 'data-analytics',
@@ -158,12 +235,12 @@ export const useChatbot = () => {
         reason: `Business intelligence and reporting dashboards for ${data.orgType ? data.orgType.toLowerCase() : 'organization'} decision-making`
       });
     }
-    
+
     setRecommendations(recs);
     setCurrentStep('recommendations');
-    trackEvent('recommendations_generated', { 
-      count: recs.length, 
-      recommendations: recs.map(r => r.id) 
+    trackEvent('recommendations_generated', {
+      count: recs.length,
+      recommendations: recs.map(r => r.id)
     });
   };
 
@@ -226,28 +303,17 @@ export const useChatbot = () => {
         webReason: 'business growth and online presence'
       }
     };
-    
+
     return focuses[orgType] || focuses['SMEs'];
   };
 
+  // ==================== LEGACY FAQ (keeping for backward compatibility) ====================
+
   const handleFAQQuery = async (query: string) => {
-    setIsLoading(true);
-    try {
-      const { data } = await supabase.functions.invoke('chatbot-faq', {
-        body: { query, sessionId }
-      });
-      setFaqResponse(data.response);
-      return data;
-    } catch (error) {
-      console.error('FAQ query failed:', error);
-      return { 
-        response: "I'm experiencing technical difficulties. Please contact our support team directly.",
-        resourceUrl: '/contact' 
-      };
-    } finally {
-      setIsLoading(false);
-    }
+    return await handleQuery(query);
   };
+
+  // ==================== LEAD SUBMISSION ====================
 
   const handleSubmit = async () => {
     setIsLoading(true);
@@ -263,16 +329,18 @@ export const useChatbot = () => {
           urgency: conversationData.urgency,
           budget: conversationData.budget,
           contact: conversationData.contact,
-          recommendations
+          recommendations,
+          messages: messages.map(m => ({ role: m.role, content: m.content }))
         }
       });
-      
-      trackEvent('form_submitted', { leadScore: data.leadScore, isHighValue: data.isHighValue });
+
+      trackEvent('form_submitted', { leadScore: data?.leadScore || 0, isHighValue: data?.isHighValue || false });
       setCurrentStep('success');
-      return data;
+      return data || { leadScore: 0, isHighValue: false };
     } catch (error) {
       console.error('Submission failed:', error);
-      throw error;
+      // Return default values if submission fails
+      return { leadScore: 0, isHighValue: false };
     } finally {
       setIsLoading(false);
     }
@@ -282,20 +350,82 @@ export const useChatbot = () => {
     trackEvent('recommendation_clicked', { recommendationId });
   };
 
+  // ==================== MODE SWITCHING ====================
+
+  const switchToWizard = () => {
+    setMode('wizard');
+    setCurrentStep('intent');
+    trackEvent('mode_switched', { newMode: 'wizard' });
+  };
+
+  const switchToChat = () => {
+    setMode('chat');
+    trackEvent('mode_switched', { newMode: 'chat' });
+  };
+
+  // ==================== RESET ====================
+
+  const resetConversation = () => {
+    setMessages([]);
+    setCurrentStep('intent');
+    setConversationData({
+      intent: '',
+      orgType: '',
+      size: '',
+      need: '',
+      stack: '',
+      urgency: '',
+      budget: '',
+      contact: { name: '', email: '', company: '', phone: '' }
+    });
+    setRecommendations([]);
+    setFaqResponse(null);
+    setLastQueryResponse(null);
+
+    // Add welcome message
+    addMessage('assistant', "Hi! I'm your Datacare AI assistant. I can help you find the perfect IT solution for your business. What can I help you with today?", [], getPopularQuestions().map(q => q.question).slice(0, 4));
+
+    trackEvent('conversation_reset');
+  };
+
+  // ==================== RETURN ====================
+
   return {
+    // Session
     sessionId,
+    mode,
+
+    // Wizard mode
     currentStep,
     setCurrentStep,
     conversationData,
     setConversationData,
     recommendations,
+    generateRecommendations,
+
+    // Conversational AI mode
+    messages,
+    handleQuery,
+    handleQuickQuestion,
+    lastQueryResponse,
+
+    // Legacy FAQ (for backward compatibility)
     faqResponse,
     setFaqResponse,
-    isLoading,
-    generateRecommendations,
     handleFAQQuery,
+
+    // Submission
     handleSubmit,
+
+    // State
+    isLoading,
+
+    // Actions
     trackEvent,
-    trackRecommendationClick
+    trackRecommendationClick,
+    switchToWizard,
+    switchToChat,
+    resetConversation,
+    addMessage
   };
 };
