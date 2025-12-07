@@ -20,9 +20,9 @@ export default function Inbox() {
 
     // Subscribe to new conversations
     const conversationChannel = supabase
-      .channel('public:conversations')
+      .channel('public:whatsapp_conversations')
       .on('postgres_changes',
-        { event: '*', schema: 'public', table: 'conversations' },
+        { event: '*', schema: 'public', table: 'whatsapp_conversations' },
         () => {
           fetchConversations()
         }
@@ -41,12 +41,12 @@ export default function Inbox() {
 
       // Subscribe to new messages for this conversation
       const messageChannel = supabase
-        .channel(`public:messages:conversation_id=eq.${selectedConversation.id}`)
+        .channel(`public:whatsapp_messages:conversation_id=eq.${selectedConversation.id}`)
         .on('postgres_changes',
           {
             event: 'INSERT',
             schema: 'public',
-            table: 'messages',
+            table: 'whatsapp_messages',
             filter: `conversation_id=eq.${selectedConversation.id}`
           },
           (payload) => {
@@ -57,7 +57,7 @@ export default function Inbox() {
           {
             event: 'UPDATE',
             schema: 'public',
-            table: 'messages',
+            table: 'whatsapp_messages',
             filter: `conversation_id=eq.${selectedConversation.id}`
           },
           (payload) => {
@@ -77,11 +77,11 @@ export default function Inbox() {
   const fetchConversations = async () => {
     try {
       const { data, error } = await supabase
-        .from('conversations')
+        .from('whatsapp_conversations')
         .select(`
           *,
-          contact:contacts(*),
-          assigned_agent:team_members(*)
+          contact:whatsapp_contacts(*),
+          assigned_agent:whatsapp_team_members(*)
         `)
         .order('last_message_at', { ascending: false, nullsFirst: false })
         .order('created_at', { ascending: false })
@@ -97,8 +97,8 @@ export default function Inbox() {
 
   const fetchMessages = async (conversationId: string) => {
     try {
-      const { data, error } = await supabase
-        .from('messages')
+      const { data, error} = await supabase
+        .from('whatsapp_messages')
         .select('*')
         .eq('conversation_id', conversationId)
         .order('created_at', { ascending: true })
@@ -118,7 +118,7 @@ export default function Inbox() {
       const { data: { user } } = await supabase.auth.getUser()
 
       const { error } = await supabase
-        .from('messages')
+        .from('whatsapp_messages')
         .insert({
           organization_id: selectedConversation.organization_id,
           conversation_id: selectedConversation.id,

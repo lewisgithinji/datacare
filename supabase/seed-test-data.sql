@@ -5,7 +5,7 @@
 -- You can find your user ID by running: SELECT id, email FROM auth.users;
 
 -- Insert test contacts
-INSERT INTO contacts (id, organization_id, phone_number, name, email, tags, segment, opt_in_status, custom_fields, metadata, first_interaction_at, last_interaction_at, created_at, updated_at)
+INSERT INTO whatsapp_contacts (id, organization_id, phone_number, name, email, tags, segment, opt_in_status, custom_fields, metadata, first_interaction_at, last_interaction_at, created_at, updated_at)
 VALUES
   (
     '11111111-1111-1111-1111-111111111111',
@@ -74,7 +74,7 @@ VALUES
 ON CONFLICT (id) DO NOTHING;
 
 -- Insert test conversations
-INSERT INTO conversations (id, organization_id, contact_id, assigned_agent_id, status, priority, channel, source, tags, category, sentiment, intent, summary, first_response_time_seconds, total_messages_count, agent_messages_count, bot_messages_count, last_message_at, first_agent_response_at, created_at, updated_at)
+INSERT INTO whatsapp_conversations (id, organization_id, contact_id, assigned_agent_id, status, priority, channel, source, tags, category, sentiment, intent, summary, first_response_time_seconds, total_messages_count, agent_messages_count, bot_messages_count, last_message_at, first_agent_response_at, created_at, updated_at)
 VALUES
   (
     'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
@@ -171,7 +171,7 @@ VALUES
 ON CONFLICT (id) DO NOTHING;
 
 -- Insert test messages for Conversation 1 (John Kamau - Microsoft 365)
-INSERT INTO messages (id, organization_id, conversation_id, whatsapp_message_id, direction, sender_type, sender_id, message_type, content, status, created_at)
+INSERT INTO whatsapp_messages (id, organization_id, conversation_id, whatsapp_message_id, direction, sender_type, sender_id, message_type, content, status, created_at)
 VALUES
   (
     gen_random_uuid(),
@@ -272,7 +272,7 @@ Your quote will be sent to john.kamau@example.com shortly. 📧',
 ON CONFLICT (id) DO NOTHING;
 
 -- Insert test messages for Conversation 2 (Grace Wanjiru - Google Workspace)
-INSERT INTO messages (id, organization_id, conversation_id, whatsapp_message_id, direction, sender_type, sender_id, message_type, content, status, created_at)
+INSERT INTO whatsapp_messages (id, organization_id, conversation_id, whatsapp_message_id, direction, sender_type, sender_id, message_type, content, status, created_at)
 VALUES
   (
     gen_random_uuid(),
@@ -344,7 +344,7 @@ I''m connecting you with our education specialist for a personalized demo! 🌟'
 ON CONFLICT (id) DO NOTHING;
 
 -- Insert test messages for Conversation 3 (David Omondi - Support)
-INSERT INTO messages (id, organization_id, conversation_id, whatsapp_message_id, direction, sender_type, sender_id, message_type, content, status, created_at)
+INSERT INTO whatsapp_messages (id, organization_id, conversation_id, whatsapp_message_id, direction, sender_type, sender_id, message_type, content, status, created_at)
 VALUES
   (
     gen_random_uuid(),
@@ -420,7 +420,7 @@ Can you confirm:
 ON CONFLICT (id) DO NOTHING;
 
 -- Insert test messages for Conversation 4 (Sarah Akinyi - New Customer)
-INSERT INTO messages (id, organization_id, conversation_id, whatsapp_message_id, direction, sender_type, sender_id, message_type, content, status, created_at)
+INSERT INTO whatsapp_messages (id, organization_id, conversation_id, whatsapp_message_id, direction, sender_type, sender_id, message_type, content, status, created_at)
 VALUES
   (
     gen_random_uuid(),
@@ -459,6 +459,6 @@ ON CONFLICT (id) DO NOTHING;
 
 -- Success message
 SELECT 'Test data inserted successfully! 🎉' AS message,
-       (SELECT COUNT(*) FROM contacts WHERE organization_id = '00000000-0000-0000-0000-000000000001') AS contacts_created,
-       (SELECT COUNT(*) FROM conversations WHERE organization_id = '00000000-0000-0000-0000-000000000001') AS conversations_created,
-       (SELECT COUNT(*) FROM messages WHERE organization_id = '00000000-0000-0000-0000-000000000001') AS messages_created;
+       (SELECT COUNT(*) FROM whatsapp_contacts WHERE organization_id = '00000000-0000-0000-0000-000000000001') AS contacts_created,
+       (SELECT COUNT(*) FROM whatsapp_conversations WHERE organization_id = '00000000-0000-0000-0000-000000000001') AS conversations_created,
+       (SELECT COUNT(*) FROM whatsapp_messages WHERE organization_id = '00000000-0000-0000-0000-000000000001') AS messages_created;
