@@ -1,28 +1,41 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
+import { useAuth } from '@/contexts/AuthContext'
 import { ConversationWithDetails, Message, Contact } from '@/types/whatsapp'
 import { ConversationList } from '@/components/messaging/ConversationList'
 import { MessageThread } from '@/components/messaging/MessageThread'
 import { ContactSidebar } from '@/components/messaging/ContactSidebar'
 import { MessageInput } from '@/components/messaging/MessageInput'
-import { Loader2, MessageSquare } from 'lucide-react'
+import { Loader2, MessageSquare, AlertCircle } from 'lucide-react'
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 
 export default function Inbox() {
+  const { organization, user, loading: authLoading } = useAuth()
   const [conversations, setConversations] = useState<ConversationWithDetails[]>([])
   const [selectedConversation, setSelectedConversation] = useState<ConversationWithDetails | null>(null)
   const [messages, setMessages] = useState<Message[]>([])
   const [loading, setLoading] = useState(true)
   const [showContactSidebar, setShowContactSidebar] = useState(true)
 
-  // Fetch conversations on mount
+  // Fetch conversations when organization is loaded
   useEffect(() => {
+    if (!organization) {
+      setLoading(false)
+      return
+    }
+
     fetchConversations()
 
-    // Subscribe to new conversations
+    // Subscribe to new conversations for this organization
     const conversationChannel = supabase
-      .channel('public:whatsapp_conversations')
+      .channel(`public:whatsapp_conversations:org_${organization.id}`)
       .on('postgres_changes',
-        { event: '*', schema: 'public', table: 'whatsapp_conversations' },
+        {
+          event: '*',
+          schema: 'public',
+          table: 'whatsapp_conversations',
+          filter: `organization_id=eq.${organization.id}`
+        },
         () => {
           fetchConversations()
         }
@@ -32,7 +45,7 @@ export default function Inbox() {
     return () => {
       supabase.removeChannel(conversationChannel)
     }
-  }, [])
+  }, [organization])
 
   // Fetch messages when conversation is selected
   useEffect(() => {
@@ -75,6 +88,8 @@ export default function Inbox() {
   }, [selectedConversation?.id])
 
   const fetchConversations = async () => {
+    if (!organization) return
+
     try {
       const { data, error } = await supabase
         .from('whatsapp_conversations')
@@ -83,6 +98,7 @@ export default function Inbox() {
           contact:whatsapp_contacts(*),
           assigned_agent:whatsapp_team_members(*)
         `)
+        .eq('organization_id', organization.id)
         .order('last_message_at', { ascending: false, nullsFirst: false })
         .order('created_at', { ascending: false })
 
@@ -111,20 +127,17 @@ export default function Inbox() {
   }
 
   const handleSendMessage = async (content: string) => {
-    if (!selectedConversation || !content.trim()) return
+    if (!selectedConversation || !content.trim() || !user || !organization) return
 
     try {
-      // TODO: Get actual user/agent ID from auth
-      const { data: { user } } = await supabase.auth.getUser()
-
       const { error } = await supabase
         .from('whatsapp_messages')
         .insert({
-          organization_id: selectedConversation.organization_id,
+          organization_id: organization.id,
           conversation_id: selectedConversation.id,
           direction: 'outbound',
           sender_type: 'agent',
-          sender_id: user?.id || null,
+          sender_id: user.id,
           message_type: 'text',
           content,
           status: 'sent',
@@ -140,13 +153,29 @@ export default function Inbox() {
     }
   }
 
-  if (loading) {
+  if (authLoading || loading) {
     return (
       <div className="h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
         <div className="text-center">
           <Loader2 className="h-12 w-12 animate-spin text-primary mx-auto mb-4" />
           <p className="text-gray-600">Loading conversations...</p>
         </div>
+      </div>
+    )
+  }
+
+  // Show message if user is not linked to an organization
+  if (!organization) {
+    return (
+      <div className="h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 p-4">
+        <Alert className="max-w-md">
+          <AlertCircle className="h-4 w-4" />
+          <AlertTitle>No Organization Access</AlertTitle>
+          <AlertDescription>
+            Your account is not linked to an organization yet. Please contact your administrator
+            to grant you access.
+          </AlertDescription>
+        </Alert>
       </div>
     )
   }

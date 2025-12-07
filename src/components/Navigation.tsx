@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Menu, X, ChevronDown } from "lucide-react";
+import { Menu, X, ChevronDown, LogIn, UserPlus, LayoutDashboard } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface NavItem {
   label: string;
@@ -14,6 +15,7 @@ interface NavItem {
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const { user } = useAuth();
 
   const navItems: NavItem[] = [
     {
@@ -140,13 +142,33 @@ const Navigation = () => {
             ))}
           </div>
 
-          {/* CTA Button */}
-          <div className="hidden lg:flex items-center">
-            <Button asChild className="bg-gradient-to-r from-orange-600 to-orange-500 hover:from-orange-700 hover:to-orange-600 text-white">
-              <Link to="/employee-amplification#get-started">
-                Get Started
-              </Link>
-            </Button>
+          {/* CTA Buttons */}
+          <div className="hidden lg:flex items-center gap-3">
+            {user ? (
+              // Logged in - Show Dashboard button
+              <Button asChild variant="default">
+                <Link to="/dashboard/inbox">
+                  <LayoutDashboard className="mr-2 h-4 w-4" />
+                  Dashboard
+                </Link>
+              </Button>
+            ) : (
+              // Not logged in - Show Login & Sign Up buttons
+              <>
+                <Button asChild variant="ghost">
+                  <Link to="/login">
+                    <LogIn className="mr-2 h-4 w-4" />
+                    Login
+                  </Link>
+                </Button>
+                <Button asChild className="bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70">
+                  <Link to="/signup">
+                    <UserPlus className="mr-2 h-4 w-4" />
+                    Try Demo
+                  </Link>
+                </Button>
+              </>
+            )}
           </div>
 
           {/* Mobile menu button */}
@@ -199,12 +221,32 @@ const Navigation = () => {
                   )}
                 </div>
               ))}
-              <div className="pt-4 border-t border-border px-2">
-                <Button asChild className="w-full bg-gradient-to-r from-orange-600 to-orange-500 hover:from-orange-700 hover:to-orange-600 text-white" onClick={() => setIsOpen(false)}>
-                  <Link to="/employee-amplification#get-started">
-                    Get Started
-                  </Link>
-                </Button>
+              <div className="pt-4 border-t border-border px-2 space-y-2">
+                {user ? (
+                  // Logged in - Show Dashboard button
+                  <Button asChild className="w-full" onClick={() => setIsOpen(false)}>
+                    <Link to="/dashboard/inbox">
+                      <LayoutDashboard className="mr-2 h-4 w-4" />
+                      Dashboard
+                    </Link>
+                  </Button>
+                ) : (
+                  // Not logged in - Show Login & Sign Up buttons
+                  <>
+                    <Button asChild variant="outline" className="w-full" onClick={() => setIsOpen(false)}>
+                      <Link to="/login">
+                        <LogIn className="mr-2 h-4 w-4" />
+                        Login
+                      </Link>
+                    </Button>
+                    <Button asChild className="w-full bg-gradient-to-r from-primary to-primary/80" onClick={() => setIsOpen(false)}>
+                      <Link to="/signup">
+                        <UserPlus className="mr-2 h-4 w-4" />
+                        Try Demo
+                      </Link>
+                    </Button>
+                  </>
+                )}
               </div>
             </div>
           </div>

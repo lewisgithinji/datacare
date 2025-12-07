@@ -535,7 +535,7 @@ ALTER TABLE whatsapp_automation_workflows ENABLE ROW LEVEL SECURITY;
 ALTER TABLE whatsapp_analytics_events ENABLE ROW LEVEL SECURITY;
 
 -- Helper function: Get user's organization IDs
-CREATE OR REPLACE FUNCTION auth.user_whatsapp_organization_ids()
+CREATE OR REPLACE FUNCTION user_whatsapp_organization_ids()
 RETURNS SETOF UUID AS $$
   SELECT organization_id
   FROM whatsapp_team_members
@@ -546,7 +546,7 @@ $$ LANGUAGE sql STABLE SECURITY DEFINER;
 CREATE POLICY "Users can view their whatsapp organizations"
   ON whatsapp_organizations FOR SELECT
   TO authenticated
-  USING (id IN (SELECT auth.user_whatsapp_organization_ids()));
+  USING (id IN (SELECT user_whatsapp_organization_ids()));
 
 CREATE POLICY "Admin users can update their whatsapp organizations"
   ON whatsapp_organizations FOR UPDATE
@@ -562,49 +562,49 @@ CREATE POLICY "Admin users can update their whatsapp organizations"
 CREATE POLICY "Users can view whatsapp team members in their organizations"
   ON whatsapp_team_members FOR SELECT
   TO authenticated
-  USING (organization_id IN (SELECT auth.user_whatsapp_organization_ids()));
+  USING (organization_id IN (SELECT user_whatsapp_organization_ids()));
 
 -- Policies for contacts
 CREATE POLICY "Users can view whatsapp contacts in their organizations"
   ON whatsapp_contacts FOR ALL
   TO authenticated
-  USING (organization_id IN (SELECT auth.user_whatsapp_organization_ids()));
+  USING (organization_id IN (SELECT user_whatsapp_organization_ids()));
 
 -- Policies for conversations
 CREATE POLICY "Users can view whatsapp conversations in their organizations"
   ON whatsapp_conversations FOR ALL
   TO authenticated
-  USING (organization_id IN (SELECT auth.user_whatsapp_organization_ids()));
+  USING (organization_id IN (SELECT user_whatsapp_organization_ids()));
 
 -- Policies for messages
 CREATE POLICY "Users can view whatsapp messages in their organizations"
   ON whatsapp_messages FOR ALL
   TO authenticated
-  USING (organization_id IN (SELECT auth.user_whatsapp_organization_ids()));
+  USING (organization_id IN (SELECT user_whatsapp_organization_ids()));
 
 -- Policies for templates
 CREATE POLICY "Users can view whatsapp templates in their organizations"
   ON whatsapp_templates FOR ALL
   TO authenticated
-  USING (organization_id IN (SELECT auth.user_whatsapp_organization_ids()));
+  USING (organization_id IN (SELECT user_whatsapp_organization_ids()));
 
 -- Policies for campaigns
 CREATE POLICY "Users can view whatsapp campaigns in their organizations"
   ON whatsapp_campaigns FOR ALL
   TO authenticated
-  USING (organization_id IN (SELECT auth.user_whatsapp_organization_ids()));
+  USING (organization_id IN (SELECT user_whatsapp_organization_ids()));
 
 -- Policies for workflows
 CREATE POLICY "Users can view whatsapp workflows in their organizations"
   ON whatsapp_automation_workflows FOR ALL
   TO authenticated
-  USING (organization_id IN (SELECT auth.user_whatsapp_organization_ids()));
+  USING (organization_id IN (SELECT user_whatsapp_organization_ids()));
 
 -- Policies for analytics
 CREATE POLICY "Users can view whatsapp analytics in their organizations"
   ON whatsapp_analytics_events FOR ALL
   TO authenticated
-  USING (organization_id IN (SELECT auth.user_whatsapp_organization_ids()));
+  USING (organization_id IN (SELECT user_whatsapp_organization_ids()));
 
 -- ============================================================================
 -- SEED DATA (Demo organization)

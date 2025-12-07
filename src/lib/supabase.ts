@@ -7,10 +7,14 @@ if (!supabaseUrl || !supabaseAnonKey) {
   throw new Error('Missing Supabase environment variables')
 }
 
+// Create a singleton Supabase client to avoid multiple instances
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
     persistSession: true,
     autoRefreshToken: true,
+    storage: window.localStorage,
+    storageKey: 'datacare-auth',
+    detectSessionInUrl: true,
   },
   realtime: {
     params: {

@@ -19,6 +19,17 @@ import NotFound from "./pages/NotFound";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
 
+// Authentication
+import { AuthProvider } from "./contexts/AuthContext";
+import { ProtectedRoute } from "./components/auth/ProtectedRoute";
+import Login from "./pages/auth/Login";
+import Signup from "./pages/auth/Signup";
+import ForgotPassword from "./pages/auth/ForgotPassword";
+import ResetPassword from "./pages/auth/ResetPassword";
+
+// Dashboard
+import { DashboardLayout } from "./layouts/DashboardLayout";
+
 // Solution pages
 import CloudAndLicensing from "./pages/solutions/CloudAndLicensing";
 import AIAndMessagingAutomation from "./pages/solutions/AIAndMessagingAutomation";
@@ -55,19 +66,26 @@ import Portfolio from "./pages/Portfolio";
 // Messaging page
 import Inbox from "./pages/messaging/Inbox";
 
+// Dashboard pages
+import DashboardOverview from "./pages/dashboard/Overview";
+import Contacts from "./pages/dashboard/Contacts";
+import ChatbotConversations from "./pages/dashboard/Chatbot";
+
 const queryClient = new QueryClient();
 
 const App = () => (
   <HelmetProvider>
     <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <ScrollToTop />
-          <Chatbot />
-          <Routes>
-          <Route path="/" element={<Index />} />
+      <AuthProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <ScrollToTop />
+            <Chatbot />
+            <Routes>
+            {/* Public routes */}
+            <Route path="/" element={<Index />} />
           <Route path="/industries" element={<Industries />} />
           <Route path="/products" element={<Products />} />
           <Route path="/ai-services" element={<AIServices />} />
@@ -109,20 +127,44 @@ const App = () => (
           <Route path="/resources/knowledge-base" element={<KnowledgeBase />} />
           <Route path="/resources/knowledge-base/:slug" element={<KnowledgeBaseArticle />} />
 
-          {/* Messaging pages */}
-          <Route path="/messaging/inbox" element={<Inbox />} />
-
           {/* Legal pages */}
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/terms-of-service" element={<TermsOfService />} />
 
           {/* Legacy route */}
           <Route path="/data-analytics-platform" element={<AIServices />} />
+
+          {/* Authentication pages */}
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
+
+          {/* Protected Dashboard routes */}
+          <Route path="/dashboard/*" element={
+            <ProtectedRoute>
+              <DashboardLayout />
+            </ProtectedRoute>
+          }>
+            <Route index element={<DashboardOverview />} />
+            <Route path="inbox" element={<Inbox />} />
+            <Route path="chatbot" element={<ChatbotConversations />} />
+            <Route path="contacts" element={<Contacts />} />
+          </Route>
+
+          {/* Legacy messaging route - redirect to dashboard */}
+          <Route path="/messaging/inbox" element={
+            <ProtectedRoute>
+              <Inbox />
+            </ProtectedRoute>
+          } />
+
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
       </TooltipProvider>
+      </AuthProvider>
     </QueryClientProvider>
   </HelmetProvider>
 );
