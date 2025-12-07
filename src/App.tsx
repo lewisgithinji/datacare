@@ -52,6 +52,9 @@ import KnowledgeBaseArticle from "./pages/resources/KnowledgeBaseArticle";
 // Portfolio page
 import Portfolio from "./pages/Portfolio";
 
+// Messaging page
+import Inbox from "./pages/messaging/Inbox";
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -105,6 +108,9 @@ const App = () => (
           <Route path="/resources/guides" element={<Guides />} />
           <Route path="/resources/knowledge-base" element={<KnowledgeBase />} />
           <Route path="/resources/knowledge-base/:slug" element={<KnowledgeBaseArticle />} />
+
+          {/* Messaging pages */}
+          <Route path="/messaging/inbox" element={<Inbox />} />
 
           {/* Legal pages */}
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
