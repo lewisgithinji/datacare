@@ -398,7 +398,7 @@ CREATE INDEX idx_whatsapp_workflows_active ON whatsapp_automation_workflows(orga
 -- WHATSAPP_ANALYTICS_EVENTS (Detailed tracking)
 -- ============================================================================
 CREATE TABLE whatsapp_analytics_events (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  id UUID DEFAULT gen_random_uuid(),
   organization_id UUID NOT NULL REFERENCES whatsapp_organizations(id) ON DELETE CASCADE,
 
   -- Event details
@@ -413,7 +413,10 @@ CREATE TABLE whatsapp_analytics_events (
   campaign_id UUID REFERENCES whatsapp_campaigns(id),
 
   -- Timestamp (partitioned for performance)
-  created_at TIMESTAMPTZ DEFAULT NOW()
+  created_at TIMESTAMPTZ DEFAULT NOW() NOT NULL,
+
+  -- Composite primary key including partition column
+  PRIMARY KEY (id, created_at)
 ) PARTITION BY RANGE (created_at);
 
 -- Create partitions for analytics (monthly)
