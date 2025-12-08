@@ -54,10 +54,10 @@ const Chatbot = () => {
     }
   };
 
-  const handleQuickReply = (field: keyof typeof conversationData, value: any) => {
+  const handleQuickReply = (field: keyof typeof conversationData, value: string | Record<string, string>) => {
     const updated = { ...conversationData, [field]: value };
     setConversationData(updated);
-    trackEvent('step_completed', { step: field, value });
+    trackEvent('step_completed', { step: field, value: String(value) });
     
     const stepOrder = ["orgType", "size", "need", "stack", "urgency", "budget", "contact"];
     const currentIndex = stepOrder.indexOf(field as string);

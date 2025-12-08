@@ -8,9 +8,9 @@ interface Organization {
   name: string
   slug: string
   plan: string
-  features: Record<string, any>
-  branding: Record<string, any>
-  settings: Record<string, any>
+  features: Record<string, boolean | string | number>
+  branding: Record<string, string | null>
+  settings: Record<string, unknown>
   is_active: boolean
 }
 

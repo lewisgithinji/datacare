@@ -190,7 +190,7 @@ const Contact = () => {
         message: "",
         serviceInterest: ""
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("EmailJS Error:", error);
 
       // Provide more specific error message
@@ -199,7 +199,7 @@ const Contact = () => {
       if (error?.text) {
         errorMessage = `Error: ${error.text}. Please contact us at info@datacare.co.ke`;
       } else if (error?.message) {
-        errorMessage = `Error: ${error.message}. Please contact us at info@datacare.co.ke`;
+        errorMessage = `Error: ${error instanceof Error ? error.message : "An error occurred"}. Please contact us at info@datacare.co.ke`;
       }
 
       toast({

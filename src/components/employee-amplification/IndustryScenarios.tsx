@@ -1,11 +1,11 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Building2, Stethoscope, Scale, GraduationCap, Factory, Heart, Landmark, ShoppingBag } from "lucide-react";
+import { Building2, Stethoscope, Scale, GraduationCap, Factory, Heart, Landmark, ShoppingBag, type LucideIcon } from "lucide-react";
 import { Link } from "react-router-dom";
 
 interface Scenario {
   industry: string;
-  icon: any;
+  icon: LucideIcon;
   problem: string;
   specificExample: string;
   solution: string;

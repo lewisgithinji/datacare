@@ -24,7 +24,9 @@ if (SUPABASE_URL && SUPABASE_PUBLISHABLE_KEY) {
   // Create a tolerant proxy that delays throwing until a method is actually used.
   const missingMsg = 'Missing Supabase environment variables. Supabase client is unavailable.';
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   function createMissingProxy(): any {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const handler: ProxyHandler<any> = {
       get(_target, prop) {
         if (prop === Symbol.toStringTag) return 'MissingSupabaseClient';
@@ -41,6 +43,7 @@ if (SUPABASE_URL && SUPABASE_PUBLISHABLE_KEY) {
     };
 
     // function-style proxy so it can be called or have properties accessed
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const fn = (..._args: any[]) => Promise.resolve({ data: null, error: null });
     return new Proxy(fn, handler);
   }

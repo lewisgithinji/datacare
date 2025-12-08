@@ -46,9 +46,9 @@ export default function ResetPassword() {
       await updatePassword(password)
       toast.success('Password updated successfully!')
       navigate('/dashboard/inbox')
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Update password error:', error)
-      toast.error(error.message || 'Failed to update password. Please try again.')
+      toast.error(error instanceof Error ? error.message : "An error occurred" || 'Failed to update password. Please try again.')
     } finally {
       setLoading(false)
     }

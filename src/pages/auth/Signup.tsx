@@ -61,14 +61,14 @@ export default function Signup() {
       await signUp(email, password, fullName)
       toast.success('Account created! Please check your email to verify your account.')
       navigate('/login')
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Signup error:', error)
 
       // Handle specific error cases
-      if (error.message?.includes('already registered')) {
+      if (error instanceof Error ? error.message : "An error occurred"?.includes('already registered')) {
         toast.error('This email is already registered. Please sign in instead.')
       } else {
-        toast.error(error.message || 'Failed to create account. Please try again.')
+        toast.error(error instanceof Error ? error.message : "An error occurred" || 'Failed to create account. Please try again.')
       }
     } finally {
       setLoading(false)

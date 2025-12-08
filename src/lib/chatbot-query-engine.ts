@@ -23,7 +23,7 @@ export interface SearchResult {
   url?: string;
   relevanceScore: number;
   matchedKeywords: string[];
-  additionalInfo?: Record<string, any>;
+  additionalInfo?: Record<string, unknown>;
 }
 
 export interface QueryResponse {
@@ -60,7 +60,7 @@ function calculateSimilarity(query: string, text: string, keywords: string[] = [
   const queryWords = normalizedQuery.split(' ');
 
   let score = 0;
-  let matchedKeywords: string[] = [];
+  const matchedKeywords: string[] = [];
 
   // Exact phrase match
   if (normalizedText.includes(normalizedQuery)) {
@@ -464,8 +464,11 @@ function generateResponse(query: string, results: SearchResult[]): string {
     response += `**${item2.title}**: ${item2.description}\n\n`;
 
     if (isPricingQuery && item1.additionalInfo?.plans && item2.additionalInfo?.plans) {
-      const plan1 = item1.additionalInfo.plans.find((p: any) => p.popular) || item1.additionalInfo.plans[0];
-      const plan2 = item2.additionalInfo.plans.find((p: any) => p.popular) || item2.additionalInfo.plans[0];
+      interface Plan { popular?: boolean; price: string; period: string; name?: string }
+      const plans1 = item1.additionalInfo.plans as Plan[];
+      const plans2 = item2.additionalInfo.plans as Plan[];
+      const plan1 = plans1.find((p) => p.popular) || plans1[0];
+      const plan2 = plans2.find((p) => p.popular) || plans2[0];
       response += `**Pricing**: ${item1.title} starts at ${plan1.price}/${plan1.period}, while ${item2.title} starts at ${plan2.price}/${plan2.period}.\n\n`;
     }
 
@@ -481,7 +484,8 @@ function generateResponse(query: string, results: SearchResult[]): string {
 
     if (isPricingQuery && topResult.additionalInfo?.plans) {
       response += `**Pricing Options:**\n`;
-      topResult.additionalInfo.plans.slice(0, 3).forEach((plan: any) => {
+      interface Plan { popular?: boolean; price: string; period: string; name: string }
+      (topResult.additionalInfo.plans as Plan[]).slice(0, 3).forEach((plan) => {
         response += `• ${plan.name}: ${plan.price}/${plan.period}${plan.popular ? ' (Most Popular)' : ''}\n`;
       });
     } else if (topResult.additionalInfo?.features) {

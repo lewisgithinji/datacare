@@ -28,9 +28,9 @@ export default function Login() {
       await signIn(email, password)
       toast.success('Welcome back!')
       navigate(from, { replace: true })
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Login error:', error)
-      toast.error(error.message || 'Failed to sign in. Please check your credentials.')
+      toast.error(error instanceof Error ? error.message : "An error occurred" || 'Failed to sign in. Please check your credentials.')
     } finally {
       setLoading(false)
     }

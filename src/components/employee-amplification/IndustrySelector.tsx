@@ -8,12 +8,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Building2, Stethoscope, Scale, Factory, GraduationCap, Heart, Landmark, ShoppingBag, ChevronDown } from "lucide-react";
+import { Building2, Stethoscope, Scale, Factory, GraduationCap, Heart, Landmark, ShoppingBag, ChevronDown, type LucideIcon } from "lucide-react";
 import { Link } from "react-router-dom";
 
 interface IndustryData {
   industry: string;
-  icon: any;
+  icon: LucideIcon;
   problem: string;
   specificExample: string;
   solution: string;
