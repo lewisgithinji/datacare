@@ -5,7 +5,9 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { toast } from 'sonner'
-import { Eye, EyeOff, Loader2, MessageSquare } from 'lucide-react'
+import { Eye, EyeOff, Loader2, MessageSquare, Info, Play } from 'lucide-react'
+import { DEMO_CREDENTIALS } from '@/data/demo-credentials'
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 
 export default function Login() {
   const [email, setEmail] = useState('')
@@ -46,6 +48,57 @@ export default function Login() {
             <h1 className="text-3xl font-bold text-gray-900">DataCare</h1>
           </div>
           <p className="text-gray-600">WhatsApp & Chatbot Platform</p>
+        </div>
+
+        {/* Demo Card */}
+        <div className="mb-6">
+          <Card className="border-blue-200 bg-blue-50">
+            <CardHeader>
+              <div className="flex items-center gap-2">
+                <Info className="h-5 w-5 text-blue-600" />
+                <CardTitle className="text-sm text-blue-900">Try Demo Account</CardTitle>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <p className="text-sm text-blue-800">Explore the platform with full admin access</p>
+
+              <div className="bg-white p-3 rounded border border-blue-200">
+                <div className="space-y-1 font-mono text-sm">
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Email:</span>
+                    <span className="font-semibold">{DEMO_CREDENTIALS.email}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Password:</span>
+                    <span className="font-semibold">{DEMO_CREDENTIALS.password}</span>
+                  </div>
+                </div>
+              </div>
+
+              <Button
+                variant="outline"
+                className="w-full border-blue-300 hover:bg-blue-100"
+                onClick={async () => {
+                  try {
+                    setLoading(true)
+                    await signIn(DEMO_CREDENTIALS.email, DEMO_CREDENTIALS.password)
+                    toast.success('Logged in to demo account')
+                    navigate(from, { replace: true })
+                  } catch (err: any) {
+                    console.error('Demo login failed', err)
+                    toast.error('Demo login failed')
+                  } finally {
+                    setLoading(false)
+                  }
+                }}
+              >
+                <Play className="mr-2 h-4 w-4" />
+                Login with Demo Account
+              </Button>
+
+              <p className="text-xs text-blue-700">⚡ Full admin access • Pre-loaded data • Safe to explore</p>
+            </CardContent>
+          </Card>
         </div>
 
         {/* Login Card */}

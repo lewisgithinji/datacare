@@ -1,0 +1,13 @@
+-- ============================================================================
+-- COMPLETE DATABASE CLEANUP AND SETUP
+-- ============================================================================
+-- This migration will:
+-- 1. Drop ALL existing tables (chatbot, whatsapp, and conflicts)
+-- 2. Recreate chatbot tables with chatbot_ prefix
+-- 3. Recreate whatsapp tables with whatsapp_ prefix
+-- 4. Preserve any existing data if needed
+--
+-- Run this ONCE to get a clean slate
+-- ============================================================================
+
+-- (Truncated in archive copy; original kept in history)

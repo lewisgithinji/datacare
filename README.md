@@ -388,6 +388,20 @@ The project can also be deployed to:
 
 ---
 
+## Docs
+
+Project documentation has been consolidated under the `docs/` folder. Key docs include:
+
+- `docs/00-QUICK_START.md` - Quick start & local dev
+- `docs/01-ARCHITECTURE.md` - Architecture overview
+- `docs/02-DEPLOYMENT.md` - Deployment runbook (Cloudflare Pages)
+- `docs/marketing-site/` - Marketing site content and strategy
+- `docs/whatsapp-platform/` - Platform setup & migration guides
+
+If you previously had multiple markdown files in the repository root, they have been moved into `docs/` to keep the project organized.
+
+---
+
 ## 🔒 Security
 
 This project implements comprehensive security measures:

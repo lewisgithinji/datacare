@@ -70,6 +70,9 @@ import Inbox from "./pages/messaging/Inbox";
 import DashboardOverview from "./pages/dashboard/Overview";
 import Contacts from "./pages/dashboard/Contacts";
 import ChatbotConversations from "./pages/dashboard/Chatbot";
+import Analytics from "./pages/dashboard/Analytics";
+import Campaigns from "./pages/dashboard/Campaigns";
+import Settings from "./pages/dashboard/Settings";
 
 const queryClient = new QueryClient();
 
@@ -150,6 +153,9 @@ const App = () => (
             <Route path="inbox" element={<Inbox />} />
             <Route path="chatbot" element={<ChatbotConversations />} />
             <Route path="contacts" element={<Contacts />} />
+            <Route path="campaigns" element={<Campaigns />} />
+            <Route path="analytics" element={<Analytics />} />
+            <Route path="settings" element={<Settings />} />
           </Route>
 
           {/* Legacy messaging route - redirect to dashboard */}
