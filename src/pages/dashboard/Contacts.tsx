@@ -1,4 +1,4 @@
-import { useAuth } from '@/contexts/AuthContext'
+import { useAuth } from '@/hooks/useAuth'
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -183,7 +183,7 @@ export default function Contacts() {
                   (c) =>
                     c.last_interaction_at &&
                     new Date(c.last_interaction_at) >
-                      new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
+                    new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
                 ).length
               }
             </div>

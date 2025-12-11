@@ -27,7 +27,7 @@ interface TeamMember {
   organization?: Organization
 }
 
-interface AuthContextType {
+export interface AuthContextType {
   user: User | null
   session: Session | null
   organization: Organization | null
@@ -40,7 +40,7 @@ interface AuthContextType {
   updatePassword: (newPassword: string) => Promise<void>
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined)
+export const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
@@ -48,15 +48,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [organization, setOrganization] = useState<Organization | null>(null)
   const [teamMember, setTeamMember] = useState<TeamMember | null>(null)
   const [loading, setLoading] = useState(true)
+  const [loadingUserId, setLoadingUserId] = useState<string | null>(null) // Track which user is being loaded
 
   useEffect(() => {
+    console.log('[AuthContext] Initializing auth context')
+
     // Get initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
+      console.log('[AuthContext] Initial session check:', session ? 'Has session' : 'No session')
       setSession(session)
       setUser(session?.user ?? null)
       if (session?.user) {
         loadOrganizationData(session.user.id)
       } else {
+        console.log('[AuthContext] No session, setting loading to false')
         setLoading(false)
       }
     })
@@ -65,26 +70,45 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (event, session) => {
-      console.log('Auth state changed:', event)
+      console.log('[AuthContext] Auth state changed:', event)
       setSession(session)
       setUser(session?.user ?? null)
 
       if (session?.user) {
         await loadOrganizationData(session.user.id)
       } else {
+        console.log('[AuthContext] No user in session, clearing org data')
         setOrganization(null)
         setTeamMember(null)
         setLoading(false)
       }
     })
 
-    return () => subscription.unsubscribe()
+    return () => {
+      console.log('[AuthContext] Cleaning up auth subscription')
+      subscription.unsubscribe()
+    }
   }, [])
 
   const loadOrganizationData = async (userId: string) => {
+    console.log('[AuthContext] Loading organization data for user:', userId)
+
+    // Prevent duplicate calls for the same user
+    if (loadingUserId === userId) {
+      console.log('[AuthContext] Already loading data for this user, skipping')
+      return
+    }
+
+    setLoadingUserId(userId)
+
+    // Add timeout to prevent infinite hanging
+    const timeoutPromise = new Promise((_, reject) => {
+      setTimeout(() => reject(new Error('Organization data loading timeout')), 10000) // 10 second timeout
+    })
+
     try {
-      // Get team member record with organization
-      const { data: teamMemberData, error } = await supabase
+      // Get team member record with organization with timeout
+      const queryPromise = supabase
         .from('whatsapp_team_members')
         .select(`
           *,
@@ -92,26 +116,37 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         `)
         .eq('user_id', userId)
         .eq('is_active', true)
-        .maybeSingle() // Use maybeSingle() instead of single() to handle no results gracefully
+        .maybeSingle()
+
+      const { data: teamMemberData, error } = await Promise.race([
+        queryPromise,
+        timeoutPromise
+      ]) as { data: any, error: any }
+
+      console.log('[AuthContext] Query completed:', { hasData: !!teamMemberData, hasError: !!error })
 
       if (error) {
-        console.error('Error loading team member:', error)
+        console.error('[AuthContext] Error loading team member:', error)
         setTeamMember(null)
         setOrganization(null)
       } else if (teamMemberData) {
+        console.log('[AuthContext] Team member loaded:', teamMemberData.display_name)
+        console.log('[AuthContext] Organization loaded:', teamMemberData.organization?.name)
         setTeamMember(teamMemberData)
         setOrganization(teamMemberData.organization as Organization)
       } else {
         // No team member found - user not linked to organization yet
-        console.warn('User not linked to any organization')
+        console.warn('[AuthContext] User not linked to any organization')
         setTeamMember(null)
         setOrganization(null)
       }
     } catch (error) {
-      console.error('Error loading organization data:', error)
+      console.error('[AuthContext] Error loading organization data:', error)
       setTeamMember(null)
       setOrganization(null)
     } finally {
+      console.log('[AuthContext] Setting loading to false')
+      setLoadingUserId(null) // Reset loading flag
       setLoading(false)
     }
   }

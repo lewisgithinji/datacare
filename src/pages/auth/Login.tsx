@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate, useLocation, Link } from 'react-router-dom'
-import { useAuth } from '@/contexts/AuthContext'
+import { useAuth } from '@/hooks/useAuth'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -76,24 +76,35 @@ export default function Login() {
               </div>
 
               <Button
+                type="button"
                 variant="outline"
                 className="w-full border-blue-300 hover:bg-blue-100"
+                disabled={loading}
                 onClick={async () => {
                   try {
                     setLoading(true)
                     await signIn(DEMO_CREDENTIALS.email, DEMO_CREDENTIALS.password)
                     toast.success('Logged in to demo account')
                     navigate(from, { replace: true })
-                  } catch (err: any) {
-                    console.error('Demo login failed', err)
-                    toast.error('Demo login failed')
-                  } finally {
+                  } catch (err: unknown) {
+                    console.error('Demo login failed:', err)
+                    const errorMessage = err instanceof Error ? err.message : 'Demo login failed. Please try again.'
+                    toast.error(errorMessage)
                     setLoading(false)
                   }
                 }}
               >
-                <Play className="mr-2 h-4 w-4" />
-                Login with Demo Account
+                {loading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Signing in...
+                  </>
+                ) : (
+                  <>
+                    <Play className="mr-2 h-4 w-4" />
+                    Login with Demo Account
+                  </>
+                )}
               </Button>
 
               <p className="text-xs text-blue-700">⚡ Full admin access • Pre-loaded data • Safe to explore</p>

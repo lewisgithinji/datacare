@@ -152,8 +152,8 @@ git --version   # Should output git version 2.x or higher
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/lewisgithinji/datacare-ai-nexus.git
-cd datacare
+git clone https://github.com/lewisgithinji/datacare-ai-nexus.git datacare-website
+cd datacare-website
 ```
 
 ### 2. Install Dependencies
@@ -277,6 +277,7 @@ datacare/
 │   ├── main.tsx                 # Application entry point
 │   └── index.css                # Global styles & Tailwind imports
 ├── supabase/                    # Supabase configuration
+│   ├── docs/                      # Project documentation
 │   ├── functions/               # Edge functions
 │   └── migrations/              # Database migrations
 ├── .env.example                 # Environment variables template
@@ -330,75 +331,13 @@ Used for the AI chatbot backend. Create a project at [Supabase](https://supabase
 
 ---
 
-## 🚀 Deployment
-
-### Cloudflare Pages (Recommended)
-
-This project is optimized for deployment on Cloudflare Pages with automatic builds and edge delivery.
-
-#### Setup Instructions
-
-1. **Connect Repository**
-   - Go to [Cloudflare Pages Dashboard](https://dash.cloudflare.com/?to=/:account/pages)
-   - Click "Create a project"
-   - Connect your GitHub account and select the `datacare-ai-nexus` repository
-
-2. **Configure Build Settings**
-   ```
-   Framework preset: None
-   Build command: npm install && npm run build
-   Build output directory: dist
-   Root directory: /
-   Node.js version: 18
-   ```
-
-3. **Add Environment Variables**
-
-   In Cloudflare Pages settings, add all variables from your `.env` file:
-   - `VITE_EMAILJS_SERVICE_ID`
-   - `VITE_EMAILJS_TEMPLATE_ID`
-   - `VITE_EMAILJS_PUBLIC_KEY`
-   - `VITE_SUPABASE_URL`
-   - `VITE_SUPABASE_ANON_KEY`
-
-4. **Deploy**
-   - Click "Save and Deploy"
-   - Cloudflare will build and deploy your site automatically
-   - Custom domain can be configured in the Pages settings
-
-#### Why Cloudflare Pages?
-
-- ✅ **Global CDN** - Edge delivery with 200+ data centers
-- ✅ **Automatic HTTPS** - Free SSL certificates
-- ✅ **Security Headers** - Configured via `public/_headers` file
-- ✅ **Instant Rollbacks** - One-click deployment history
-- ✅ **Preview Deployments** - Automatic previews for pull requests
-- ✅ **Zero Configuration** - Works with `.node-version` file
-
-### Alternative Platforms
-
-The project can also be deployed to:
-
-| Platform | Build Command | Output Directory | Notes |
-|----------|---------------|------------------|-------|
-| **Vercel** | `npm run build` | `dist` | Add environment variables in project settings |
-| **Netlify** | `npm run build` | `dist` | Configure redirects for SPA routing |
-| **AWS Amplify** | `npm run build` | `dist` | Use Node.js 18 runtime |
-| **GitHub Pages** | `npm run build` | `dist` | Requires base path configuration |
-
----
-
 ## Docs
 
 Project documentation has been consolidated under the `docs/` folder. Key docs include:
 
-- `docs/00-QUICK_START.md` - Quick start & local dev
-- `docs/01-ARCHITECTURE.md` - Architecture overview
-- `docs/02-DEPLOYMENT.md` - Deployment runbook (Cloudflare Pages)
-- `docs/marketing-site/` - Marketing site content and strategy
-- `docs/whatsapp-platform/` - Platform setup & migration guides
-
-If you previously had multiple markdown files in the repository root, they have been moved into `docs/` to keep the project organized.
+- `docs/01-ARCHITECTURE.md` - The complete system architecture and design document.
+- `docs/02-TESTING.md` - The guide for the project's testing strategy and execution.
+- `docs/03-DEPLOYMENT.md` - The deployment runbook for Cloudflare Pages.
 
 ---
 
@@ -437,42 +376,37 @@ Do not disclose security issues publicly until they have been addressed.
 
 ---
 
-## 🤝 Contributing
+## 🤝 Internal Development Workflow
 
-We welcome contributions to improve the Datacare website. Please follow these guidelines:
+This section outlines the development workflow for the Datacare Limited team. Please follow these guidelines when contributing to the project.
 
 ### Development Workflow
 
-1. **Fork the repository** on GitHub
-2. **Clone your fork** locally
+1. **Pull the latest changes** from the `main` branch.
+2. **Create a feature branch** from `main`.
    ```bash
-   git clone https://github.com/your-username/datacare-ai-nexus.git
+   git checkout -b feature/your-initials/feature-name
    ```
-3. **Create a feature branch**
-   ```bash
-   git checkout -b feature/your-feature-name
-   ```
-4. **Make your changes** and test thoroughly
-5. **Run linting** to ensure code quality
+3. **Make your changes** and test thoroughly.
+4. **Run linting** to ensure code quality.
    ```bash
    npm run lint
    ```
-6. **Build the project** to verify no errors
+5. **Build the project** to verify there are no errors.
    ```bash
    npm run build
    ```
-7. **Commit your changes** with clear commit messages
+6. **Commit your changes** with clear, descriptive commit messages.
    ```bash
-   git commit -m "Add: Brief description of your changes"
+   git commit -m "feat: Brief description of your changes"
    ```
-8. **Push to your fork**
+7. **Push your branch** to the remote repository.
    ```bash
-   git push origin feature/your-feature-name
+   git push origin feature/your-initials/feature-name
    ```
-9. **Create a Pull Request** on GitHub
+8. **Create a Pull Request** on GitHub for review.
 
 ### Code Standards
-
 - Follow the existing TypeScript and React patterns
 - Use functional components with hooks
 - Maintain type safety - avoid `any` types

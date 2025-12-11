@@ -151,11 +151,39 @@ export interface Template {
   name: string
   category: 'MARKETING' | 'UTILITY' | 'AUTHENTICATION'
   language: string
-  status: 'PENDING' | 'APPROVED' | 'REJECTED' | 'PAUSED' | 'DISABLED'
-  rejection_reason: string | null
-  components: any
-  usage_count: number
-  last_used_at: string | null
+  status: 'APPROVED' | 'REJECTED' | 'PENDING' | 'PAUSED' | 'DISABLED'
+  components: any[] // Array of header, body, footer, buttons
+  quality_score: 'HIGH' | 'MEDIUM' | 'LOW' | 'UNKNOWN' | null
+  created_at: string
+  updated_at: string
+}
+
+export interface Broadcast {
+  id: string
+  organization_id: string
+  name: string
+  template_id: string
+  segment_criteria: Record<string, any> | null
+  status: 'draft' | 'scheduled' | 'sending' | 'completed' | 'failed'
+  scheduled_at: string | null
+  total_recipients: number
+  successful_sends: number
+  failed_sends: number
+  created_by: string | null
+  created_at: string
+  updated_at: string
+}
+
+export interface WhatsAppProvider {
+  id: string
+  organization_id: string
+  provider_type: 'meta' | '360dialog' | 'twilio'
+  phone_number_id: string
+  waba_id: string
+  phone_number: string | null
+  display_name: string | null
+  status: 'active' | 'disconnected' | 'banned'
+  quality_rating: string | null
   created_at: string
   updated_at: string
 }
@@ -192,4 +220,16 @@ export interface ConversationWithDetails extends Conversation {
   assigned_agent: TeamMember | null
   latest_message?: Message
   unread_count?: number
+}
+
+export interface QuickReply {
+  id: string
+  organization_id: string
+  shortcut: string
+  content: string
+  category: string | null
+  usage_count: number
+  created_by: string | null
+  created_at: string
+  updated_at: string
 }

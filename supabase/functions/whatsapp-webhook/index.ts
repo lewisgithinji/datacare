@@ -7,9 +7,9 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3'
 // Environment variables
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
-const WHATSAPP_VERIFY_TOKEN = Deno.env.get('WHATSAPP_VERIFY_TOKEN')!
-const WHATSAPP_ACCESS_TOKEN = Deno.env.get('WHATSAPP_ACCESS_TOKEN')!
-const WHATSAPP_PHONE_NUMBER_ID = Deno.env.get('WHATSAPP_PHONE_NUMBER_ID')!
+
+// NOTE: WhatsApp credentials are now fetched dynamically from the database per organization
+
 
 // CORS headers
 const corsHeaders = {
@@ -35,12 +35,21 @@ serve(async (req) => {
 
       console.log('Webhook verification request:', { mode, token: token ? '***' : null })
 
-      if (mode === 'subscribe' && token === WHATSAPP_VERIFY_TOKEN) {
-        console.log('✅ Webhook verified successfully')
-        return new Response(challenge, {
-          status: 200,
-          headers: { ...corsHeaders, 'Content-Type': 'text/plain' }
-        })
+      if (mode === 'subscribe' && token) {
+        // Check if ANY organization has this verify token
+        const { data: provider } = await supabase
+          .from('whatsapp_providers')
+          .select('organization_id')
+          .eq('webhook_verify_token', token)
+          .maybeSingle()
+
+        if (provider) {
+          console.log('✅ Webhook verified successfully for org:', provider.organization_id)
+          return new Response(challenge, {
+            status: 200,
+            headers: { ...corsHeaders, 'Content-Type': 'text/plain' }
+          })
+        }
       }
 
       console.log('❌ Webhook verification failed')
@@ -63,9 +72,17 @@ serve(async (req) => {
 
       // Process all entries
       for (const entry of body.entry || []) {
+        // Extract ID from metadata to identify organization
+        // entry.id is the WABA ID
+        // changes[0].value.metadata.phone_number_id is the specific phone ID
         for (const change of entry.changes || []) {
           if (change.field === 'messages') {
-            await processWhatsAppChange(change.value, supabase)
+            const metadata = change.value.metadata;
+            if (metadata && metadata.phone_number_id) {
+              await processWhatsAppChange(change.value, metadata.phone_number_id, supabase)
+            } else {
+              console.error('❌ Missing metadata.phone_number_id in webhook change')
+            }
           }
         }
       }
@@ -90,11 +107,14 @@ serve(async (req) => {
 /**
  * Process WhatsApp webhook change
  */
-async function processWhatsAppChange(value: any, supabase: any) {
+/**
+ * Process WhatsApp webhook change
+ */
+async function processWhatsAppChange(value: any, phoneNumberId: string, supabase: any) {
   // Handle incoming messages
   if (value.messages && value.messages.length > 0) {
     for (const message of value.messages) {
-      await handleIncomingMessage(message, value.contacts, supabase)
+      await handleIncomingMessage(message, value.contacts, phoneNumberId, supabase)
     }
   }
 
@@ -109,34 +129,46 @@ async function processWhatsAppChange(value: any, supabase: any) {
 /**
  * Handle incoming message from customer
  */
-async function handleIncomingMessage(message: any, contacts: any[], supabase: any) {
+/**
+ * Handle incoming message from customer
+ */
+async function handleIncomingMessage(message: any, contacts: any[], phoneNumberId: string, supabase: any) {
   try {
     const from = message.from
     const messageId = message.id
     const timestamp = message.timestamp
     const type = message.type
 
-    console.log(`📱 Processing ${type} message from ${from}`)
+    console.log(`📱 Processing ${type} message from ${from} for phone ID: ${phoneNumberId}`)
 
-    // Get organization by phone number ID
-    const { data: organization } = await supabase
-      .from('organizations')
-      .select('id, slug, settings, features')
-      .eq('whatsapp_phone_number_id', WHATSAPP_PHONE_NUMBER_ID)
+    // Get organization credentials from whatsapp_providers
+    const { data: provider } = await supabase
+      .from('whatsapp_providers')
+      .select('organization_id, access_token')
+      .eq('phone_number_id', phoneNumberId)
+      .eq('status', 'active')
       .single()
 
-    if (!organization) {
-      console.error('❌ No organization found for phone number ID:', WHATSAPP_PHONE_NUMBER_ID)
+    if (!provider) {
+      console.error('❌ No active provider found for phone number ID:', phoneNumberId)
       return
     }
 
-    const organizationId = organization.id
+    const organizationId = provider.organization_id
+    const accessToken = provider.access_token
+
+    // Fetch organization settings (for chatbot/AI features if needed)
+    const { data: organization } = await supabase
+      .from('organizations')
+      .select('id, slug, settings, features')
+      .eq('id', organizationId)
+      .single();
 
     // Extract message content
     const { content, mediaUrl, mediaType } = extractMessageContent(message)
 
     // Get or create contact
-    const contact = await getOrCreateContact(from, contacts[0], organizationId, supabase)
+    const contact = await getOrCreateContact(from, contacts?.[0], organizationId, supabase)
 
     // Get or create conversation
     const conversation = await getOrCreateConversation(contact.id, organizationId, supabase)
@@ -161,13 +193,15 @@ async function handleIncomingMessage(message: any, contacts: any[], supabase: an
       .select()
       .single()
 
-    console.log('💾 Message saved:', savedMessage.id)
+    if (savedMessage) {
+      console.log('💾 Message saved:', savedMessage.id)
+    }
 
-    // Mark as read
-    await markMessageAsRead(messageId)
+    // Mark as read using dynamic access token
+    await markMessageAsRead(messageId, phoneNumberId, accessToken)
 
     // Process with chatbot (if not assigned to agent)
-    if (!conversation.assigned_agent_id && organization.features?.ai_chatbot) {
+    if (!conversation.assigned_agent_id && organization?.features?.ai_chatbot) {
       await processChatbotResponse(
         from,
         content,
@@ -175,17 +209,21 @@ async function handleIncomingMessage(message: any, contacts: any[], supabase: an
         contact,
         organizationId,
         organization,
+        phoneNumberId,
+        accessToken,
         supabase
       )
     } else if (conversation.assigned_agent_id) {
       console.log('👤 Message for assigned agent:', conversation.assigned_agent_id)
       // Agent will see it in realtime via Supabase Realtime
     } else {
-      // Queue for agent assignment
-      await supabase
-        .from('conversations')
-        .update({ status: 'open' })
-        .eq('id', conversation.id)
+      // Queue for agent assignment if not already open
+      if (conversation.status !== 'open') {
+        await supabase
+          .from('conversations')
+          .update({ status: 'open' })
+          .eq('id', conversation.id)
+      }
     }
 
     // Track analytics
@@ -199,7 +237,8 @@ async function handleIncomingMessage(message: any, contacts: any[], supabase: an
         event_data: {
           message_type: type,
           from,
-          has_media: !!mediaUrl
+          has_media: !!mediaUrl,
+          phone_number_id: phoneNumberId
         }
       })
   } catch (error: any) {
@@ -338,14 +377,17 @@ async function getOrCreateConversation(contactId: string, organizationId: string
 /**
  * Mark WhatsApp message as read
  */
-async function markMessageAsRead(messageId: string) {
+/**
+ * Mark WhatsApp message as read
+ */
+async function markMessageAsRead(messageId: string, phoneNumberId: string, accessToken: string) {
   try {
-    const url = `https://graph.facebook.com/v21.0/${WHATSAPP_PHONE_NUMBER_ID}/messages`
+    const url = `https://graph.facebook.com/v21.0/${phoneNumberId}/messages`
 
     const response = await fetch(url, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${WHATSAPP_ACCESS_TOKEN}`,
+        'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
@@ -373,6 +415,8 @@ async function processChatbotResponse(
   contact: any,
   organizationId: string,
   organization: any,
+  phoneNumberId: string,
+  accessToken: string,
   supabase: any
 ) {
   try {
@@ -388,18 +432,13 @@ async function processChatbotResponse(
 
     // Keyword detection
     if (lowerQuery.includes('hello') || lowerQuery.includes('hi') || lowerQuery.match(/\b(hey|hola|jambo)\b/)) {
-      response = `Hi ${contact.name || 'there'}! 👋\n\nWelcome to Datacare. How can I help you today?\n\n1️⃣ Product Information\n2️⃣ Get a Quote\n3️⃣ Technical Support\n4️⃣ Speak to Sales`
+      response = `Hi ${contact.name || 'there'}! 👋\n\nWelcome to ${organization.name || 'Datacare'}. How can I help you today?\n\n1️⃣ Product Information\n2️⃣ Get a Quote\n3️⃣ Technical Support\n4️⃣ Speak to Sales`
     } else if (lowerQuery.match(/\b(price|pricing|cost|how much)\b/)) {
-      response = "I'd be happy to help with pricing! 💰\n\nWhat are you interested in?\n\n📦 Microsoft 365\n🎯 Google Workspace\n💬 Messaging Platform\n☁️ Cloud Backup\n🌐 Web Design\n\nReply with the product name or type 'custom quote' for personalized pricing."
-      shouldAssignAgent = true
-    } else if (lowerQuery.match(/\b(microsoft|m365|office 365)\b/)) {
-      response = "**Microsoft 365** 📊\n\nWe offer three plans:\n\n• Business Basic - $6/user/month\n• Business Standard - $12.50/user/month\n• Business Premium - $22/user/month\n\nWould you like more details or a custom quote? Our team can help!"
-      shouldAssignAgent = true
-    } else if (lowerQuery.match(/\b(google|workspace|gmail)\b/)) {
-      response = "**Google Workspace** 📧\n\nProfessional email and collaboration tools:\n\n• Business Starter - $6/user/month\n• Business Standard - $12/user/month\n• Business Plus - $18/user/month\n\nInterested? Let me connect you with our sales team!"
+      // Generic pricing response for now
+      response = "I'd be happy to help with pricing! 💰\n\nReply with 'custom quote' for personalized pricing."
       shouldAssignAgent = true
     } else if (lowerQuery.match(/\b(hours|time|when|available)\b/)) {
-      response = `We're available:\n📅 Monday-Friday\n🕐 8AM-6PM EAT\n\n📧 Email: sales@datacare.co.ke\n📞 Phone: +254 709 980 000\n🌐 Web: datacare.co.ke\n\n${!isBusinessHours ? '⏰ We\'re currently offline but will respond during business hours.' : '✅ We\'re online now!'}`
+      response = `We're available:\n📅 Monday-Friday\n🕐 8AM-6PM\n\n${!isBusinessHours ? '⏰ We\'re currently offline but will respond during business hours.' : '✅ We\'re online now!'}`
     } else if (lowerQuery.match(/\b(help|support|problem|issue)\b/)) {
       response = "I can help you with:\n\n✅ Product information\n💰 Pricing & quotes\n📦 Order status\n🛠️ Technical support\n\nWhat would you like assistance with?"
       shouldAssignAgent = true
@@ -409,12 +448,12 @@ async function processChatbotResponse(
         response = "Thanks for your message! Let me connect you with our team who can better assist you. Someone will respond shortly. 👤"
         shouldAssignAgent = true
       } else {
-        response = "Thank you for contacting Datacare! 🌙\n\nOur team is currently offline but will respond during business hours (Mon-Fri 8AM-6PM EAT).\n\nFor urgent matters:\n📧 sales@datacare.co.ke\n📞 +254 709 980 000"
+        response = "Thank you for contacting us! 🌙\n\nOur team is currently offline but will respond during business hours (Mon-Fri)."
       }
     }
 
     // Send response
-    await sendWhatsAppMessage(to, response, conversation.id, organizationId, supabase)
+    await sendWhatsAppMessage(to, response, conversation.id, organizationId, phoneNumberId, accessToken, supabase)
 
     // Assign to agent if needed
     if (shouldAssignAgent && isBusinessHours) {
@@ -436,20 +475,25 @@ async function processChatbotResponse(
 /**
  * Send WhatsApp message
  */
+/**
+ * Send WhatsApp message
+ */
 async function sendWhatsAppMessage(
   to: string,
   text: string,
   conversationId: string,
   organizationId: string,
+  phoneNumberId: string,
+  accessToken: string,
   supabase: any
 ) {
   try {
-    const url = `https://graph.facebook.com/v21.0/${WHATSAPP_PHONE_NUMBER_ID}/messages`
+    const url = `https://graph.facebook.com/v21.0/${phoneNumberId}/messages`
 
     const response = await fetch(url, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${WHATSAPP_ACCESS_TOKEN}`,
+        'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({

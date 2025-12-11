@@ -1,144 +1,140 @@
-import { ConversationWithDetails } from '@/types/whatsapp'
-import { Badge } from '@/components/ui/badge'
-import { Input } from '@/components/ui/input'
-import { ScrollArea } from '@/components/ui/scroll-area'
-import { Search, MessageSquare, Clock, CheckCheck } from 'lucide-react'
-import { cn } from '@/lib/utils'
-import { formatDistanceToNow } from 'date-fns'
+import { useEffect, useState } from 'react';
+import { supabase } from '@/lib/supabase';
+import { useAuth } from '@/hooks/useAuth';
+import { ConversationWithDetails } from '@/types/whatsapp';
+import { cn } from '@/lib/utils';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
+import { formatDistanceToNow } from 'date-fns';
+import { Loader2, MessageSquare } from 'lucide-react';
 
 interface ConversationListProps {
-  conversations: ConversationWithDetails[]
-  selectedConversation: ConversationWithDetails | null
-  onSelectConversation: (conversation: ConversationWithDetails) => void
+  onSelectConversation: (conversation: ConversationWithDetails) => void;
+  selectedConversationId?: string | null;
 }
 
-export function ConversationList({
-  conversations,
-  selectedConversation,
-  onSelectConversation,
-}: ConversationListProps) {
+/**
+ * Displays a list of conversations for the current organization.
+ * Fetches from whatsapp_conversations joined with whatsapp_contacts.
+ */
+const ConversationList = ({ onSelectConversation, selectedConversationId }: ConversationListProps) => {
+  const { organization } = useAuth();
+  const [conversations, setConversations] = useState<ConversationWithDetails[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (organization?.id) {
+      fetchConversations();
+    }
+  }, [organization?.id]);
+
+  const fetchConversations = async () => {
+    if (!organization?.id) return;
+
+    setLoading(true);
+    try {
+      // Query conversations with joined contact data
+      const { data, error } = await supabase
+        .from('whatsapp_conversations')
+        .select(`
+          *,
+          contact:whatsapp_contacts(id, phone_number, name, avatar_url)
+        `)
+        .eq('organization_id', organization.id)
+        .order('last_message_at', { ascending: false, nullsFirst: false })
+        .limit(50);
+
+      if (error) {
+        console.error('Error fetching conversations:', error);
+        setConversations([]);
+      } else {
+        setConversations(data as ConversationWithDetails[] || []);
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getContactInitials = (name: string | null, phone: string) => {
+    if (name) {
+      return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+    }
+    return phone.slice(-2);
+  };
+
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'open':
-        return 'bg-green-100 text-green-700'
-      case 'assigned':
-        return 'bg-blue-100 text-blue-700'
-      case 'pending':
-        return 'bg-yellow-100 text-yellow-700'
-      case 'resolved':
-        return 'bg-gray-100 text-gray-700'
-      case 'closed':
-        return 'bg-gray-100 text-gray-500'
-      default:
-        return 'bg-gray-100 text-gray-700'
+      case 'open': return 'bg-green-500';
+      case 'assigned': return 'bg-blue-500';
+      case 'pending': return 'bg-yellow-500';
+      case 'resolved': return 'bg-gray-500';
+      default: return 'bg-gray-400';
     }
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+      </div>
+    );
   }
 
-  const getPriorityColor = (priority: string) => {
-    switch (priority) {
-      case 'urgent':
-        return 'text-red-600'
-      case 'high':
-        return 'text-orange-600'
-      case 'normal':
-        return 'text-gray-600'
-      case 'low':
-        return 'text-gray-400'
-      default:
-        return 'text-gray-600'
-    }
+  if (conversations.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center h-64 text-center p-4">
+        <MessageSquare className="h-12 w-12 text-muted-foreground mb-4 opacity-30" />
+        <p className="text-sm text-muted-foreground">No conversations yet</p>
+        <p className="text-xs text-muted-foreground mt-1">
+          Incoming messages will appear here
+        </p>
+      </div>
+    );
   }
 
   return (
-    <div className="h-full flex flex-col">
-      {/* Header */}
-      <div className="p-4 border-b border-gray-200">
-        <h1 className="text-2xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-          <MessageSquare className="h-6 w-6 text-primary" />
-          Inbox
-        </h1>
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-          <Input
-            placeholder="Search conversations..."
-            className="pl-9"
-          />
-        </div>
-      </div>
-
-      {/* Conversation List */}
-      <ScrollArea className="flex-1">
-        <div className="divide-y divide-gray-100">
-          {conversations.length === 0 ? (
-            <div className="p-8 text-center text-gray-500">
-              <MessageSquare className="h-12 w-12 text-gray-300 mx-auto mb-3" />
-              <p>No conversations yet</p>
-            </div>
-          ) : (
-            conversations.map((conversation) => (
-              <button
-                key={conversation.id}
-                onClick={() => onSelectConversation(conversation)}
-                className={cn(
-                  'w-full p-4 text-left hover:bg-gray-50 transition-colors',
-                  selectedConversation?.id === conversation.id && 'bg-primary/5 border-l-4 border-primary'
-                )}
-              >
-                <div className="flex items-start gap-3">
-                  {/* Avatar */}
-                  <div className="h-12 w-12 rounded-full bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center text-white font-semibold flex-shrink-0">
-                    {conversation.contact?.name?.[0]?.toUpperCase() || 'U'}
-                  </div>
-
-                  {/* Content */}
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center justify-between mb-1">
-                      <h3 className="font-semibold text-gray-900 truncate">
-                        {conversation.contact?.name || conversation.contact?.phone_number}
-                      </h3>
-                      {conversation.last_message_at && (
-                        <span className="text-xs text-gray-500 flex items-center gap-1">
-                          <Clock className="h-3 w-3" />
-                          {formatDistanceToNow(new Date(conversation.last_message_at), { addSuffix: true })}
-                        </span>
-                      )}
-                    </div>
-
-                    <p className="text-sm text-gray-600 truncate mb-2">
-                      {conversation.contact?.phone_number}
-                    </p>
-
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <Badge className={cn('text-xs', getStatusColor(conversation.status))}>
-                        {conversation.status}
-                      </Badge>
-
-                      {conversation.priority !== 'normal' && (
-                        <Badge variant="outline" className={cn('text-xs', getPriorityColor(conversation.priority))}>
-                          {conversation.priority}
-                        </Badge>
-                      )}
-
-                      {conversation.category && (
-                        <Badge variant="outline" className="text-xs">
-                          {conversation.category}
-                        </Badge>
-                      )}
-
-                      {conversation.total_messages_count > 0 && (
-                        <span className="text-xs text-gray-500 flex items-center gap-1 ml-auto">
-                          <CheckCheck className="h-3 w-3" />
-                          {conversation.total_messages_count}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </button>
-            ))
+    <div className="divide-y divide-border">
+      {conversations.map((conversation) => (
+        <div
+          key={conversation.id}
+          onClick={() => onSelectConversation(conversation)}
+          className={cn(
+            "p-3 cursor-pointer transition-colors hover:bg-muted/50",
+            selectedConversationId === conversation.id && "bg-muted"
           )}
+        >
+          <div className="flex items-start gap-3">
+            <Avatar className="h-10 w-10">
+              <AvatarFallback className="text-xs">
+                {getContactInitials(
+                  conversation.contact?.name || null,
+                  conversation.contact?.phone_number || '??'
+                )}
+              </AvatarFallback>
+            </Avatar>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center justify-between gap-2">
+                <span className="font-medium text-sm truncate">
+                  {conversation.contact?.name || conversation.contact?.phone_number || 'Unknown'}
+                </span>
+                {conversation.last_message_at && (
+                  <span className="text-xs text-muted-foreground whitespace-nowrap">
+                    {formatDistanceToNow(new Date(conversation.last_message_at), { addSuffix: true })}
+                  </span>
+                )}
+              </div>
+              <div className="flex items-center gap-2 mt-0.5">
+                <span className={cn("h-2 w-2 rounded-full", getStatusColor(conversation.status))} />
+                <Badge variant="outline" className="text-[10px] px-1 py-0">
+                  {conversation.status}
+                </Badge>
+              </div>
+            </div>
+          </div>
         </div>
-      </ScrollArea>
+      ))}
     </div>
-  )
-}
+  );
+};
+
+export default ConversationList;

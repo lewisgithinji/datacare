@@ -1,4 +1,4 @@
-import { useAuth } from '@/contexts/AuthContext'
+import { useAuth } from '@/hooks/useAuth'
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -41,6 +41,7 @@ import {
   CheckCircle,
 } from 'lucide-react'
 import { toast } from 'sonner'
+import { WhatsAppConnectionForm } from '@/components/settings/WhatsAppConnectionForm'
 
 interface UserPreferences {
   email_notifications: boolean
@@ -373,6 +374,10 @@ export default function Settings() {
           <TabsTrigger value="api">
             <Key className="h-4 w-4 mr-2" />
             API Keys
+          </TabsTrigger>
+          <TabsTrigger value="connections">
+            <Webhook className="h-4 w-4 mr-2" />
+            Connections
           </TabsTrigger>
         </TabsList>
 
@@ -829,6 +834,11 @@ export default function Settings() {
               )}
             </CardContent>
           </Card>
+        </TabsContent>
+
+        {/* Connections Tab */}
+        <TabsContent value="connections" className="space-y-4">
+          <WhatsAppConnectionForm />
         </TabsContent>
       </Tabs>
     </div>

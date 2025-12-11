@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { Send, Paperclip, Smile, Mic } from 'lucide-react'
+import { QuickReplySelector } from './QuickReplySelector'
 
 interface MessageInputProps {
   onSend: (content: string) => void
@@ -25,6 +26,10 @@ export function MessageInput({ onSend, disabled = false }: MessageInputProps) {
     }
   }
 
+  const handleQuickReplySelect = (content: string) => {
+    setMessage(content)
+  }
+
   return (
     <div className="bg-white border-t border-gray-200 p-4">
       <div className="flex items-end gap-3">
@@ -34,6 +39,7 @@ export function MessageInput({ onSend, disabled = false }: MessageInputProps) {
           variant="ghost"
           size="icon"
           className="text-gray-500 hover:text-gray-700"
+          aria-label="Attach file"
           disabled={disabled}
         >
           <Paperclip className="h-5 w-5" />
@@ -58,15 +64,20 @@ export function MessageInput({ onSend, disabled = false }: MessageInputProps) {
               variant="ghost"
               size="icon"
               className="h-8 w-8 text-gray-500 hover:text-gray-700"
+              aria-label="Add emoji"
               disabled={disabled}
             >
               <Smile className="h-4 w-4" />
             </Button>
+
+            <QuickReplySelector onSelect={handleQuickReplySelect} disabled={disabled} />
+
             <Button
               type="button"
               variant="ghost"
               size="icon"
               className="h-8 w-8 text-gray-500 hover:text-gray-700"
+              aria-label="Record voice message"
               disabled={disabled}
             >
               <Mic className="h-4 w-4" />
@@ -78,6 +89,7 @@ export function MessageInput({ onSend, disabled = false }: MessageInputProps) {
         <Button
           onClick={handleSend}
           disabled={!message.trim() || disabled}
+          aria-label="Send message"
           className="bg-primary hover:bg-primary/90"
         >
           <Send className="h-5 w-5" />

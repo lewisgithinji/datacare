@@ -1,30 +1,36 @@
-import { Navigate, useLocation } from 'react-router-dom'
-import { useAuth } from '@/contexts/AuthContext'
-import { Loader2 } from 'lucide-react'
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
+import { useAuth } from '@/hooks/useAuth';
+import { Loader2 } from 'lucide-react';
+import { ReactNode } from 'react';
 
 interface ProtectedRouteProps {
-  children: React.ReactNode
+  children?: ReactNode;
 }
 
-export function ProtectedRoute({ children }: ProtectedRouteProps) {
-  const { user, loading } = useAuth()
-  const location = useLocation()
+/**
+ * A component that protects routes from unauthenticated access.
+ * - If children are provided, they are rendered instead of Outlet
+ * - If no children, renders Outlet for nested routes
+ */
+const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
+  const { user, loading } = useAuth();
+  const location = useLocation();
 
   if (loading) {
     return (
-      <div className="h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
-        <div className="text-center">
-          <Loader2 className="h-12 w-12 animate-spin text-primary mx-auto mb-4" />
-          <p className="text-gray-600">Loading...</p>
-        </div>
+      <div className="flex h-screen w-full items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
-    )
+    );
   }
 
   if (!user) {
-    // Redirect to login but save the location they were trying to go to
-    return <Navigate to="/login" state={{ from: location }} replace />
+    // Redirect to login, saving the current location in state
+    return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  return <>{children}</>
-}
+  // If children are provided, render them; otherwise render Outlet for nested routes
+  return children ? <>{children}</> : <Outlet />;
+};
+
+export default ProtectedRoute;

@@ -47,14 +47,23 @@ export default function ChatbotConversations() {
 
   const fetchChatbotConversations = async () => {
     try {
-      const { data, error } = await supabase
-        .from('conversations')
-        .select('*')
-        .order('created_at', { ascending: false })
+      // Note: This is for marketing chatbot conversations, not WhatsApp conversations
+      // The table 'conversations' for the marketing chatbot doesn't exist yet
+      // For now, we'll just set empty data to prevent errors
+      setConversations([])
+      setFilteredConversations([])
 
-      if (error) throw error
-      setConversations(data || [])
-      setFilteredConversations(data || [])
+      // TODO: Create 'conversations' table for marketing chatbot
+      // OR use 'whatsapp_conversations' if this should show WhatsApp data
+
+      // Commented out to prevent 404 errors:
+      // const { data, error } = await supabase
+      //   .from('conversations')
+      //   .select('*')
+      //   .order('created_at', { ascending: false })
+      // if (error) throw error
+      // setConversations(data || [])
+      // setFilteredConversations(data || [])
     } catch (error) {
       console.error('Error fetching chatbot conversations:', error)
     } finally {

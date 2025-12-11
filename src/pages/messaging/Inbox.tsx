@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
-import { useAuth } from '@/contexts/AuthContext'
+import { useAuth } from '@/hooks/useAuth'
 import { ConversationWithDetails, Message, Contact } from '@/types/whatsapp'
 import { ConversationList } from '@/components/messaging/ConversationList'
 import { MessageThread } from '@/components/messaging/MessageThread'
@@ -113,7 +113,7 @@ export default function Inbox() {
 
   const fetchMessages = async (conversationId: string) => {
     try {
-      const { data, error} = await supabase
+      const { data, error } = await supabase
         .from('whatsapp_messages')
         .select('*')
         .eq('conversation_id', conversationId)

@@ -1,4 +1,4 @@
-import { useAuth } from '@/contexts/AuthContext'
+import { useAuth } from '@/hooks/useAuth'
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -310,9 +310,9 @@ export default function Analytics() {
             <div className="text-2xl font-bold">
               {analytics.responseTimesByDate.length > 0
                 ? Math.round(
-                    analytics.responseTimesByDate.reduce((acc, d) => acc + d.avgTime, 0) /
-                      analytics.responseTimesByDate.length
-                  )
+                  analytics.responseTimesByDate.reduce((acc, d) => acc + d.avgTime, 0) /
+                  analytics.responseTimesByDate.length
+                )
                 : 0}
               m
             </div>
