@@ -113,7 +113,7 @@ export default function Inbox() {
 
   const fetchMessages = async (conversationId: string) => {
     try {
-      const { data, error} = await supabase
+      const { data, error } = await supabase
         .from('whatsapp_messages')
         .select('*')
         .eq('conversation_id', conversationId)
@@ -130,26 +130,30 @@ export default function Inbox() {
     if (!selectedConversation || !content.trim() || !user || !organization) return
 
     try {
-      const { error } = await supabase
-        .from('whatsapp_messages')
-        .insert({
+      // Call Edge Function to send via WhatsApp
+      const { data, error } = await supabase.functions.invoke('send-whatsapp-message', {
+        body: {
           organization_id: organization.id,
           conversation_id: selectedConversation.id,
-          direction: 'outbound',
-          sender_type: 'agent',
-          sender_id: user.id,
-          message_type: 'text',
+          to: selectedConversation.contact.phone_number,
           content,
-          status: 'sent',
-        })
+          message_type: 'text'
+        }
+      })
 
       if (error) throw error
 
-      // TODO: Send actual WhatsApp message via Edge Function
-      // await fetch('/api/whatsapp/send', { ... })
+      if (!data.success) {
+        throw new Error(data.error || 'Failed to send message')
+      }
+
+      console.log('✅ Message sent successfully:', data.message_id)
+      // Message will appear via real-time subscription
 
     } catch (error) {
       console.error('Error sending message:', error)
+      // Show error to user
+      alert('Failed to send message. Please try again.')
     }
   }
 
